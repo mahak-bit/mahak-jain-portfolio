@@ -57,7 +57,7 @@ const INTENTS: Intent[] = [
       'the work',
     ],
     response:
-      'Six in the archive, all deployed. The range: a full e-commerce platform with its own admin (Zazzlers), the AI Study Planner with a tool-calling coach, an AI skincare matcher with an explainable engine (Beauty Match), a scroll-driven site for a rice mill (Pawan Industries), a digital exhibition on 80 years of Indian independence, and a scroll-scrubbed 911 Carrera concept. Open the archive to read any of them.',
+      'Six in the archive, all deployed. The range: a full e-commerce platform with its own admin (Zazzlers), the AI Study Planner with a tool-calling coach, an AI skincare matcher with an explainable engine (Beauty Match), a client site for a rice-milling company (Pawan Industries), a digital exhibition on 80 years of Indian independence, and a scroll-scrubbed 911 Carrera concept. Open the archive to read any of them.',
     followUps: ['is she good with agents?', "what's the tech stack?", 'can she build an AI product?'],
   },
   {

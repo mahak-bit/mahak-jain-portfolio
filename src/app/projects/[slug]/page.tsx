@@ -52,7 +52,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       <Reveal className="mt-10">
         <p className="kicker">
-          {project.number} · {project.year} · {isPlaceholder ? 'Open slot' : project.status}
+          {project.number} · {project.year} ·{' '}
+          {isPlaceholder ? 'Open slot' : (project.context ?? project.status)}
         </p>
         <h1 className="mt-4 text-[clamp(2.2rem,1.5rem+3.6vw,3.8rem)] leading-[1.02]">
           {project.name}

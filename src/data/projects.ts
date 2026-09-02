@@ -32,6 +32,8 @@ export interface Project {
   year: string;
   status: ProjectStatus;
   featured: boolean;
+  /** Optional label — e.g. "Client project". Shown next to the year. */
+  context?: string;
 
   /** One sentence: what it is. */
   oneLiner: string;
@@ -70,11 +72,12 @@ const projectList: ProjectInput[] = [
     year: '2026',
     status: 'live',
     featured: true,
+    context: 'Client project',
     oneLiner:
-      'A cinematic, scroll-driven site for a rice-milling facility — the production line told as one continuous film.',
+      'A cinematic, scroll-driven site for a rice-milling company — the production line told as one continuous film.',
     story: {
       solving:
-        'A rice mill in Kota needed a site that felt as precise as the process it runs. Most factory websites are a logo, a stock photo and a phone number.',
+        'Built for Pawan Industries, a rice-milling company in Kota. They needed a site that felt as precise as the process they run — and most factory websites are a logo, a stock photo and a phone number.',
       built:
         'A single-page scroll experience in Next.js: a 14-step journey from raw paddy to packed grain, expandable craft stages, a product range with quality grades, a zero-waste model and a real facility spec sheet. GSAP timelines and Lenis smooth scroll carry it; every section has a reduced-motion fallback.',
       learned:
@@ -91,7 +94,7 @@ const projectList: ProjectInput[] = [
     ],
     caseStudy: {
       overview:
-        'Pawan Industries processes raw paddy into graded, packed rice for domestic and export markets. The site presents that as a continuous narrative — “precision in every grain” — instead of a brochure.',
+        'Pawan Industries processes raw paddy into graded, packed rice for domestic and export markets. They wanted their public site to present that as a continuous narrative — “precision in every grain” — instead of a brochure.',
       features: [
         {
           title: 'The Journey',
@@ -128,7 +131,7 @@ const projectList: ProjectInput[] = [
         },
       ],
       outcome:
-        'A deployed, production-ready site that reads like a documentary short — from process to products in one scroll.',
+        'The company’s public site — a deployed, production-ready experience that reads like a documentary short, from process to products in one scroll.',
     },
   },
 

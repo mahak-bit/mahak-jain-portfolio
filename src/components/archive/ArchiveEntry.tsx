@@ -95,7 +95,10 @@ function Compact({ project }: { project: Project }) {
     <div className="flex flex-wrap items-baseline gap-x-5 gap-y-1">
       <span className="text-faint font-mono text-sm">{project.number}</span>
       <span className="font-display text-xl tracking-tight">{project.name}</span>
-      <span className="text-faint font-mono text-xs">{project.year}</span>
+      <span className="text-faint font-mono text-xs">
+        {project.year}
+        {project.context && <span className="text-accent"> · {project.context}</span>}
+      </span>
       <span className="text-muted min-w-0 flex-1 truncate text-[0.95rem]">{project.oneLiner}</span>
     </div>
   );
@@ -123,6 +126,7 @@ function Head({ project, size }: { project: Project; size: 'md' | 'lg' | 'xl' })
     <div className="flex flex-col gap-2">
       <span className="text-faint font-mono text-sm tabular-nums">
         {project.number} — {project.year}
+        {project.context && <span className="text-accent"> · {project.context}</span>}
       </span>
       {project.status === 'placeholder' ? (
         <h2 className={cn('font-display leading-[1.02] tracking-tight', cls)}>{project.name}</h2>
