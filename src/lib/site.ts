@@ -16,7 +16,7 @@ export const site = {
   annotation: 'currently figuring out how to make AI agents actually useful',
 
   location: 'India',
-  /** Canonical URL. [ADD PRODUCTION DOMAIN once deployed] */
+  /** Canonical URL — used for OG tags, canonical links and the sitemap. Swap for a custom domain when there is one. */
   url: 'https://mahak-jain-portfolio.vercel.app',
   email: 'mahakj532@gmail.com',
   resumeUrl: '', // [ADD RESUME] e.g. '/mahak-jain-resume.pdf'
