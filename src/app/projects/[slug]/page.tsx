@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getProject, projects } from '@/data/projects';
+import { getProject, projects, type Screenshot } from '@/data/projects';
 import { Reveal } from '@/components/ui/Reveal';
 import { site } from '@/lib/site';
 
@@ -72,11 +73,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       {/* Lead visual */}
       <Reveal delay={0.05} className="mt-12">
-        <div className="border-line bg-raise flex aspect-[16/10] items-center justify-center border">
-          <span className="text-faint font-mono text-xs">
-            {project.screenshots[0]?.caption || '[ADD SCREENSHOT]'}
-          </span>
-        </div>
+        <Shot shot={project.screenshots[0]} ratio="aspect-[16/10]" priority />
       </Reveal>
 
       {/* Story */}
@@ -135,14 +132,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <Block label="Screens">
             <div className="grid gap-4 sm:grid-cols-2">
               {project.screenshots.map((shot, i) => (
-                <div
-                  key={i}
-                  className="border-line bg-raise flex aspect-video items-center justify-center border"
-                >
-                  <span className="text-faint px-4 text-center font-mono text-xs">
-                    {shot.caption ?? '[ADD SCREENSHOT]'}
-                  </span>
-                </div>
+                <Shot key={i} shot={shot} ratio="aspect-video" />
               ))}
             </div>
           </Block>
@@ -186,6 +176,40 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </Link>
       </Reveal>
     </article>
+  );
+}
+
+function Shot({
+  shot,
+  ratio,
+  priority = false,
+}: {
+  shot?: Screenshot;
+  ratio: string;
+  priority?: boolean;
+}) {
+  const contain = shot?.fit === 'contain';
+  return (
+    <div
+      className={`relative flex items-center justify-center overflow-hidden border ${ratio} ${
+        contain ? 'border-line bg-[#0a0a0a]' : 'border-line bg-raise'
+      }`}
+    >
+      {shot?.src ? (
+        <Image
+          src={shot.src}
+          alt={shot.alt}
+          fill
+          priority={priority}
+          sizes="(max-width: 768px) 100vw, 720px"
+          className={contain ? 'object-contain p-10' : 'object-cover'}
+        />
+      ) : (
+        <span className="text-faint px-4 text-center font-mono text-xs">
+          {shot?.caption ?? '[ADD SCREENSHOT]'}
+        </span>
+      )}
+    </div>
   );
 }
 

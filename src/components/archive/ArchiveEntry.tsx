@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
 import type { Project } from '@/data/projects';
@@ -161,16 +162,29 @@ function TechLine({ project, className }: { project: Project; className?: string
 }
 
 function Visual({ project, ratio }: { project: Project; ratio: string }) {
-  const caption = project.screenshots[0]?.caption || `[ADD SCREENSHOT] — ${project.name}`;
+  const shot = project.screenshots[0];
+  const caption = shot?.caption || `[ADD SCREENSHOT] — ${project.name}`;
+  const contain = shot?.fit === 'contain';
   const frame = (
     <div
       className={cn(
-        'border-line bg-raise relative flex items-center justify-center overflow-hidden border',
+        'relative flex items-center justify-center overflow-hidden border',
         ratio,
+        contain ? 'border-line bg-[#0a0a0a]' : 'border-line bg-raise',
         project.status === 'placeholder' && 'border-dashed'
       )}
     >
-      <span className="text-faint px-6 text-center font-mono text-xs">{caption}</span>
+      {shot?.src ? (
+        <Image
+          src={shot.src}
+          alt={shot.alt}
+          fill
+          sizes="(max-width: 640px) 100vw, 640px"
+          className={contain ? 'object-contain p-10' : 'object-cover'}
+        />
+      ) : (
+        <span className="text-faint px-6 text-center font-mono text-xs">{caption}</span>
+      )}
     </div>
   );
   if (project.status === 'placeholder') return frame;

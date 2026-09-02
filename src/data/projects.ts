@@ -17,6 +17,8 @@ export interface Screenshot {
   src: string;
   alt: string;
   caption?: string;
+  /** 'contain' (logos, portrait shots) sits the image on a dark panel; default 'cover'. */
+  fit?: 'cover' | 'contain';
 }
 
 export interface CasePoint {
@@ -89,8 +91,12 @@ const projectList: ProjectInput[] = [
       github: 'https://github.com/mahak-bit/PAWAN-INDUSTRIES',
     },
     screenshots: [
-      { src: '', alt: 'Pawan Industries — hero', caption: '[ADD SCREENSHOT] — Hero' },
-      { src: '', alt: 'Pawan Industries — the journey', caption: '[ADD SCREENSHOT] — The Journey' },
+      {
+        src: '/projects/pawan-industries.jpg',
+        alt: 'The Pawan Industries milling facility',
+        caption: 'The facility',
+      },
+      { src: '', alt: 'Pawan Industries — the journey', caption: '[ADD SCREENSHOT] — The Journey section' },
     ],
     caseStudy: {
       overview:
@@ -157,7 +163,12 @@ const projectList: ProjectInput[] = [
       // repo is private
     },
     screenshots: [
-      { src: '', alt: 'Zazzlers — storefront', caption: '[ADD SCREENSHOT] — Storefront' },
+      {
+        src: '/projects/zazzlers-logo.png',
+        alt: 'Zazzlers logo',
+        caption: 'Zazzlers',
+        fit: 'contain',
+      },
       { src: '', alt: 'Zazzlers — admin orders', caption: '[ADD SCREENSHOT] — Admin dashboard' },
     ],
     caseStudy: {
