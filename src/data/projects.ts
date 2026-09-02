@@ -184,7 +184,7 @@ const projectList: ProjectInput[] = [
         },
       ],
       architecture: [
-        'Prisma schema of ~25 models: users and auth, catalogue, cart / wishlist, orders with status history, addresses, coupons, notifications.',
+        'Prisma schema of around twenty models: users and auth, catalogue, cart / wishlist, orders with status history, addresses, coupons, notifications.',
         'Storefront and admin each get their own Route Handler API surface under app/api.',
         'Auth.js v5 with credentials + bcrypt and a full password-reset flow; Postgres and file storage on Supabase.',
       ],
