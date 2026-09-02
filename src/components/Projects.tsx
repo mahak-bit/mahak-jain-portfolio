@@ -5,7 +5,7 @@ import { projects } from '@/data/projects';
 
 export function Projects() {
   return (
-    <Section id="work" className="max-w-5xl">
+    <Section id="work" className="ruled max-w-5xl">
       <Reveal className="mb-14 flex flex-wrap items-end justify-between gap-4">
         <h2 className="font-display text-[clamp(2.4rem,1.6rem+4vw,4.5rem)] leading-none">
           Selected work

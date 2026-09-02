@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { Section } from './ui/Section';
 import { Reveal } from './ui/Reveal';
 import { askPortfolio, SUGGESTED_PROMPTS, type PortfolioAnswer } from '@/lib/portfolio-ai';
 
@@ -42,28 +43,30 @@ export function PortfolioAI() {
         clearInterval(id);
         setStatus('done');
       }
-    }, 24);
+    }, 22);
     return () => clearInterval(id);
   }, [status, answer]);
 
   return (
-    <section id="ask" aria-label="Ask around" className="mx-auto max-w-5xl px-5 py-14 sm:px-8">
-      <h2 className="sr-only">Ask around</h2>
-      <Reveal className="border-line border-t pt-10">
-        <p className="text-muted text-[1.05rem]">
-          Want to know something specific?{' '}
-          <span className="text-fg">Ask around.</span>{' '}
-          <span className="text-faint text-sm">
-            (It&rsquo;s a small local model of me — no API, works offline.)
-          </span>
+    <Section id="ask" aria-label="Ask my portfolio" className="ruled">
+      <Reveal>
+        <span className="kicker">Ask around</span>
+        <h2 className="mt-4 text-[clamp(1.9rem,1.3rem+2.6vw,3rem)]">
+          Ask my portfolio anything.
+        </h2>
+        <p className="text-muted mt-4 max-w-md text-[1.05rem] leading-relaxed">
+          Not sure where to start? Ask about the projects, the AI work, the tools, or how I work.
+          It&rsquo;s a small local model of me — no API, runs offline.
         </p>
+      </Reveal>
 
+      <Reveal delay={0.05} className="mt-9">
         <form
           onSubmit={(e) => {
             e.preventDefault();
             void run(query);
           }}
-          className="mt-5 flex items-baseline gap-3"
+          className="border-line focus-within:border-fg flex items-center gap-3 border-b pb-3 transition-colors"
         >
           <span className="text-accent font-mono text-sm" aria-hidden>
             &gt;
@@ -73,24 +76,25 @@ export function PortfolioAI() {
             onChange={(e) => setQuery(e.target.value)}
             placeholder="what has she actually built?"
             aria-label="Ask a question about Mahak"
-            className="placeholder:text-faint border-line focus:border-fg min-w-0 flex-1 border-b bg-transparent pb-2 text-[1.02rem] outline-none transition-colors"
+            className="placeholder:text-faint min-w-0 flex-1 bg-transparent text-[1.05rem] outline-none"
           />
           <button
             type="submit"
             disabled={!query.trim() || status === 'thinking'}
-            className="text-muted hover:text-fg text-sm transition-colors disabled:opacity-40"
+            aria-label="Ask"
+            className="text-muted hover:text-fg font-mono text-sm transition-colors disabled:opacity-40"
           >
-            ↵
+            ask ↵
           </button>
         </form>
 
-        <div className="text-faint mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[0.82rem]">
-          {SUGGESTED_PROMPTS.slice(0, 3).map((p) => (
+        <div className="mt-4 flex flex-wrap gap-2">
+          {SUGGESTED_PROMPTS.map((p) => (
             <button
               key={p}
               type="button"
               onClick={() => void run(p)}
-              className="hover:text-fg underline decoration-transparent underline-offset-2 transition-colors hover:decoration-current"
+              className="border-line text-muted hover:border-fg hover:text-fg rounded-sm border px-3 py-1.5 text-[0.82rem] transition-colors"
             >
               {p}
             </button>
@@ -106,39 +110,40 @@ export function PortfolioAI() {
               transition={{ duration: 0.25 }}
               className="overflow-hidden"
             >
-              <p
-                className="text-fg/90 mt-6 max-w-2xl text-[0.98rem] leading-relaxed"
-                aria-live="polite"
-              >
+              <div className="border-line mt-8 border-t pt-6" aria-live="polite">
+                <p className="text-faint mb-3 font-mono text-xs uppercase tracking-[0.12em]">
+                  {status === 'thinking' ? 'thinking' : 'assistant'}
+                </p>
                 {status === 'thinking' ? (
-                  <span className="text-faint">thinking…</span>
+                  <span className="text-faint text-sm">…</span>
                 ) : (
-                  <>
+                  <p className="text-fg/90 max-w-2xl text-[1rem] leading-relaxed">
                     {shown}
                     {status === 'answering' && (
                       <span className="bg-accent ml-0.5 inline-block h-[1em] w-px translate-y-[0.15em] animate-pulse" />
                     )}
-                  </>
+                  </p>
                 )}
-              </p>
-              {status === 'done' && answer?.followUps?.length ? (
-                <div className="text-faint mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[0.82rem]">
-                  {answer.followUps.map((f) => (
-                    <button
-                      key={f}
-                      type="button"
-                      onClick={() => void run(f)}
-                      className="hover:text-fg transition-colors"
-                    >
-                      {f} →
-                    </button>
-                  ))}
-                </div>
-              ) : null}
+
+                {status === 'done' && answer?.followUps?.length ? (
+                  <div className="mt-4 flex flex-wrap gap-x-5 gap-y-1.5 text-[0.85rem]">
+                    {answer.followUps.map((f) => (
+                      <button
+                        key={f}
+                        type="button"
+                        onClick={() => void run(f)}
+                        className="text-muted hover:text-fg transition-colors"
+                      >
+                        {f} →
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
       </Reveal>
-    </section>
+    </Section>
   );
 }
