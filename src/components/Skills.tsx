@@ -30,39 +30,25 @@ export function Skills() {
           <h2 className="mt-4 text-[clamp(1.7rem,1.2rem+2vw,2.6rem)]">I work with</h2>
         </Reveal>
 
-        <div className="mt-10 font-display text-[clamp(1.35rem,1rem+2vw,2.4rem)] leading-[1.25]">
-          <motion.p style={reduceMotion ? undefined : { x: xA }} className="[text-wrap:balance]">
-            {join(rowA)}
-          </motion.p>
-          <motion.p
-            style={reduceMotion ? undefined : { x: xB }}
-            className="text-muted mt-1 [text-wrap:balance]"
-          >
-            {join(rowB)}
+        <div className="mt-10 font-display text-[clamp(1.35rem,1rem+2vw,2.35rem)] leading-[1.3]">
+          <motion.p style={reduceMotion ? undefined : { x: xA }}>{rowA.join(', ')},</motion.p>
+          <motion.p style={reduceMotion ? undefined : { x: xB }} className="text-muted mt-1">
+            {rowB.join(', ')}.
           </motion.p>
         </div>
 
         <Reveal delay={0.05} className="mt-10">
           <p className="text-faint text-[0.95rem]">
-            <span className="font-mono text-xs uppercase tracking-[0.12em]">Still poking at</span>
-            <span className="mx-3">—</span>
+            <span className="text-accent font-mono text-xs uppercase tracking-[0.12em]">
+              Still poking at
+            </span>
+            <span className="mx-3" aria-hidden>
+              &mdash;
+            </span>
             {pokingAt.join(', ')}
           </p>
         </Reveal>
       </div>
     </Section>
   );
-}
-
-function join(items: string[]) {
-  return items.map((t, i) => (
-    <span key={t}>
-      {i > 0 && (
-        <span className="text-accent align-middle text-[0.5em]" aria-hidden>
-          {' ✳ '}
-        </span>
-      )}
-      {t}
-    </span>
-  ));
 }
