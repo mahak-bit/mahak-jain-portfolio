@@ -16,7 +16,7 @@ const JUMPS: Record<string, string> = {
 
 const SHORTCUTS: [string, string][] = [
   ['/', 'search — focus the ask bar'],
-  ['g then w', 'go to work'],
+  ['g then w', 'go to the archive'],
   ['g then a', 'go to about'],
   ['g then n', 'go to now'],
   ['g then c', 'go to contact'],

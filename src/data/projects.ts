@@ -23,8 +23,8 @@ export interface CasePoint {
 
 export interface Project {
   slug: string;
-  /** Auto-assigned roman numeral (i, ii, iii…) from list order. */
-  index: string;
+  /** Auto-assigned two-digit number (01, 02, 03…) from list order. */
+  number: string;
   name: string;
   year: string;
   status: ProjectStatus;
@@ -54,29 +54,11 @@ export interface Project {
   };
 }
 
-type ProjectInput = Omit<Project, 'index'>;
-
-function toRoman(n: number): string {
-  const map: [number, string][] = [
-    [10, 'x'],
-    [9, 'ix'],
-    [5, 'v'],
-    [4, 'iv'],
-    [1, 'i'],
-  ];
-  let out = '';
-  for (const [value, sym] of map) {
-    while (n >= value) {
-      out += sym;
-      n -= value;
-    }
-  }
-  return out;
-}
+type ProjectInput = Omit<Project, 'number'>;
 
 /**
- * The list. To add a project, drop a new object in here — the roman numeral,
- * the work card and the /projects/<slug> page all follow automatically.
+ * The list. To add a project, drop a new object in here — the number, the
+ * archive entry and the /projects/<slug> page all follow automatically.
  */
 const projectList: ProjectInput[] = [
   {
@@ -239,7 +221,7 @@ const projectList: ProjectInput[] = [
 
 export const projects: Project[] = projectList.map((p, i) => ({
   ...p,
-  index: toRoman(i + 1),
+  number: String(i + 1).padStart(2, '0'),
 }));
 
 export function getProject(slug: string): Project | undefined {

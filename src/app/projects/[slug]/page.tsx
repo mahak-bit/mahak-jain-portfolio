@@ -37,19 +37,22 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   if (!project) notFound();
 
   const isPlaceholder = project.status === 'placeholder';
+  const idx = projects.findIndex((p) => p.slug === project.slug);
+  const prev = idx > 0 ? projects[idx - 1] : null;
+  const next = idx < projects.length - 1 ? projects[idx + 1] : null;
 
   return (
     <article className="mx-auto max-w-3xl px-5 pb-24 pt-14 sm:px-8 sm:pt-20">
       <Link
-        href="/#work"
+        href="/archive"
         className="text-muted hover:text-fg inline-flex items-center gap-1.5 text-sm transition-colors"
       >
-        ← Work
+        ← The Archive
       </Link>
 
       <Reveal className="mt-10">
         <p className="kicker">
-          {project.index} · {project.year} · {isPlaceholder ? 'Open slot' : project.status}
+          {project.number} · {project.year} · {isPlaceholder ? 'Open slot' : project.status}
         </p>
         <h1 className="mt-4 text-[clamp(2.2rem,1.5rem+3.6vw,3.8rem)] leading-[1.02]">
           {project.name}
@@ -145,7 +148,34 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         )}
       </div>
 
-      <Reveal className="ruled mt-16 pt-14">
+      {/* Flip through the archive */}
+      <nav
+        className="border-line mt-16 flex items-stretch justify-between gap-4 border-t pt-10 text-sm"
+        aria-label="Archive navigation"
+      >
+        {prev ? (
+          <Link href={`/projects/${prev.slug}`} className="group flex-1">
+            <span className="text-faint font-mono text-xs">← {prev.number}</span>
+            <span className="group-hover:text-accent mt-1 block font-display text-lg transition-colors">
+              {prev.name}
+            </span>
+          </Link>
+        ) : (
+          <span className="flex-1" />
+        )}
+        {next ? (
+          <Link href={`/projects/${next.slug}`} className="group flex-1 text-right">
+            <span className="text-faint font-mono text-xs">{next.number} →</span>
+            <span className="group-hover:text-accent mt-1 block font-display text-lg transition-colors">
+              {next.name}
+            </span>
+          </Link>
+        ) : (
+          <span className="flex-1" />
+        )}
+      </nav>
+
+      <Reveal className="ruled mt-14 pt-14">
         <p className="font-display text-2xl">Want something like this?</p>
         <Link
           href="/#contact"

@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 
 const SECTIONS: { id: string; label: string }[] = [
   { id: 'ask', label: 'Ask' },
-  { id: 'work', label: 'Work' },
+  { id: 'work', label: 'Archive' },
   { id: 'about', label: 'About' },
   { id: 'now', label: 'Now' },
   { id: 'skills', label: 'Tools' },

@@ -48,7 +48,7 @@ export const seo = {
 
 /** Nav — kept short on purpose. Hrefs are in-page anchors. */
 export const navItems = [
-  { label: 'Work', href: '#work' },
+  { label: 'Archive', href: '#work' },
   { label: 'About', href: '#about' },
   { label: 'Now', href: '#now' },
   { label: 'Contact', href: '#contact' },

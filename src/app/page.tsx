@@ -1,6 +1,6 @@
 import { Hero } from '@/components/Hero';
 import { PortfolioAI } from '@/components/PortfolioAI';
-import { Projects } from '@/components/Projects';
+import { HomeArchive } from '@/components/HomeArchive';
 import { About } from '@/components/About';
 import { Now } from '@/components/Now';
 import { Skills } from '@/components/Skills';
@@ -13,7 +13,7 @@ export default function HomePage() {
     <>
       <Hero />
       <PortfolioAI />
-      <Projects />
+      <HomeArchive />
       <About />
       <Now />
       <Skills />
