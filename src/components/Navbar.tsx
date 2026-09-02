@@ -3,11 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { ArrowUpRight, Menu, X } from 'lucide-react';
 import { navItems } from '@/lib/site';
 import { ThemeToggle } from './ThemeToggle';
-import { Magnetic } from './ui/Magnetic';
-import { buttonStyles } from './ui/Button';
 import { cn } from '@/lib/utils';
 
 export function Navbar() {
@@ -16,7 +13,7 @@ export function Navbar() {
   const reduceMotion = useReducedMotion();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16);
+    const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -33,56 +30,52 @@ export function Navbar() {
   }, [open]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-4">
-      <nav
+    <header
+      className={cn(
+        'sticky top-0 z-50 transition-[background-color,border-color,backdrop-filter]',
+        scrolled
+          ? 'bg-bg/85 border-line border-b backdrop-blur'
+          : 'border-transparent bg-transparent'
+      )}
+    >
+      <div
         className={cn(
-          'mt-3 flex w-full max-w-3xl items-center gap-1 rounded-full border transition-all duration-300 sm:mt-4',
-          scrolled
-            ? 'border-border-strong bg-surface/80 p-1.5 shadow-lg shadow-black/5 backdrop-blur-xl'
-            : 'border-border/60 bg-surface/40 p-2 backdrop-blur-md'
+          'mx-auto flex max-w-5xl items-baseline justify-between px-5 transition-[padding] sm:px-8',
+          scrolled ? 'py-3' : 'py-5'
         )}
-        aria-label="Primary"
       >
         <Link
           href="/"
-          className="focus-visible:bg-surface-2 rounded-full px-3 py-1.5 font-mono text-sm font-semibold tracking-tight"
+          className="font-mono text-[0.82rem] font-semibold uppercase tracking-[0.16em]"
         >
-          MAHAK
+          Mahak Jain
         </Link>
 
-        <div className="mx-auto hidden items-center gap-0.5 md:flex">
+        <nav className="hidden items-baseline gap-7 md:flex" aria-label="Primary">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={`/${item.href}`}
-              className="text-muted hover:text-foreground hover:bg-surface-2 rounded-full px-3 py-1.5 text-sm transition-colors"
+              className="text-muted hover:text-fg text-[0.9rem] transition-colors"
             >
               {item.label}
             </Link>
           ))}
-        </div>
-
-        <div className="ml-auto flex items-center gap-2 md:ml-0">
           <ThemeToggle />
-          <Magnetic className="hidden sm:block">
-            <Link
-              href="/#contact"
-              className={buttonStyles('primary', 'sm', 'group whitespace-nowrap')}
-            >
-              Let&rsquo;s Work Together
-              <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </Link>
-          </Magnetic>
+        </nav>
+
+        <div className="flex items-center gap-4 md:hidden">
+          <ThemeToggle />
           <button
             type="button"
             onClick={() => setOpen(true)}
             aria-label="Open menu"
-            className="border-border-strong hover:bg-surface-2 inline-flex size-9 items-center justify-center rounded-full border md:hidden"
+            className="font-mono text-[0.8rem] uppercase tracking-[0.14em]"
           >
-            <Menu className="size-4" />
+            Menu
           </button>
         </div>
-      </nav>
+      </div>
 
       <AnimatePresence>
         {open && (
@@ -91,54 +84,48 @@ export function Navbar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.18 }}
           >
-            <div
-              className="bg-background/95 absolute inset-0 backdrop-blur-xl"
-              onClick={() => setOpen(false)}
-            />
-            <nav className="relative flex h-dvh flex-col px-6 pb-10 pt-6" aria-label="Mobile">
-              <div className="flex items-center justify-between">
-                <span className="font-mono text-sm font-semibold tracking-tight">MAHAK</span>
+            <div className="bg-bg absolute inset-0" onClick={() => setOpen(false)} />
+            <nav
+              className="relative flex h-dvh flex-col px-6 pb-12 pt-5"
+              aria-label="Mobile"
+            >
+              <div className="flex items-baseline justify-between">
+                <span className="font-mono text-[0.8rem] font-semibold uppercase tracking-[0.16em]">
+                  Mahak Jain
+                </span>
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
                   aria-label="Close menu"
-                  className="border-border-strong inline-flex size-9 items-center justify-center rounded-full border"
+                  className="font-mono text-[0.8rem] uppercase tracking-[0.14em]"
                 >
-                  <X className="size-4" />
+                  Close
                 </button>
               </div>
 
-              <div className="mt-16 flex flex-col gap-1">
+              <div className="mt-auto flex flex-col">
                 {navItems.map((item, i) => (
                   <motion.div
                     key={item.href}
-                    initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+                    initial={reduceMotion ? false : { opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.05 + i * 0.05, duration: 0.3 }}
+                    transition={{ delay: 0.04 + i * 0.04, duration: 0.25 }}
+                    className="border-line border-t"
                   >
                     <Link
                       href={`/${item.href}`}
                       onClick={() => setOpen(false)}
-                      className="block py-3 text-3xl tracking-tight"
+                      className="flex items-baseline gap-4 py-5"
                     >
-                      {item.label}
+                      <span className="text-faint font-mono text-xs">
+                        0{i + 1}
+                      </span>
+                      <span className="font-display text-3xl">{item.label}</span>
                     </Link>
                   </motion.div>
                 ))}
-              </div>
-
-              <div className="mt-auto flex items-center justify-between">
-                <Link
-                  href="/#contact"
-                  onClick={() => setOpen(false)}
-                  className={buttonStyles('primary', 'md')}
-                >
-                  Let&rsquo;s Work Together
-                  <ArrowUpRight className="size-4" />
-                </Link>
-                <ThemeToggle />
               </div>
             </nav>
           </motion.div>

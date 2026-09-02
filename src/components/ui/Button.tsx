@@ -1,26 +1,24 @@
 import { forwardRef } from 'react';
 import { cn } from '@/lib/utils';
 
-export type ButtonVariant = 'primary' | 'outline' | 'ghost';
-export type ButtonSize = 'sm' | 'md' | 'lg';
+export type ButtonVariant = 'solid' | 'line';
+export type ButtonSize = 'sm' | 'md';
 
 const base =
-  'inline-flex items-center justify-center gap-2 rounded-full font-medium transition-[filter,background-color,color,border-color] disabled:pointer-events-none disabled:opacity-50';
+  'inline-flex items-center justify-center gap-2 rounded-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-45';
 
 const variants: Record<ButtonVariant, string> = {
-  primary: 'bg-accent text-accent-foreground hover:brightness-110 active:brightness-95',
-  outline: 'border border-border-strong text-foreground hover:bg-surface-2',
-  ghost: 'text-muted hover:text-foreground hover:bg-surface-2',
+  solid: 'bg-fg text-bg hover:bg-accent hover:text-accent-fg',
+  line: 'border border-line text-fg hover:border-fg',
 };
 
 const sizes: Record<ButtonSize, string> = {
-  sm: 'h-9 px-4 text-sm',
+  sm: 'h-9 px-3.5 text-[0.8rem]',
   md: 'h-11 px-5 text-sm',
-  lg: 'h-12 px-6 text-[0.95rem]',
 };
 
 export function buttonStyles(
-  variant: ButtonVariant = 'primary',
+  variant: ButtonVariant = 'solid',
   size: ButtonSize = 'md',
   className?: string
 ) {
@@ -33,7 +31,7 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { variant = 'primary', size = 'md', className, ...props },
+  { variant = 'solid', size = 'md', className, ...props },
   ref
 ) {
   return <button ref={ref} className={buttonStyles(variant, size, className)} {...props} />;

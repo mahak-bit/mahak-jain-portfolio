@@ -4,30 +4,25 @@ import type { ReactNode } from 'react';
 import { Reveal } from './Reveal';
 import { cn } from '@/lib/utils';
 
+/**
+ * A quiet kicker + a display-type heading. No section numbers.
+ */
 export function SectionHeading({
-  index,
-  label,
+  kicker,
   title,
-  intro,
+  lede,
   className,
 }: {
-  index: string;
-  label: string;
+  kicker: string;
   title: ReactNode;
-  intro?: ReactNode;
+  lede?: ReactNode;
   className?: string;
 }) {
   return (
-    <Reveal className={cn('flex flex-col gap-5', className)}>
-      <div className="text-eyebrow flex items-center gap-3">
-        <span className="text-accent">{index}</span>
-        <span className="bg-border-strong h-px w-8" aria-hidden />
-        <span>{label}</span>
-      </div>
-      <h2 className="max-w-3xl text-[clamp(1.9rem,1.2rem+3vw,3.25rem)] leading-[1.05]">{title}</h2>
-      {intro ? (
-        <p className="text-muted max-w-xl text-base leading-relaxed sm:text-lg">{intro}</p>
-      ) : null}
+    <Reveal className={cn('flex flex-col gap-4', className)}>
+      <span className="kicker">{kicker}</span>
+      <h2 className="max-w-3xl text-[clamp(1.85rem,1.3rem+2.4vw,2.9rem)]">{title}</h2>
+      {lede ? <p className="text-muted max-w-xl text-[1.05rem] leading-relaxed">{lede}</p> : null}
     </Reveal>
   );
 }

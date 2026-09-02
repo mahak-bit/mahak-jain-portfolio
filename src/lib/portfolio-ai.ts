@@ -26,11 +26,11 @@ export interface PortfolioAnswer {
 }
 
 export const SUGGESTED_PROMPTS = [
-  'What AI projects have you built?',
-  'What technologies do you use?',
-  'Can you build an AI SaaS?',
-  'What are your strongest skills?',
-  'Tell me about your web projects.',
+  'what has she actually built?',
+  'is she any good with agents?',
+  'can she build an AI product end to end?',
+  'what does she use day to day?',
+  'how does she work?',
 ] as const;
 
 interface Intent {
@@ -57,8 +57,8 @@ const INTENTS: Intent[] = [
       'show me',
     ],
     response:
-      'The flagship is the AI Study Planner — a full-stack platform that generates a personalised study schedule from a student’s subjects, exams and real availability, then rebalances it automatically when sessions are missed. It includes a genuine tool-calling AI Coach whose tools are scoped to the student’s own data, structured AI output with a retry contract, and a deterministic rescheduling engine backed by unit tests. This portfolio site is the second build: a hand-made design system, this assistant, and a restrained motion layer. A third project slot is open and clearly marked in the code.',
-    followUps: ['How does the AI Coach work?', 'What’s the tech stack?', 'Can you build an AI SaaS?'],
+      'Two real ones so far. The AI Study Planner — a study app that reshuffles your schedule when you miss a session, with an AI coach that can read your data but structurally can’t touch your plan. And this site, which she rebuilt from scratch to stop looking like every other AI portfolio. A third slot is open and clearly labelled in the code.',
+    followUps: ['is she any good with agents?', 'what does she use day to day?', 'can she build an AI product end to end?'],
   },
   {
     id: 'coach',
@@ -97,8 +97,8 @@ const INTENTS: Intent[] = [
       'hire you to build',
     ],
     response:
-      'Yes. The AI Study Planner is a working example of the full loop: auth and onboarding, an AI generation layer with schema-validated output, a database, analytics, a tool-calling agent, and a tested critical path — deployed. The workflow is AI-first: an AI coding assistant sits between the IDE and the architecture, which makes moving from idea to a usable product fast. If you have an AI SaaS in mind, the Contact section is the place to start.',
-    followUps: ['What’s your development workflow?', 'How do I get in touch?'],
+      'Yes — the Study Planner is the proof: auth, onboarding, an AI generation layer with validated output, a database, analytics, a tool-calling agent, and a tested critical path, all deployed. The workflow is AI-first, so idea to working product is fast. If you have something in mind, the contact section is right below.',
+    followUps: ['how does she work?', 'how do I get in touch?'],
   },
   {
     id: 'skills',

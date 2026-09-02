@@ -1,9 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { ArrowRight, CornerDownLeft, Sparkles } from 'lucide-react';
-import { Section } from './ui/Section';
 import { Reveal } from './ui/Reveal';
 import { askPortfolio, SUGGESTED_PROMPTS, type PortfolioAnswer } from '@/lib/portfolio-ai';
 
@@ -15,7 +13,6 @@ export function PortfolioAI() {
   const [status, setStatus] = useState<Status>('idle');
   const [answer, setAnswer] = useState<PortfolioAnswer | null>(null);
   const [shown, setShown] = useState('');
-  const inputRef = useRef<HTMLInputElement>(null);
 
   async function run(q: string) {
     const trimmed = q.trim();
@@ -34,7 +31,6 @@ export function PortfolioAI() {
     }
   }
 
-  // Progressive word reveal for the "answering" phase.
   useEffect(() => {
     if (status !== 'answering' || !answer) return;
     const words = answer.response.split(' ');
@@ -46,51 +42,55 @@ export function PortfolioAI() {
         clearInterval(id);
         setStatus('done');
       }
-    }, 22);
+    }, 24);
     return () => clearInterval(id);
   }, [status, answer]);
 
   return (
-    <Section id="ask" aria-label="Ask my portfolio">
-      <SectionHead />
+    <section id="ask" aria-label="Ask around" className="mx-auto max-w-5xl px-5 py-14 sm:px-8">
+      <h2 className="sr-only">Ask around</h2>
+      <Reveal className="border-line border-t pt-10">
+        <p className="text-muted text-[1.05rem]">
+          Want to know something specific?{' '}
+          <span className="text-fg">Ask around.</span>{' '}
+          <span className="text-faint text-sm">
+            (It&rsquo;s a small local model of me — no API, works offline.)
+          </span>
+        </p>
 
-      <Reveal
-        delay={0.05}
-        className="border-border-strong bg-surface/70 mt-10 overflow-hidden rounded-2xl border backdrop-blur-md"
-      >
         <form
           onSubmit={(e) => {
             e.preventDefault();
             void run(query);
           }}
-          className="flex items-center gap-3 px-4 py-3.5 sm:px-5"
+          className="mt-5 flex items-baseline gap-3"
         >
-          <Sparkles className="text-accent size-4 shrink-0" aria-hidden />
+          <span className="text-accent font-mono text-sm" aria-hidden>
+            &gt;
+          </span>
           <input
-            ref={inputRef}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Ask: What can Mahak build?"
-            aria-label="Ask my portfolio a question"
-            className="placeholder:text-faint min-w-0 flex-1 bg-transparent text-sm outline-none sm:text-base"
+            placeholder="what has she actually built?"
+            aria-label="Ask a question about Mahak"
+            className="placeholder:text-faint border-line focus:border-fg min-w-0 flex-1 border-b bg-transparent pb-2 text-[1.02rem] outline-none transition-colors"
           />
           <button
             type="submit"
             disabled={!query.trim() || status === 'thinking'}
-            aria-label="Send question"
-            className="bg-accent text-accent-foreground inline-flex size-8 shrink-0 items-center justify-center rounded-full transition hover:brightness-110 disabled:opacity-40"
+            className="text-muted hover:text-fg text-sm transition-colors disabled:opacity-40"
           >
-            <ArrowRight className="size-4" />
+            ↵
           </button>
         </form>
 
-        <div className="border-border/60 flex flex-wrap gap-2 border-t px-4 py-3 sm:px-5">
-          {SUGGESTED_PROMPTS.map((p) => (
+        <div className="text-faint mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[0.82rem]">
+          {SUGGESTED_PROMPTS.slice(0, 3).map((p) => (
             <button
               key={p}
               type="button"
               onClick={() => void run(p)}
-              className="border-border text-muted hover:border-border-strong hover:text-foreground rounded-full border px-3 py-1.5 text-xs transition-colors"
+              className="hover:text-fg underline decoration-transparent underline-offset-2 transition-colors hover:decoration-current"
             >
               {p}
             </button>
@@ -100,87 +100,45 @@ export function PortfolioAI() {
         <AnimatePresence initial={false}>
           {status !== 'idle' && (
             <motion.div
-              initial={reduceMotion ? false : { height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="border-border/60 border-t"
+              initial={reduceMotion ? false : { opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.25 }}
+              className="overflow-hidden"
             >
-              <div className="px-4 py-5 sm:px-5" aria-live="polite">
-                <p className="text-eyebrow mb-3 flex items-center gap-2">
-                  <span className="bg-accent inline-block size-1.5 rounded-full" aria-hidden />
-                  {status === 'thinking' ? 'Thinking' : 'Portfolio assistant'}
-                </p>
-
+              <p
+                className="text-fg/90 mt-6 max-w-2xl text-[0.98rem] leading-relaxed"
+                aria-live="polite"
+              >
                 {status === 'thinking' ? (
-                  <ThinkingDots />
+                  <span className="text-faint">thinking…</span>
                 ) : (
-                  <p className="text-foreground/90 text-sm leading-relaxed sm:text-[0.95rem]">
+                  <>
                     {shown}
                     {status === 'answering' && (
-                      <span className="bg-accent ml-0.5 inline-block h-[1em] w-[2px] translate-y-0.5 animate-pulse" />
+                      <span className="bg-accent ml-0.5 inline-block h-[1em] w-px translate-y-[0.15em] animate-pulse" />
                     )}
-                  </p>
+                  </>
                 )}
-
-                {status === 'done' && answer?.followUps?.length ? (
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {answer.followUps.map((f) => (
-                      <button
-                        key={f}
-                        type="button"
-                        onClick={() => void run(f)}
-                        className="text-muted hover:text-foreground inline-flex items-center gap-1 text-xs"
-                      >
-                        <ArrowRight className="size-3" />
-                        {f}
-                      </button>
-                    ))}
-                  </div>
-                ) : null}
-              </div>
+              </p>
+              {status === 'done' && answer?.followUps?.length ? (
+                <div className="text-faint mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[0.82rem]">
+                  {answer.followUps.map((f) => (
+                    <button
+                      key={f}
+                      type="button"
+                      onClick={() => void run(f)}
+                      className="hover:text-fg transition-colors"
+                    >
+                      {f} →
+                    </button>
+                  ))}
+                </div>
+              ) : null}
             </motion.div>
           )}
         </AnimatePresence>
       </Reveal>
-
-      <p className="text-faint mt-3 flex items-center gap-1.5 font-mono text-xs">
-        <CornerDownLeft className="size-3" />
-        Simulated locally — built so a real model API can be connected later.
-      </p>
-    </Section>
-  );
-}
-
-function SectionHead() {
-  return (
-    <Reveal className="flex flex-col gap-5">
-      <div className="text-eyebrow flex items-center gap-3">
-        <span className="text-accent">◆</span>
-        <span className="bg-border-strong h-px w-8" aria-hidden />
-        <span>Ask my portfolio</span>
-      </div>
-      <h2 className="max-w-2xl text-[clamp(1.9rem,1.2rem+3vw,3.25rem)] leading-[1.05]">
-        Ask my portfolio anything.
-      </h2>
-      <p className="text-muted max-w-xl text-base leading-relaxed sm:text-lg">
-        Not sure where to start? Ask about my projects, skills, AI work, or what I&rsquo;m building.
-      </p>
-    </Reveal>
-  );
-}
-
-function ThinkingDots() {
-  return (
-    <span className="text-muted inline-flex gap-1">
-      {[0, 1, 2].map((i) => (
-        <motion.span
-          key={i}
-          className="bg-muted inline-block size-1.5 rounded-full"
-          animate={{ opacity: [0.3, 1, 0.3] }}
-          transition={{ duration: 1, repeat: Infinity, delay: i * 0.15 }}
-        />
-      ))}
-    </span>
+    </section>
   );
 }

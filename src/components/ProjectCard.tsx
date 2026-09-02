@@ -1,139 +1,116 @@
 'use client';
 
-import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowUpRight, Plus } from 'lucide-react';
 import type { Project } from '@/data/projects';
-import { fadeUp, viewportOnce } from '@/lib/motion';
+import { enter, viewportOnce } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 
-export function ProjectCard({ project, flip = false }: { project: Project; flip?: boolean }) {
+export function ProjectCard({ project, position }: { project: Project; position: number }) {
   const reduceMotion = useReducedMotion();
   const isPlaceholder = project.status === 'placeholder';
-
-  const shell = cn(
-    'border-border-strong bg-surface/50 relative grid overflow-hidden rounded-3xl border backdrop-blur-sm transition-colors lg:grid-cols-2',
-    !isPlaceholder && 'hover:border-accent/40 focus-visible:border-accent/60'
-  );
-
-  const inner: ReactNode = (
-    <>
-      <div className={cn('order-1', flip ? 'lg:order-2' : 'lg:order-1')}>
-        <Preview project={project} />
-      </div>
-
-      <div
-        className={cn('order-2 flex flex-col gap-5 p-6 sm:p-9', flip ? 'lg:order-1' : 'lg:order-2')}
-      >
-        <div className="flex items-center justify-between">
-          <span className="text-faint font-mono text-sm">{project.number}</span>
-          <span
-            className={cn(
-              'rounded-full border px-2.5 py-1 font-mono text-[0.68rem] uppercase tracking-wider',
-              isPlaceholder
-                ? 'border-border text-faint'
-                : 'border-accent/30 text-accent bg-accent-soft'
-            )}
-          >
-            {isPlaceholder ? 'Open slot' : project.status === 'live' ? 'Shipped' : project.status}
-          </span>
-        </div>
-
-        <div>
-          <h3 className="text-2xl tracking-tight sm:text-[1.7rem]">{project.name}</h3>
-          <p className="text-muted mt-2 text-sm leading-relaxed sm:text-[0.95rem]">
-            {project.description}
-          </p>
-        </div>
-
-        <div className="mt-auto flex flex-wrap gap-1.5">
-          {project.tech.slice(0, 5).map((t) => (
-            <span
-              key={t}
-              className="border-border text-muted rounded-full border px-2.5 py-1 text-xs"
-            >
-              {t}
-            </span>
-          ))}
-        </div>
-
-        <span
-          className={cn(
-            'inline-flex items-center gap-1.5 text-sm font-medium',
-            isPlaceholder ? 'text-faint' : 'text-foreground'
-          )}
-        >
-          {isPlaceholder ? (
-            <>
-              <Plus className="size-4" /> Add this project in{' '}
-              <code className="text-xs">data/projects.ts</code>
-            </>
-          ) : (
-            <>
-              View case study
-              <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </>
-          )}
-        </span>
-      </div>
-    </>
-  );
+  const cover = project.screenshots[0];
 
   return (
     <motion.article
-      variants={reduceMotion ? undefined : fadeUp}
+      variants={reduceMotion ? undefined : enter}
       initial={reduceMotion ? undefined : 'hidden'}
       whileInView={reduceMotion ? undefined : 'visible'}
       viewport={viewportOnce}
-      className="group"
+      className="border-line border-t pt-10 first:border-t-0 first:pt-0"
     >
-      {isPlaceholder ? (
-        <div className={shell}>{inner}</div>
-      ) : (
-        <Link
-          href={`/projects/${project.slug}`}
-          aria-label={`${project.name} — view case study`}
-          className={shell}
+      {/* Heading row */}
+      <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+        <div className="flex items-baseline gap-4">
+          <span className="text-faint font-mono text-sm">{project.index}</span>
+          <h3 className="text-[clamp(1.6rem,1.2rem+1.8vw,2.4rem)]">{project.name}</h3>
+        </div>
+        <span className="text-faint font-mono text-xs uppercase tracking-[0.12em]">
+          {project.year} · {isPlaceholder ? 'Open slot' : project.status}
+        </span>
+      </div>
+
+      <p className="text-muted mt-4 max-w-2xl text-[1.12rem] leading-snug">{project.oneLiner}</p>
+
+      {/* Visual */}
+      <div
+        className={cn(
+          'mt-8',
+          position % 2 === 1 ? 'sm:ml-[6%] sm:mr-0' : 'sm:mr-[6%] sm:ml-0'
+        )}
+      >
+        <div
+          className={cn(
+            'border-line flex items-center justify-center border',
+            position % 2 === 1 ? 'aspect-[4/3]' : 'aspect-[16/10]',
+            isPlaceholder ? 'bg-surface border-dashed' : 'bg-raise'
+          )}
         >
-          {inner}
-        </Link>
+          <span className="text-faint px-6 text-center font-mono text-xs">
+            {cover?.caption || '[ADD SCREENSHOT]'}
+          </span>
+        </div>
+      </div>
+
+      {/* Story */}
+      {!isPlaceholder ? (
+        <div className="mt-9 grid gap-x-10 gap-y-6 sm:grid-cols-3">
+          <StoryCol label="The problem" text={project.story.solving} />
+          <StoryCol label="I built" text={project.story.built} />
+          <StoryCol label="I learned" text={project.story.learned} />
+        </div>
+      ) : (
+        <p className="text-faint mt-9 text-sm">
+          Add the details in <code className="text-xs">src/data/projects.ts</code> — this entry and
+          its case-study page render automatically.
+        </p>
       )}
+
+      {/* Footer row */}
+      <div className="mt-8 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-3">
+        <p className="text-faint text-[0.82rem]">{project.tech.join(' · ')}</p>
+        <div className="flex items-center gap-6 text-[0.9rem]">
+          {!isPlaceholder && (
+            <Link href={`/projects/${project.slug}`} className="group inline-flex items-center gap-1.5">
+              <span className="border-fg group-hover:border-accent border-b pb-0.5 transition-colors">
+                Read the case study
+              </span>
+              <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
+                →
+              </span>
+            </Link>
+          )}
+          {project.links.github && (
+            <a
+              href={project.links.github}
+              target="_blank"
+              rel="noreferrer"
+              className="text-muted hover:text-fg transition-colors"
+            >
+              GitHub ↗
+            </a>
+          )}
+          {project.links.demo && (
+            <a
+              href={project.links.demo}
+              target="_blank"
+              rel="noreferrer"
+              className="text-muted hover:text-fg transition-colors"
+            >
+              Live ↗
+            </a>
+          )}
+        </div>
+      </div>
     </motion.article>
   );
 }
 
-function Preview({ project }: { project: Project }) {
-  const isPlaceholder = project.status === 'placeholder';
-
+function StoryCol({ label, text }: { label: string; text: string }) {
   return (
-    <div className="relative h-56 overflow-hidden sm:h-full sm:min-h-[19rem]">
-      <div className="grid-lines absolute inset-0 opacity-60" aria-hidden />
-      <div
-        className="absolute inset-0"
-        style={{ background: 'radial-gradient(120% 80% at 80% 0%, var(--accent-soft), transparent 55%)' }}
-        aria-hidden
-      />
-      <span
-        className="text-foreground/[0.04] pointer-events-none absolute -right-2 bottom-[-1.5rem] font-mono text-[9rem] font-bold leading-none sm:text-[12rem]"
-        aria-hidden
-      >
-        {project.number}
-      </span>
-
-      {isPlaceholder ? (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="border-border text-faint flex size-16 items-center justify-center rounded-2xl border border-dashed">
-            <Plus className="size-6" />
-          </div>
-        </div>
-      ) : (
-        <div className="absolute inset-x-8 top-9 flex flex-col gap-2.5" aria-hidden>
-          <div className="border-border-strong bg-surface/80 h-8 w-2/3 rounded-lg border shadow-sm transition-transform duration-500 group-hover:translate-x-1" />
-          <div className="border-border-strong bg-surface/80 ml-6 h-8 w-1/2 rounded-lg border shadow-sm transition-transform duration-500 group-hover:translate-x-2" />
-          <div className="border-accent/40 bg-accent-soft h-8 w-3/5 rounded-lg border shadow-sm transition-transform duration-500 group-hover:-translate-x-1" />
-        </div>
-      )}
+    <div>
+      <p className="text-faint mb-2 font-mono text-xs uppercase tracking-[0.12em]">{label}</p>
+      <p className="text-[0.98rem] leading-relaxed">{text}</p>
     </div>
   );
 }

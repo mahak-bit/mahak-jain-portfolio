@@ -1,21 +1,23 @@
 import { Section } from './ui/Section';
-import { SectionHeading } from './ui/SectionHeading';
+import { Reveal } from './ui/Reveal';
 import { ProjectCard } from './ProjectCard';
 import { projects } from '@/data/projects';
 
 export function Projects() {
   return (
-    <Section id="work">
-      <SectionHeading
-        index="02"
-        label="Work"
-        title="Selected work."
-        intro="A collection of products, experiments and systems I've built. Real projects only — open slots are labelled."
-      />
+    <Section id="work" className="max-w-5xl">
+      <Reveal className="mb-14 flex flex-wrap items-end justify-between gap-4">
+        <h2 className="font-display text-[clamp(2.4rem,1.6rem+4vw,4.5rem)] leading-none">
+          Selected work
+        </h2>
+        <p className="text-muted max-w-xs text-[0.95rem] leading-snug">
+          Three things, told as short stories. Real projects only — the open slot is labelled.
+        </p>
+      </Reveal>
 
-      <div className="mt-14 flex flex-col gap-8 sm:gap-10">
+      <div className="flex flex-col gap-14">
         {projects.map((project, i) => (
-          <ProjectCard key={project.slug} project={project} flip={i % 2 === 1} />
+          <ProjectCard key={project.slug} project={project} position={i} />
         ))}
       </div>
     </Section>

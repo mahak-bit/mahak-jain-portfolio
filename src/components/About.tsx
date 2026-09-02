@@ -1,53 +1,38 @@
 import { Section } from './ui/Section';
-import { SectionHeading } from './ui/SectionHeading';
 import { Reveal } from './ui/Reveal';
-
-const EXPLORING = [
-  'Generative AI',
-  'Agentic AI',
-  'AI Agents',
-  'LLM Applications',
-  'Automation',
-  'Product Engineering',
-];
 
 export function About() {
   return (
-    <Section id="about">
-      <SectionHeading
-        index="01"
-        label="About"
-        title="I like turning ideas into things that work."
-      />
-
-      <div className="mt-12 grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:gap-16">
-        <Reveal className="text-muted space-y-5 text-base leading-relaxed sm:text-[1.05rem]">
-          <p>
-            I came into technology from business — a BBA — and moved into it deliberately, not as a
-            detour. What started as building interfaces became full-stack development, and then AI:
-            generative models, LLM applications, and the engineering around them.
-          </p>
-          <p>
-            Today I build AI-powered products end to end with an AI-first workflow — using AI coding
-            assistants like Claude Code to move quickly while keeping the architecture, the data
-            model and the guardrails deliberate. I&rsquo;m most interested in where product thinking
-            meets real systems: shipping something people actually use — and, increasingly, in
-            agentic AI, software that can plan and act rather than only respond.
-          </p>
+    <Section id="about" className="ruled pt-16 sm:pt-20">
+      <div className="grid gap-x-12 gap-y-10 md:grid-cols-[1fr_1.4fr]">
+        <Reveal className="md:sticky md:top-24 md:self-start">
+          <span className="kicker">About</span>
+          <h2 className="mt-4 text-[clamp(1.7rem,1.2rem+2vw,2.6rem)]">
+            I studied business. Then I got more interested in the thing everyone was building on
+            top of.
+          </h2>
         </Reveal>
 
-        <Reveal delay={0.1}>
-          <div className="border-border-strong bg-surface/50 rounded-2xl border p-6">
-            <p className="text-eyebrow mb-4">Currently exploring</p>
-            <ul className="flex flex-col gap-2.5">
-              {EXPLORING.map((item) => (
-                <li key={item} className="flex items-center gap-3 text-sm">
-                  <span className="bg-accent size-1.5 shrink-0 rounded-full" aria-hidden />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
+        <Reveal delay={0.05} className="prose-links flex flex-col gap-5 text-[1.06rem] leading-relaxed">
+          <p>
+            I&rsquo;m Mahak. Somewhere between spreadsheets and a late-night &ldquo;wait, can I just
+            build this?&rdquo; I started making software — and lately that&rsquo;s mostly meant AI:
+            apps, agents, and the small automations that remove a step nobody should be doing by
+            hand.
+          </p>
+          <p>
+            I work AI-first. An assistant handles the repetitive parts; I decide the shape of
+            things — the data model, the boundaries, the places it isn&rsquo;t allowed to break.
+            It&rsquo;s fast, but it&rsquo;s not hands-off.
+          </p>
+          <p>
+            The work here is real and deliberately small. I&rsquo;d rather ship something that
+            works than write a paragraph about something that might.
+          </p>
+
+          <p className="annotation mt-3 max-w-sm -rotate-1">
+            Most of my ideas start as a random thought and end up as a repo.
+          </p>
         </Reveal>
       </div>
     </Section>

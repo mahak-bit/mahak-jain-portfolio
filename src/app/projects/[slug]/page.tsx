@@ -1,11 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, ArrowUpRight, Globe } from 'lucide-react';
 import { getProject, projects } from '@/data/projects';
 import { Reveal } from '@/components/ui/Reveal';
-import { buttonStyles } from '@/components/ui/Button';
-import { GithubIcon } from '@/components/ui/BrandIcons';
 import { site } from '@/lib/site';
 
 export function generateStaticParams() {
@@ -19,16 +16,15 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const project = getProject(slug);
-  if (!project) return { title: 'Project not found' };
-
+  if (!project) return { title: 'Not found' };
   const title = project.name === '[ADD PROJECT]' ? 'Project slot' : project.name;
   return {
     title,
-    description: project.tagline,
+    description: project.oneLiner,
     alternates: { canonical: `/projects/${project.slug}` },
     openGraph: {
       title: `${title} — ${site.name}`,
-      description: project.tagline,
+      description: project.oneLiner,
       url: `${site.url}/projects/${project.slug}`,
       type: 'article',
     },
@@ -40,169 +36,170 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const project = getProject(slug);
   if (!project) notFound();
 
-  const hasDemo = Boolean(project.links.demo);
-  const hasRepo = Boolean(project.links.github);
+  const isPlaceholder = project.status === 'placeholder';
 
   return (
-    <article className="mx-auto max-w-4xl px-5 pb-24 pt-32 sm:px-8 sm:pt-40">
+    <article className="mx-auto max-w-3xl px-5 pb-24 pt-14 sm:px-8 sm:pt-20">
       <Link
         href="/#work"
-        className="text-muted hover:text-foreground inline-flex items-center gap-1.5 text-sm transition-colors"
+        className="text-muted hover:text-fg inline-flex items-center gap-1.5 text-sm transition-colors"
       >
-        <ArrowLeft className="size-4" />
-        All work
+        ← Work
       </Link>
 
-      <Reveal className="mt-8">
-        <div className="text-eyebrow flex flex-wrap items-center gap-3">
-          <span className="text-accent">{project.number}</span>
-          <span className="bg-border-strong h-px w-8" aria-hidden />
-          <span>{project.year}</span>
-          <span className="text-faint">·</span>
-          <span>{project.status === 'placeholder' ? 'Open slot' : project.status}</span>
-        </div>
-        <h1 className="mt-5 text-[clamp(2rem,1.3rem+3.4vw,3.5rem)] leading-[1.05]">
+      <Reveal className="mt-10">
+        <p className="kicker">
+          {project.index} · {project.year} · {isPlaceholder ? 'Open slot' : project.status}
+        </p>
+        <h1 className="mt-4 text-[clamp(2.2rem,1.5rem+3.6vw,3.8rem)] leading-[1.02]">
           {project.name}
         </h1>
-        <p className="text-muted mt-4 max-w-2xl text-lg leading-relaxed">{project.tagline}</p>
+        <p className="text-muted mt-4 max-w-xl text-[1.15rem] leading-snug">{project.oneLiner}</p>
 
-        <div className="mt-7 flex flex-wrap gap-3">
-          {hasDemo ? (
-            <a
-              href={project.links.demo}
-              target="_blank"
-              rel="noreferrer"
-              className={buttonStyles('primary', 'md')}
-            >
-              <Globe className="size-4" />
-              Live demo
-            </a>
-          ) : (
-            <span className={buttonStyles('outline', 'md', 'pointer-events-none opacity-60')}>
-              <Globe className="size-4" />
-              Live demo — [ADD URL]
-            </span>
-          )}
-          {hasRepo ? (
-            <a
-              href={project.links.github}
-              target="_blank"
-              rel="noreferrer"
-              className={buttonStyles('outline', 'md')}
-            >
-              <GithubIcon className="size-4" />
-              Source
-            </a>
-          ) : (
-            <span className={buttonStyles('outline', 'md', 'pointer-events-none opacity-60')}>
-              <GithubIcon className="size-4" />
-              Source — [ADD REPO]
-            </span>
-          )}
+        <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-[0.9rem]">
+          <LinkOrPlaceholder label="Live" href={project.links.demo} placeholder="[ADD LIVE URL]" />
+          <LinkOrPlaceholder
+            label="Source"
+            href={project.links.github}
+            placeholder="[ADD REPO URL]"
+          />
         </div>
       </Reveal>
 
-      <div className="mt-16 flex flex-col gap-14">
-        <Block title="Overview">
-          <p>{project.overview}</p>
+      {/* Lead visual */}
+      <Reveal delay={0.05} className="mt-12">
+        <div className="border-line bg-raise flex aspect-[16/10] items-center justify-center border">
+          <span className="text-faint font-mono text-xs">
+            {project.screenshots[0]?.caption || '[ADD SCREENSHOT]'}
+          </span>
+        </div>
+      </Reveal>
+
+      {/* Story */}
+      {!isPlaceholder && (
+        <div className="mt-16 flex flex-col gap-12">
+          <StoryBlock label="The problem" text={project.story.solving} />
+          <StoryBlock label="What I built" text={project.story.built} />
+          <StoryBlock label="What I learned" text={project.story.learned} />
+        </div>
+      )}
+
+      {/* Deeper detail */}
+      <div className="ruled mt-16 flex flex-col gap-14 pt-14">
+        <Block label="Overview">
+          <p>{project.caseStudy.overview}</p>
         </Block>
 
-        <div className="grid gap-10 sm:grid-cols-2">
-          <Block title="Problem">
-            <p>{project.problem}</p>
-          </Block>
-          <Block title="Approach">
-            <p>{project.approach}</p>
-          </Block>
-        </div>
-
-        <Block title="Features">
-          <ul className="not-prose flex flex-col gap-4">
-            {project.features.map((f) => (
-              <li key={f.title} className="border-border border-l-2 pl-4">
-                <p className="text-foreground font-medium">{f.title}</p>
-                <p className="text-muted mt-1 text-sm leading-relaxed">{f.detail}</p>
+        <Block label="Features">
+          <ul className="flex flex-col gap-4">
+            {project.caseStudy.features.map((f) => (
+              <li key={f.title} className="border-line border-l pl-4">
+                <p className="text-fg font-medium">{f.title}</p>
+                <p className="text-muted mt-1 text-[0.96rem] leading-relaxed">{f.detail}</p>
               </li>
             ))}
           </ul>
         </Block>
 
-        <Block title="Technology">
-          <div className="not-prose flex flex-wrap gap-2">
-            {project.tech.map((t) => (
-              <span
-                key={t}
-                className="border-border text-muted rounded-full border px-3 py-1.5 text-sm"
-              >
-                {t}
-              </span>
-            ))}
-          </div>
-        </Block>
-
-        <Block title="Screenshots">
-          <div className="not-prose grid gap-4 sm:grid-cols-2">
-            {project.screenshots.map((shot, i) => (
-              <figure key={i} className="flex flex-col gap-2">
-                <div className="border-border bg-surface/40 grid-lines flex aspect-video items-center justify-center rounded-xl border">
-                  <span className="text-faint font-mono text-xs">
-                    {shot.caption ?? '[ADD SCREENSHOT]'}
-                  </span>
-                </div>
-              </figure>
-            ))}
-          </div>
-        </Block>
-
-        <Block title="Architecture">
-          <ul className="not-prose flex flex-col gap-3">
-            {project.architecture.map((point, i) => (
-              <li key={i} className="text-muted flex gap-3 text-sm leading-relaxed">
-                <span className="text-accent font-mono">{String(i + 1).padStart(2, '0')}</span>
+        <Block label="How it's put together">
+          <ul className="flex flex-col gap-3">
+            {project.caseStudy.architecture.map((point, i) => (
+              <li key={i} className="text-muted flex gap-3 text-[0.96rem] leading-relaxed">
+                <span className="text-accent font-mono text-xs">{String(i + 1).padStart(2, '0')}</span>
                 {point}
               </li>
             ))}
           </ul>
         </Block>
 
-        <Block title="Challenges">
-          <ul className="not-prose flex flex-col gap-4">
-            {project.challenges.map((c) => (
-              <li key={c.title} className="border-border border-l-2 pl-4">
-                <p className="text-foreground font-medium">{c.title}</p>
-                <p className="text-muted mt-1 text-sm leading-relaxed">{c.detail}</p>
+        <Block label="Challenges">
+          <ul className="flex flex-col gap-4">
+            {project.caseStudy.challenges.map((c) => (
+              <li key={c.title} className="border-line border-l pl-4">
+                <p className="text-fg font-medium">{c.title}</p>
+                <p className="text-muted mt-1 text-[0.96rem] leading-relaxed">{c.detail}</p>
               </li>
             ))}
           </ul>
         </Block>
 
-        <Block title="Outcome">
-          <p>{project.outcome}</p>
+        <Block label="Where it landed">
+          <p>{project.caseStudy.outcome}</p>
         </Block>
+
+        {project.screenshots.length > 0 && (
+          <Block label="Screens">
+            <div className="grid gap-4 sm:grid-cols-2">
+              {project.screenshots.map((shot, i) => (
+                <div
+                  key={i}
+                  className="border-line bg-raise flex aspect-video items-center justify-center border"
+                >
+                  <span className="text-faint px-4 text-center font-mono text-xs">
+                    {shot.caption ?? '[ADD SCREENSHOT]'}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </Block>
+        )}
       </div>
 
-      <Reveal className="border-border-strong mt-16 flex flex-col items-start gap-4 rounded-2xl border p-8">
-        <h2 className="text-xl tracking-tight">Want something like this?</h2>
-        <p className="text-muted max-w-md text-sm leading-relaxed">
-          I&rsquo;m open to opportunities and collaborations on AI products, web experiences and
-          automation.
-        </p>
-        <Link href="/#contact" className={buttonStyles('primary', 'md', 'group')}>
-          Get in touch
-          <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+      <Reveal className="ruled mt-16 pt-14">
+        <p className="font-display text-2xl">Want something like this?</p>
+        <Link
+          href="/#contact"
+          className="border-fg hover:border-accent mt-3 inline-block border-b pb-0.5 text-[0.95rem] transition-colors"
+        >
+          Get in touch →
         </Link>
       </Reveal>
     </article>
   );
 }
 
-function Block({ title, children }: { title: string; children: React.ReactNode }) {
+function LinkOrPlaceholder({
+  label,
+  href,
+  placeholder,
+}: {
+  label: string;
+  href?: string;
+  placeholder: string;
+}) {
+  if (!href) {
+    return (
+      <span className="text-faint">
+        {label} — {placeholder}
+      </span>
+    );
+  }
   return (
-    <Reveal as="item">
-      <h2 className="text-eyebrow mb-4">{title}</h2>
-      <div className="text-foreground/90 max-w-2xl text-base leading-relaxed [&>p]:text-[1.02rem]">
-        {children}
-      </div>
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="border-fg hover:border-accent border-b pb-0.5 transition-colors"
+    >
+      {label} ↗
+    </a>
+  );
+}
+
+function StoryBlock({ label, text }: { label: string; text: string }) {
+  return (
+    <Reveal>
+      <p className="kicker">{label}</p>
+      <p className="mt-3 max-w-xl text-[1.1rem] leading-relaxed">{text}</p>
+    </Reveal>
+  );
+}
+
+function Block({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <Reveal>
+      <p className="kicker mb-4">{label}</p>
+      <div className="prose-links text-fg/90 max-w-xl text-[1.02rem] leading-relaxed">{children}</div>
     </Reveal>
   );
 }

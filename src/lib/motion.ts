@@ -1,23 +1,12 @@
 import type { Variants, Transition } from 'framer-motion';
 
-/** Shared easing — a soft "out-expo" that feels expensive without being slow. */
-export const easeOutExpo: Transition['ease'] = [0.16, 1, 0.3, 1];
+/** One easing for the whole site — a quiet settle, nothing springy. */
+export const easeOut: Transition['ease'] = [0.22, 1, 0.36, 1];
 
-export const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 18 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.55, ease: easeOutExpo },
-  },
+/** The only entrance used anywhere: a small opacity + 6px lift. */
+export const enter: Variants = {
+  hidden: { opacity: 0, y: 6 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: easeOut } },
 };
 
-/** Parent that staggers its children's `fadeUp` entrances. */
-export const stagger: Variants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.08, delayChildren: 0.05 },
-  },
-};
-
-export const viewportOnce = { once: true, margin: '-15% 0px -10% 0px' } as const;
+export const viewportOnce = { once: true, margin: '-8% 0px -8% 0px' } as const;

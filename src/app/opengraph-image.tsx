@@ -15,55 +15,45 @@ export default function OpengraphImage() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          padding: 80,
-          background: '#0d0d10',
-          color: '#f4f4f5',
-          fontFamily: 'sans-serif',
+          padding: 84,
+          background: '#1a1917',
+          color: '#efece5',
+          fontFamily: 'Georgia, serif',
         }}
       >
         <div
           style={{
             display: 'flex',
-            alignItems: 'center',
-            fontSize: 25,
-            letterSpacing: 6,
+            fontSize: 22,
+            letterSpacing: 4,
             textTransform: 'uppercase',
-            color: '#e8b45c',
+            color: '#9a9488',
+            fontFamily: 'ui-monospace, monospace',
           }}
         >
-          <div style={{ display: 'flex', width: 12, height: 12, borderRadius: 999, background: '#e8b45c', marginRight: 18 }} />
-          AI Engineer · Creative Technologist
+          Portfolio — {site.location}
         </div>
 
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            fontSize: 84,
-            fontWeight: 600,
-            lineHeight: 1.12,
-            letterSpacing: -2,
-          }}
-        >
-          <div style={{ display: 'flex' }}>Building intelligent products</div>
-          <div style={{ display: 'flex' }}>
-            <span>with&nbsp;</span>
-            <span style={{ color: '#e8b45c' }}>AI</span>
-            <span>, code &amp; creativity.</span>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', fontSize: 148, lineHeight: 0.95, letterSpacing: -3 }}>
+            Mahak Jain
+          </div>
+          <div style={{ display: 'flex', fontSize: 40, marginTop: 20, color: '#efece5' }}>
+            <span>AI Engineer&nbsp;</span>
+            <span style={{ color: '#e2603b' }}>&amp;</span>
+            <span>&nbsp;Creative Technologist</span>
           </div>
         </div>
 
         <div
           style={{
             display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            fontSize: 27,
-            color: '#a1a1aa',
+            fontSize: 24,
+            color: '#9a9488',
+            fontFamily: 'ui-monospace, monospace',
           }}
         >
-          <span style={{ color: '#f4f4f5', fontWeight: 600 }}>{site.name}</span>
-          <span>{site.url.replace('https://', '')}</span>
+          {site.url.replace(/^https?:\/\//, '')}
         </div>
       </div>
     ),
