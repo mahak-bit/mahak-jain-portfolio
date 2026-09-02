@@ -57,7 +57,7 @@ const INTENTS: Intent[] = [
       'the work',
     ],
     response:
-      'Two real ones so far. The AI Study Planner — a study app that reshuffles your schedule when you miss a session, with an AI coach that can read your data but structurally can’t touch your plan. And this site, which she rebuilt from scratch to stop looking like every other AI portfolio. A third slot is open and clearly labelled in the code.',
+      'Six in the archive, all deployed. The range: a full e-commerce platform with its own admin (Zazzlers), the AI Study Planner with a tool-calling coach, an AI skincare matcher with an explainable engine (Beauty Match), a scroll-driven site for a rice mill (Pawan Industries), a digital exhibition on 80 years of Indian independence, and a scroll-scrubbed 911 Carrera concept. Open the archive to read any of them.',
     followUps: ['is she good with agents?', "what's the tech stack?", 'can she build an AI product?'],
   },
   {
@@ -134,7 +134,7 @@ const INTENTS: Intent[] = [
       'design',
     ],
     response:
-      'This site is the clearest example — a hand-built design system, this assistant, dynamic case-study pages, and a motion layer that fully respects reduced-motion. The Study Planner is the bigger one: a full Next.js app with Server Components, Server Actions, a planner UI, analytics views and a streaming chat interface. Both are built for real use, not as demos.',
+      'Most of the archive is web work. Zazzlers is a full Next.js storefront plus an admin back office. Three of the projects are scroll-driven, GSAP-and-Lenis sites — a rice-mill site, a digital exhibition, and a 911 Carrera concept where the video scrubs to your scroll. The Study Planner and Beauty Match are the app-shaped ones. All deployed, all built for real use.',
     followUps: ["what's the tech stack?", 'can she build an AI product?'],
   },
   {
