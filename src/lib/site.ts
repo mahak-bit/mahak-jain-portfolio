@@ -10,7 +10,7 @@ export const site = {
 
   /** Hero statement — short, spoken, first person. */
   statement:
-    'I build AI products — apps, agents, small automations. Came from a business degree, got curious about how software actually gets made, and haven’t really stopped since.',
+    'I build AI products — apps, agents, small automations — mostly in Python and TypeScript. Came from a business degree, got curious about how software actually gets made, and haven’t really stopped since.',
 
   /** Handwritten annotation in the hero. Truthful + editable. */
   annotation: 'currently figuring out how to make AI agents actually useful',

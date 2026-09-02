@@ -169,3 +169,68 @@
 @utility ruled {
   border-top: 1px solid var(--line);
 }
+
+/* ---------------------------------------------------------------------------
+   Print — collapse to a clean, single-column CV. Chrome / Safari "Save as PDF"
+   from the home page produces a readable one-pager.
+--------------------------------------------------------------------------- */
+@media print {
+  :root {
+    --bg: #fff;
+    --surface: #fff;
+    --raise: #fff;
+    --fg: #111;
+    --muted: #333;
+    --faint: #555;
+    --line: #ccc;
+    --line-soft: #ddd;
+    --accent: #b23a1e;
+  }
+
+  .grain,
+  header,
+  nav[aria-label='Section progress'],
+  #ask,
+  footer nav,
+  [aria-label='Close shortcuts'] {
+    display: none !important;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  * {
+    opacity: 1 !important;
+    transform: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+
+  main,
+  section,
+  article {
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 0 1.5rem !important;
+    break-inside: avoid;
+  }
+
+  h1,
+  h2 {
+    break-after: avoid;
+  }
+
+  a[href^='http']::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.75em;
+    color: #555;
+    word-break: break-all;
+  }
+
+  @page {
+    margin: 16mm;
+  }
+}

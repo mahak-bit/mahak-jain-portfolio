@@ -5,6 +5,8 @@ import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { KeyboardNav } from '@/components/KeyboardNav';
+import { ProgressRail } from '@/components/ProgressRail';
 import { site, seo } from '@/lib/site';
 
 const fraunces = Fraunces({
@@ -95,9 +97,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </a>
           <div className="relative z-[1]">
             <Navbar />
+            <ProgressRail />
             <main id="main">{children}</main>
             <Footer />
           </div>
+          <KeyboardNav />
         </ThemeProvider>
       </body>
     </html>

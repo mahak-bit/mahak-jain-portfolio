@@ -72,6 +72,7 @@ export function PortfolioAI() {
             &gt;
           </span>
           <input
+            id="ask-input"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="what has she actually built?"

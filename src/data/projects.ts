@@ -23,6 +23,7 @@ export interface CasePoint {
 
 export interface Project {
   slug: string;
+  /** Auto-assigned roman numeral (i, ii, iii…) from list order. */
   index: string;
   name: string;
   year: string;
@@ -53,10 +54,33 @@ export interface Project {
   };
 }
 
-export const projects: Project[] = [
+type ProjectInput = Omit<Project, 'index'>;
+
+function toRoman(n: number): string {
+  const map: [number, string][] = [
+    [10, 'x'],
+    [9, 'ix'],
+    [5, 'v'],
+    [4, 'iv'],
+    [1, 'i'],
+  ];
+  let out = '';
+  for (const [value, sym] of map) {
+    while (n >= value) {
+      out += sym;
+      n -= value;
+    }
+  }
+  return out;
+}
+
+/**
+ * The list. To add a project, drop a new object in here — the roman numeral,
+ * the work card and the /projects/<slug> page all follow automatically.
+ */
+const projectList: ProjectInput[] = [
   {
     slug: 'ai-study-planner',
-    index: 'i',
     name: 'AI Study Planner',
     year: '2026',
     status: 'live',
@@ -130,7 +154,6 @@ export const projects: Project[] = [
   },
   {
     slug: 'portfolio-site',
-    index: 'ii',
     name: 'This site',
     year: '2026',
     status: 'live',
@@ -191,7 +214,6 @@ export const projects: Project[] = [
   },
   {
     slug: 'project-slot-03',
-    index: 'iii',
     name: '[ADD PROJECT]',
     year: '[ADD YEAR]',
     status: 'placeholder',
@@ -214,6 +236,11 @@ export const projects: Project[] = [
     },
   },
 ];
+
+export const projects: Project[] = projectList.map((p, i) => ({
+  ...p,
+  index: toRoman(i + 1),
+}));
 
 export function getProject(slug: string): Project | undefined {
   return projects.find((p) => p.slug === slug);

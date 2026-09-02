@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { navItems, site } from '@/lib/site';
+import { IndiaClock } from './IndiaClock';
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -37,10 +38,39 @@ export function Footer() {
         </nav>
       </div>
 
-      <div className="text-faint mt-10 flex flex-col gap-1 text-xs sm:flex-row sm:justify-between">
-        <p>Built by hand with Next.js and too many small revisions.</p>
-        <p>© {year} Mahak Jain</p>
-      </div>
+      {/* Colophon */}
+      <dl className="border-line text-faint mt-10 grid gap-x-8 gap-y-2 border-t pt-6 text-xs sm:grid-cols-2">
+        <div className="flex gap-3">
+          <dt className="w-14 shrink-0 font-mono uppercase tracking-[0.1em]">Type</dt>
+          <dd>Fraunces, Hanken Grotesk & JetBrains Mono</dd>
+        </div>
+        <div className="flex gap-3">
+          <dt className="w-14 shrink-0 font-mono uppercase tracking-[0.1em]">Built</dt>
+          <dd>
+            Next.js, by hand, on Vercel —{' '}
+            <a
+              href="https://github.com/mahak-bit/mahak-jain-portfolio"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-fg underline decoration-dotted underline-offset-2"
+            >
+              source ↗
+            </a>
+          </dd>
+        </div>
+        <div className="flex gap-3">
+          <dt className="w-14 shrink-0 font-mono uppercase tracking-[0.1em]">Tracking</dt>
+          <dd>None. No analytics, no cookies.</dd>
+        </div>
+        <div className="flex gap-3">
+          <dt className="w-14 shrink-0 font-mono uppercase tracking-[0.1em]">Clock</dt>
+          <dd>
+            <IndiaClock />
+          </dd>
+        </div>
+      </dl>
+
+      <p className="text-faint mt-8 text-xs">© {year} Mahak Jain</p>
     </footer>
   );
 }
