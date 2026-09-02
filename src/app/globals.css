@@ -1,0 +1,195 @@
+@import 'tailwindcss';
+
+/* next-themes toggles a `class` on <html>; make Tailwind's dark: variant follow it. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------------------
+   Design tokens
+   A restrained, editorial system: a near-monochrome neutral base with a
+   single warm amber accent used sparingly. Dark is the primary appearance.
+--------------------------------------------------------------------------- */
+:root {
+  --background: oklch(0.986 0.002 95);
+  --surface: oklch(1 0 0);
+  --surface-2: oklch(0.972 0.004 95);
+  --foreground: oklch(0.19 0.006 265);
+  --muted: oklch(0.44 0.008 265);
+  --faint: oklch(0.6 0.008 265);
+  --border: oklch(0.16 0.02 265 / 0.1);
+  --border-strong: oklch(0.16 0.02 265 / 0.2);
+  --accent: oklch(0.585 0.132 62);
+  --accent-foreground: oklch(0.99 0.01 90);
+  --accent-soft: oklch(0.585 0.132 62 / 0.1);
+  --ring: oklch(0.585 0.132 62 / 0.5);
+
+  --radius: 0.75rem;
+
+  --font-sans:
+    var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono:
+    var(--font-geist-mono), ui-monospace, 'SF Mono', 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+.dark {
+  --background: oklch(0.15 0.006 265);
+  --surface: oklch(0.185 0.007 265);
+  --surface-2: oklch(0.213 0.008 265);
+  --foreground: oklch(0.965 0.003 265);
+  --muted: oklch(0.68 0.009 265);
+  --faint: oklch(0.5 0.009 265);
+  --border: oklch(1 0 0 / 0.09);
+  --border-strong: oklch(1 0 0 / 0.17);
+  --accent: oklch(0.82 0.125 78);
+  --accent-foreground: oklch(0.22 0.03 80);
+  --accent-soft: oklch(0.82 0.125 78 / 0.14);
+  --ring: oklch(0.82 0.125 78 / 0.55);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-soft: var(--accent-soft);
+  --color-ring: var(--ring);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 6px);
+  --radius-2xl: calc(var(--radius) + 14px);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before {
+    border-color: var(--border);
+  }
+
+  html {
+    font-family: var(--font-sans);
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-foreground);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Ambient background — a single fixed layer of very low-opacity light,
+   plus a faint grain. Deliberately subtle: depth, not decoration.
+--------------------------------------------------------------------------- */
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      42rem 42rem at 78% -8%,
+      color-mix(in oklch, var(--accent) 12%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      36rem 36rem at 8% 12%,
+      color-mix(in oklch, var(--foreground) 5%, transparent),
+      transparent 55%
+    );
+}
+
+.dark .ambient {
+  background:
+    radial-gradient(
+      44rem 44rem at 80% -10%,
+      color-mix(in oklch, var(--accent) 16%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      40rem 40rem at -6% 10%,
+      color-mix(in oklch, oklch(0.6 0.11 250) 12%, transparent),
+      transparent 58%
+    );
+}
+
+.ambient::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+}
+
+.dark .ambient::after {
+  opacity: 0.28;
+}
+
+/* Utility: subtle hairline grid used behind a few sections. */
+@utility grid-lines {
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 4rem 4rem;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 40%, transparent 100%);
+}
+
+@utility text-eyebrow {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
