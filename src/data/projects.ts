@@ -149,21 +149,22 @@ const projectList: ProjectInput[] = [
     year: '2026',
     status: 'live',
     featured: true,
+    context: 'Client project',
     oneLiner:
-      'A full production e-commerce platform for a fashion label — storefront, payments, notifications and a complete admin back office.',
+      'A full production e-commerce platform for a clothing label — storefront, payments, notifications and a complete admin back office.',
     story: {
       solving:
-        'A clothing brand needs more than a storefront: order management, payments that reconcile, stock control and customer comms — without paying a platform a cut of every sale.',
+        'Built for Zazzlers, a clothing label — heavyweight graphic tees and wide-leg denim. They needed more than a storefront: order management, payments that reconcile, stock control and customer comms, without handing a platform a cut of every sale.',
       built:
         'An end-to-end store in Next.js. Front: catalogue, cart, wishlist, reviews, an editorial lookbook, checkout. Payments: Razorpay with a verify step and a webhook. Comms: SMS and email on order events, plus in-app notifications, PDF invoices and order QR codes. Behind it, a full admin dashboard — products with bulk actions, orders with payment/shipping/status-history control, users, categories, coupons, messages and analytics.',
       learned:
-        'That the hard part of commerce isn’t the checkout button — it’s the states after it: partial payments, refunds, status history, and making the admin side fast enough that someone actually uses it.',
+        'That the hard part of commerce isn’t the checkout button — it’s the states after it: partial payments, refunds, status history, and making the admin side fast enough that the client actually uses it.',
     },
     tech: ['Next.js 16', 'TypeScript', 'Prisma', 'PostgreSQL', 'Auth.js', 'Razorpay', 'Tailwind CSS'],
     links: {
       demo: 'https://zazzlers.vercel.app',
     },
-    sourceNote: 'Private repo · walkthrough on request',
+    sourceNote: 'Private — client project · walkthrough on request',
     screenshots: [
       {
         src: '/projects/zazzlers-logo.png',
@@ -175,7 +176,7 @@ const projectList: ProjectInput[] = [
     ],
     caseStudy: {
       overview:
-        'Zazzlers is an Indian fashion label — heavyweight graphic tees and wide-leg denim. The site is the full commercial system behind it: a shoppable storefront and the operational tooling to run it.',
+        'Zazzlers is an Indian fashion label — heavyweight graphic tees and wide-leg denim. The site is the full commercial system I built for them: a shoppable storefront and the operational tooling to run it.',
       features: [
         {
           title: 'Storefront',
@@ -217,7 +218,7 @@ const projectList: ProjectInput[] = [
         },
       ],
       outcome:
-        'A deployed storefront with a working admin back office — the full loop from browsing to a fulfilled, paid order. The repo is private (it’s a running store), so this write-up is the walkthrough.',
+        'A deployed storefront with a working admin back office — the full loop from browsing to a fulfilled, paid order. The repo is private (it’s a client’s running store), so this write-up is the walkthrough.',
     },
   },
 

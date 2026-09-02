@@ -30,7 +30,7 @@ export const buildLog: LogEntry[] = [
   {
     date: 'Aug 2026',
     verb: 'Built',
-    entry: 'Zazzlers — a full e-commerce platform with payments and its own admin back office',
+    entry: 'Zazzlers — a full e-commerce platform with payments and admin, for a clothing label',
     href: '/projects/zazzlers',
   },
   {
