@@ -223,7 +223,7 @@ function FootLinks({ project, className }: { project: Project; className?: strin
           Live ↗
         </a>
       )}
-      {project.links.github && (
+      {project.links.github ? (
         <a
           href={project.links.github}
           target="_blank"
@@ -232,7 +232,9 @@ function FootLinks({ project, className }: { project: Project; className?: strin
         >
           GitHub ↗
         </a>
-      )}
+      ) : project.sourceNote ? (
+        <span className="text-faint">{project.sourceNote}</span>
+      ) : null}
     </div>
   );
 }

@@ -63,11 +63,13 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
         <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-[0.9rem]">
           <LinkOrPlaceholder label="Live" href={project.links.demo} placeholder="[ADD LIVE URL]" />
-          <LinkOrPlaceholder
-            label="Source"
-            href={project.links.github}
-            placeholder="[ADD REPO URL]"
-          />
+          {project.links.github ? (
+            <LinkOrPlaceholder label="Source" href={project.links.github} placeholder="" />
+          ) : project.sourceNote ? (
+            <span className="text-faint">{project.sourceNote}</span>
+          ) : (
+            <LinkOrPlaceholder label="Source" href={undefined} placeholder="[ADD REPO URL]" />
+          )}
         </div>
       </Reveal>
 

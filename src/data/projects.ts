@@ -49,6 +49,8 @@ export interface Project {
 
   tech: string[];
   links: { demo?: string; github?: string };
+  /** Shown where the GitHub link would be when there's no public repo. */
+  sourceNote?: string;
   screenshots: Screenshot[];
 
   /** Deeper material for the /projects/[slug] page. */
@@ -160,8 +162,8 @@ const projectList: ProjectInput[] = [
     tech: ['Next.js 16', 'TypeScript', 'Prisma', 'PostgreSQL', 'Auth.js', 'Razorpay', 'Tailwind CSS'],
     links: {
       demo: 'https://zazzlers.vercel.app',
-      // repo is private
     },
+    sourceNote: 'Private repo · walkthrough on request',
     screenshots: [
       {
         src: '/projects/zazzlers-logo.png',
@@ -215,7 +217,7 @@ const projectList: ProjectInput[] = [
         },
       ],
       outcome:
-        'A deployed storefront with a working admin back office — the full loop from browsing to a fulfilled, paid order.',
+        'A deployed storefront with a working admin back office — the full loop from browsing to a fulfilled, paid order. The repo is private (it’s a running store), so this write-up is the walkthrough.',
     },
   },
 
