@@ -16,9 +16,9 @@ export function About() {
         <Reveal delay={0.05} className="prose-links flex flex-col gap-5 text-[1.06rem] leading-relaxed">
           <p>
             I&rsquo;m Mahak. Somewhere between spreadsheets and a late-night &ldquo;wait, can I just
-            build this?&rdquo; I started making software — and lately that&rsquo;s mostly meant AI:
-            apps, agents, and the small automations that remove a step nobody should be doing by
-            hand.
+            build this?&rdquo; I started building for the web — and lately that&rsquo;s mostly meant
+            AI on top of it: apps, agents, and the small automations that remove a step nobody
+            should be doing by hand.
           </p>
           <p>
             I work AI-first. An assistant handles the repetitive parts; I decide the shape of
