@@ -35,6 +35,16 @@ export function Footer() {
               GitHub ↗
             </a>
           )}
+          {site.socials.linkedin && (
+            <a
+              href={site.socials.linkedin}
+              target="_blank"
+              rel="noreferrer"
+              className="text-muted hover:text-fg text-sm transition-colors"
+            >
+              LinkedIn ↗
+            </a>
+          )}
         </nav>
       </div>
 

@@ -22,7 +22,7 @@ export const site = {
   resumeUrl: '', // [ADD RESUME] e.g. '/mahak-jain-resume.pdf'
   socials: {
     github: 'https://github.com/mahak-bit',
-    linkedin: '', // [ADD LINKEDIN]
+    linkedin: 'https://www.linkedin.com/in/mahak-jain-7665432a3/',
     x: '', // [ADD X / TWITTER] (optional)
   },
 } as const;
