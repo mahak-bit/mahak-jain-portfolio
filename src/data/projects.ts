@@ -17,8 +17,12 @@ export interface Screenshot {
   src: string;
   alt: string;
   caption?: string;
-  /** 'contain' (logos, portrait shots) sits the image on a dark panel; default 'cover'. */
-  fit?: 'cover' | 'contain';
+  /**
+   * 'cover' (default) fills the frame. 'contain' letterboxes on a neutral panel
+   * (portrait photos, wide shots). 'logo' letterboxes on a dark panel with more
+   * padding (brand marks).
+   */
+  fit?: 'cover' | 'contain' | 'logo';
 }
 
 export interface CasePoint {
@@ -97,6 +101,7 @@ const projectList: ProjectInput[] = [
         src: '/projects/pawan-industries.jpg',
         alt: 'The Pawan Industries milling facility',
         caption: 'The facility',
+        fit: 'contain',
       },
       { src: '', alt: 'Pawan Industries — the journey', caption: '[ADD SCREENSHOT] — The Journey section' },
     ],
@@ -167,10 +172,10 @@ const projectList: ProjectInput[] = [
     sourceNote: 'Private — client project · walkthrough on request',
     screenshots: [
       {
-        src: '/projects/zazzlers-logo.png',
+        src: '/projects/zazzlers-logo.jpg',
         alt: 'Zazzlers logo',
         caption: 'Zazzlers',
-        fit: 'contain',
+        fit: 'logo',
       },
       { src: '', alt: 'Zazzlers — admin orders', caption: '[ADD SCREENSHOT] — Admin dashboard' },
     ],

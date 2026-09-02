@@ -75,7 +75,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       {/* Lead visual */}
       <Reveal delay={0.05} className="mt-12">
-        <Shot shot={project.screenshots[0]} ratio="aspect-[16/10]" priority />
+        <Shot shot={project.screenshots[0]} priority />
       </Reveal>
 
       {/* Story */}
@@ -187,14 +187,16 @@ function Shot({
   priority = false,
 }: {
   shot?: Screenshot;
-  ratio: string;
+  ratio?: string;
   priority?: boolean;
 }) {
-  const contain = shot?.fit === 'contain';
+  const fit = shot?.fit ?? 'cover';
+  // A portrait / logo lead reads better in a squarer frame than a wide one.
+  const frameRatio = ratio ?? (fit === 'cover' ? 'aspect-[16/10]' : 'aspect-[4/3]');
   return (
     <div
-      className={`relative flex items-center justify-center overflow-hidden border ${ratio} ${
-        contain ? 'border-line bg-[#0a0a0a]' : 'border-line bg-raise'
+      className={`relative flex items-center justify-center overflow-hidden border ${frameRatio} ${
+        fit === 'logo' ? 'border-line bg-[#0a0a0a]' : 'border-line bg-raise'
       }`}
     >
       {shot?.src ? (
@@ -204,7 +206,13 @@ function Shot({
           fill
           priority={priority}
           sizes="(max-width: 768px) 100vw, 720px"
-          className={contain ? 'object-contain p-10' : 'object-cover'}
+          className={
+            fit === 'logo'
+              ? 'object-contain p-10'
+              : fit === 'contain'
+                ? 'object-contain p-3'
+                : 'object-cover'
+          }
         />
       ) : (
         <span className="text-faint px-4 text-center font-mono text-xs">

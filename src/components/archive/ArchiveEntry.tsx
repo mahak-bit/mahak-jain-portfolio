@@ -164,13 +164,13 @@ function TechLine({ project, className }: { project: Project; className?: string
 function Visual({ project, ratio }: { project: Project; ratio: string }) {
   const shot = project.screenshots[0];
   const caption = shot?.caption || `[ADD SCREENSHOT] — ${project.name}`;
-  const contain = shot?.fit === 'contain';
+  const fit = shot?.fit ?? 'cover';
   const frame = (
     <div
       className={cn(
         'relative flex items-center justify-center overflow-hidden border',
         ratio,
-        contain ? 'border-line bg-[#0a0a0a]' : 'border-line bg-raise',
+        fit === 'logo' ? 'border-line bg-[#0a0a0a]' : 'border-line bg-raise',
         project.status === 'placeholder' && 'border-dashed'
       )}
     >
@@ -180,7 +180,13 @@ function Visual({ project, ratio }: { project: Project; ratio: string }) {
           alt={shot.alt}
           fill
           sizes="(max-width: 640px) 100vw, 640px"
-          className={contain ? 'object-contain p-10' : 'object-cover'}
+          className={
+            fit === 'logo'
+              ? 'object-contain p-10'
+              : fit === 'contain'
+                ? 'object-contain p-2'
+                : 'object-cover'
+          }
         />
       ) : (
         <span className="text-faint px-6 text-center font-mono text-xs">{caption}</span>
