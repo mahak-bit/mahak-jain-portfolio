@@ -6,6 +6,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { site } from '@/lib/site';
 import { easeOut } from '@/lib/motion';
 import { cn } from '@/lib/utils';
+import { HeroCharacter } from './HeroCharacter';
 
 const NAME = ['Mahak', 'Jain'];
 const TAGS = ['Web Apps', 'Python Systems', 'GenAI Products', 'Agents'];
@@ -40,7 +41,7 @@ export function Hero() {
   return (
     <section
       aria-label="Introduction"
-      className="mx-auto flex min-h-[88svh] max-w-5xl flex-col justify-center px-5 pb-16 pt-20 sm:px-8"
+      className="relative mx-auto flex min-h-[88svh] max-w-5xl flex-col justify-center px-5 pb-16 pt-20 sm:px-8"
     >
       {/* What I build — animated tag boxes */}
       <ul className="flex flex-wrap gap-2" aria-label="What I build">
@@ -104,6 +105,11 @@ export function Hero() {
         <motion.p {...fade(0.5)} className="annotation -rotate-2">
           {site.annotation} →
         </motion.p>
+      </div>
+
+      {/* Greeting character — in flow on small screens, floated right on desktop */}
+      <div className="mt-10 flex justify-end lg:absolute lg:top-1/2 lg:right-8 lg:mt-0 lg:block lg:-translate-y-1/2">
+        <HeroCharacter />
       </div>
 
       {/* Statement — indented, narrow measure */}

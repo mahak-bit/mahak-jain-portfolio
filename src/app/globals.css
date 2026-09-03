@@ -148,6 +148,17 @@
   opacity: 0.05;
 }
 
+/* Hero character — a barely-there idle float once she's finished greeting. */
+@keyframes char-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
 /* Mono kicker used above section headings — small, quiet, structural. */
 @utility kicker {
   font-family: var(--font-mono);
