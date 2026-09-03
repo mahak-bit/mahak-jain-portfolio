@@ -18,10 +18,10 @@ import { useReducedMotion } from 'framer-motion';
 const VIDEO_SRC = '/character/mahak-character.mp4';
 const POSTER_SRC = '/character/mahak-character.jpg';
 
-// Feathers the character's studio backdrop into the page background so she reads
-// as standing in the hero rather than pasted onto it. Theme-aware via --bg.
-const BACKDROP_BLEND =
-  'radial-gradient(125% 90% at 50% 38%, transparent 40%, var(--bg) 88%)';
+// Feathers every edge of the clip to fully transparent so the character reads as
+// standing in the hero — no rectangle, no studio backdrop, works on any theme.
+const EDGE_FADE =
+  'radial-gradient(ellipse 76% 82% at 50% 40%, #000 54%, rgba(0, 0, 0, 0) 100%)';
 
 export function HeroCharacter() {
   const reduceMotion = useReducedMotion();
@@ -82,7 +82,7 @@ export function HeroCharacter() {
   return (
     <div
       className={[
-        'w-[clamp(128px,36vw,164px)] lg:w-[clamp(216px,18vw,264px)]',
+        'w-[clamp(146px,42vw,186px)] lg:w-[clamp(264px,25vw,352px)]',
         reduceMotion
           ? ''
           : [
@@ -90,7 +90,7 @@ export function HeroCharacter() {
               entered ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0',
             ].join(' '),
       ].join(' ')}
-      style={{ filter: 'drop-shadow(0 22px 34px rgba(0,0,0,0.28))' }}
+      style={{ filter: 'drop-shadow(0 16px 24px rgba(0,0,0,0.20))' }}
     >
       <div
         className={
@@ -103,7 +103,7 @@ export function HeroCharacter() {
         <div
           aria-hidden="true"
           className={[
-            'border-line bg-surface text-fg pointer-events-none absolute top-2 left-0 z-10 -translate-x-[18%] rounded-full border px-2.5 py-1 font-mono text-[0.72rem] shadow-sm transition-all duration-300 ease-out',
+            'border-line bg-surface text-fg pointer-events-none absolute top-1 left-0 z-10 -translate-x-[14%] rounded-full border px-2.5 py-1 font-mono text-[0.72rem] shadow-sm transition-all duration-300 ease-out',
             greeting ? 'translate-y-0 opacity-100' : 'translate-y-1 opacity-0',
           ].join(' ')}
         >
@@ -114,35 +114,35 @@ export function HeroCharacter() {
           type="button"
           onClick={onActivate}
           aria-label="Mahak’s character — play the wave again"
-          className="group relative block aspect-[4/5] w-full overflow-hidden rounded-[1.6rem] outline-offset-4 transition-transform duration-500 ease-out focus-visible:outline-2 focus-visible:outline-accent motion-safe:hover:-translate-y-1.5"
+          className="group relative block aspect-[4/5] w-full outline-offset-4 transition-transform duration-500 ease-out focus-visible:outline-2 focus-visible:outline-accent motion-safe:hover:-translate-y-1.5"
         >
-          {reduceMotion ? (
-            <Image
-              src={POSTER_SRC}
-              alt="A 3D-illustrated character of Mahak, smiling and waving hello"
-              fill
-              sizes="(min-width: 1024px) 264px, 164px"
-              className="object-cover object-[center_top]"
-            />
-          ) : (
-            <video
-              ref={videoRef}
-              src={VIDEO_SRC}
-              poster={POSTER_SRC}
-              muted
-              playsInline
-              preload="none"
-              aria-hidden="true"
-              disablePictureInPicture
-              className="h-full w-full object-cover object-[center_top]"
-            />
-          )}
-
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0"
-            style={{ background: BACKDROP_BLEND }}
-          />
+            className="absolute inset-0"
+            style={{ maskImage: EDGE_FADE, WebkitMaskImage: EDGE_FADE }}
+          >
+            {reduceMotion ? (
+              <Image
+                src={POSTER_SRC}
+                alt="A 3D-illustrated character of Mahak, smiling and waving hello"
+                fill
+                sizes="(min-width: 1024px) 352px, 186px"
+                className="object-cover object-[center_top]"
+              />
+            ) : (
+              <video
+                ref={videoRef}
+                src={VIDEO_SRC}
+                poster={POSTER_SRC}
+                muted
+                playsInline
+                preload="none"
+                aria-hidden="true"
+                disablePictureInPicture
+                className="h-full w-full object-cover object-[center_top]"
+              />
+            )}
+          </span>
         </button>
       </div>
     </div>
