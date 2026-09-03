@@ -3,7 +3,7 @@ import { Reveal } from './ui/Reveal';
 
 export function About() {
   return (
-    <Section id="about" className="ruled pt-16 sm:pt-20">
+    <Section id="about" className="pt-8 sm:pt-10">
       <div className="grid gap-x-12 gap-y-10 md:grid-cols-[1fr_1.4fr]">
         <Reveal className="md:sticky md:top-24 md:self-start">
           <span className="kicker">About</span>
