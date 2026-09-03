@@ -61,19 +61,16 @@ export function Hero() {
       </h1>
 
       {/* Role + annotation */}
-      <div className="mt-7 grid gap-x-10 gap-y-6 sm:grid-cols-[auto_1fr] sm:items-start">
+      <div className="mt-6 flex flex-col gap-4">
         <motion.p
           {...fade(0.35)}
-          className="max-w-[15ch] font-display text-[clamp(1.3rem,1rem+1.5vw,1.9rem)] leading-tight"
+          className="text-muted font-mono text-[0.82rem] tracking-[0.03em]"
         >
           Full-Stack Developer <span className="text-accent">·</span> Python Developer{' '}
           <span className="text-accent">·</span> GenAI Engineer
         </motion.p>
 
-        <motion.p
-          {...fade(0.5)}
-          className="annotation max-w-[16rem] -rotate-2 sm:mt-1 sm:justify-self-start"
-        >
+        <motion.p {...fade(0.5)} className="annotation -rotate-2">
           {site.annotation} →
         </motion.p>
       </div>
