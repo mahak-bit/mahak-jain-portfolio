@@ -1,15 +1,26 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
 import { site } from '@/lib/site';
 import { easeOut } from '@/lib/motion';
+import { cn } from '@/lib/utils';
 
 const NAME = ['Mahak', 'Jain'];
 const TAGS = ['Web Apps', 'Python Systems', 'GenAI Products', 'Agents'];
+const ROLES = ['Full-Stack Developer', 'Python Developer', 'GenAI Engineer'];
 
 export function Hero() {
   const reduceMotion = useReducedMotion();
+
+  // A slow spotlight that moves across the three roles.
+  const [lit, setLit] = useState(0);
+  useEffect(() => {
+    if (reduceMotion) return;
+    const id = setInterval(() => setLit((n) => (n + 1) % ROLES.length), 2200);
+    return () => clearInterval(id);
+  }, [reduceMotion]);
 
   const line = (i: number) => ({
     initial: reduceMotion ? false : { y: '108%' },
@@ -62,13 +73,33 @@ export function Hero() {
 
       {/* Role + annotation */}
       <div className="mt-6 flex flex-col gap-4">
-        <motion.p
-          {...fade(0.35)}
-          className="text-muted font-mono text-[0.82rem] tracking-[0.03em]"
-        >
-          Full-Stack Developer <span className="text-accent">·</span> Python Developer{' '}
-          <span className="text-accent">·</span> GenAI Engineer
-        </motion.p>
+        <p className="flex flex-wrap items-center font-mono text-[0.8rem] tracking-[0.02em]">
+          {ROLES.map((role, i) => (
+            <motion.span
+              key={role}
+              initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+              animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, ease: easeOut, delay: 0.35 + i * 0.1 }}
+              className="inline-flex items-center whitespace-nowrap"
+            >
+              {i > 0 && (
+                <span aria-hidden className="text-accent/40 mx-1.5 select-none">
+                  ·
+                </span>
+              )}
+              <span
+                className={cn(
+                  'rounded-[3px] px-1.5 py-0.5 transition-colors duration-700 ease-out',
+                  !reduceMotion && lit === i
+                    ? 'bg-accent/15 text-accent'
+                    : 'text-muted'
+                )}
+              >
+                {role}
+              </span>
+            </motion.span>
+          ))}
+        </p>
 
         <motion.p {...fade(0.5)} className="annotation -rotate-2">
           {site.annotation} →
