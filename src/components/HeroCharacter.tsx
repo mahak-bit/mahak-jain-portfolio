@@ -1,35 +1,54 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import Image from 'next/image';
 import { useReducedMotion } from 'framer-motion';
 
 /**
  * A small illustrated character that greets the visitor in the hero.
  *
- * The greeting (pop-in → look → smile → wave) lives in a short, muted, watermark-
- * free MP4 that plays once on load and once more on click/tap; afterwards she
- * holds the last frame with a barely-there idle float. No animation library —
- * just a <video> element, one CSS keyframe and a little local state.
+ * The greeting (pop-in → look → smile → wave) is a short, muted clip with the
+ * studio background cut out. It plays once on load and once more on click/tap,
+ * then holds the last frame with a barely-there idle float. No animation
+ * library — a <video> element, one CSS keyframe and a little state.
  *
- * Reduced motion: renders the poster frame only — no video, no float, no
- * entrance transition; a tap still shows the "Hi!" bubble.
+ * The clip can't carry an alpha channel across every browser, so it ships
+ * pre-composited once per theme and the component swaps to match. Reduced
+ * motion: the transparent poster frame only — no video, no float, no entrance
+ * transition; a tap still shows the "Hi!" bubble.
  */
-const VIDEO_SRC = '/character/mahak-character.mp4';
-const POSTER_SRC = '/character/mahak-character.jpg';
+const DARK_MP4 = '/character/mahak-character-dark.mp4';
+const LIGHT_MP4 = '/character/mahak-character-light.mp4';
+const POSTER_SRC = '/character/mahak-character.webp';
 
-// Feathers every edge of the clip to fully transparent so the character reads as
-// standing in the hero — no rectangle, no studio backdrop, works on any theme.
+// A gentle feather — dissolves the mid-thigh crop and any faint matte rim so she
+// settles into the hero instead of ending on a hard edge.
 const EDGE_FADE =
-  'radial-gradient(ellipse 76% 82% at 50% 40%, #000 54%, rgba(0, 0, 0, 0) 100%)';
+  'radial-gradient(ellipse 100% 92% at 50% 40%, #000 74%, rgba(0, 0, 0, 0) 100%)';
+
+/** Tracks the site's light/dark theme (next-themes toggles `.dark` on <html>). */
+function useIsDark() {
+  return useSyncExternalStore(
+    (onChange) => {
+      const obs = new MutationObserver(onChange);
+      obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+      return () => obs.disconnect();
+    },
+    () => document.documentElement.classList.contains('dark'),
+    () => true // SSR / first paint: the default theme is dark
+  );
+}
 
 export function HeroCharacter() {
   const reduceMotion = useReducedMotion();
+  const isDark = useIsDark();
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const bubbleTimer = useRef<number | undefined>(undefined);
   const greeted = useRef(false);
   const [entered, setEntered] = useState(false);
   const [greeting, setGreeting] = useState(false);
+
+  const src = isDark ? DARK_MP4 : LIGHT_MP4;
 
   const flashBubble = useCallback(() => {
     setGreeting(true);
@@ -72,6 +91,24 @@ export function HeroCharacter() {
     };
   }, [reduceMotion, playGreeting]);
 
+  // Theme swap: reload the matching clip; if she already greeted, hold the last
+  // frame rather than replaying.
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.load();
+    if (!greeted.current) return;
+    const hold = () => {
+      try {
+        v.currentTime = v.duration || 6;
+      } catch {
+        /* ignore */
+      }
+    };
+    v.addEventListener('loadeddata', hold, { once: true });
+    return () => v.removeEventListener('loadeddata', hold);
+  }, [src]);
+
   useEffect(() => () => window.clearTimeout(bubbleTimer.current), []);
 
   const onActivate = () => {
@@ -90,7 +127,7 @@ export function HeroCharacter() {
               entered ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0',
             ].join(' '),
       ].join(' ')}
-      style={{ filter: 'drop-shadow(0 16px 24px rgba(0,0,0,0.20))' }}
+      style={{ filter: 'drop-shadow(0 16px 24px rgba(0,0,0,0.18))' }}
     >
       <div
         className={
@@ -132,7 +169,7 @@ export function HeroCharacter() {
             ) : (
               <video
                 ref={videoRef}
-                src={VIDEO_SRC}
+                src={src}
                 poster={POSTER_SRC}
                 muted
                 playsInline
