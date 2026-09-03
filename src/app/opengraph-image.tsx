@@ -40,9 +40,9 @@ export default function OpengraphImage() {
           </div>
           <div style={{ display: 'flex', fontSize: 40, marginTop: 20, color: '#efece5' }}>
             <span>Full-Stack&nbsp;</span>
-            <span style={{ color: '#e2603b' }}>·</span>
+            <span style={{ color: '#d1394c' }}>·</span>
             <span>&nbsp;Python&nbsp;</span>
-            <span style={{ color: '#e2603b' }}>·</span>
+            <span style={{ color: '#d1394c' }}>·</span>
             <span>&nbsp;GenAI</span>
           </div>
         </div>

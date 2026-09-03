@@ -4,7 +4,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ---------------------------------------------------------------------------
-   Palette — warm near-black, warm paper white, one vermilion.
+   Palette — warm near-black, warm paper white, one deep cherry-red.
    The accent is Mahak's; it shows up on a handful of words and marks, never
    as a fill or a gradient.
 --------------------------------------------------------------------------- */
@@ -17,8 +17,8 @@
   --faint: oklch(0.5 0.011 58);
   --line: oklch(0.16 0.02 50 / 0.16);
   --line-soft: oklch(0.16 0.02 50 / 0.08);
-  --accent: oklch(0.555 0.2 33);
-  --accent-fg: oklch(0.98 0.01 80);
+  --accent: oklch(0.5 0.188 18);
+  --accent-fg: oklch(0.985 0.006 20);
 
   --radius: 0.4rem;
 
@@ -37,8 +37,8 @@
   --faint: oklch(0.56 0.009 66);
   --line: oklch(0.98 0 0 / 0.12);
   --line-soft: oklch(0.98 0 0 / 0.06);
-  --accent: oklch(0.68 0.185 36);
-  --accent-fg: oklch(0.17 0.02 40);
+  --accent: oklch(0.645 0.204 23);
+  --accent-fg: oklch(0.17 0.025 25);
 }
 
 @theme inline {
@@ -195,7 +195,7 @@
     --faint: #555;
     --line: #ccc;
     --line-soft: #ddd;
-    --accent: #b23a1e;
+    --accent: #9c1f33;
   }
 
   .grain,
