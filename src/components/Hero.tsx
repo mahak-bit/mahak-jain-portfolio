@@ -6,6 +6,7 @@ import { site } from '@/lib/site';
 import { easeOut } from '@/lib/motion';
 
 const NAME = ['Mahak', 'Jain'];
+const TAGS = ['Web Apps', 'Python Systems', 'GenAI Products', 'Agents'];
 
 export function Hero() {
   const reduceMotion = useReducedMotion();
@@ -30,9 +31,20 @@ export function Hero() {
       aria-label="Introduction"
       className="mx-auto flex min-h-[88svh] max-w-5xl flex-col justify-center px-5 pb-16 pt-20 sm:px-8"
     >
-      <motion.p {...fade(0)} className="kicker">
-        Portfolio — {site.location}
-      </motion.p>
+      {/* What I build — animated tag boxes */}
+      <ul className="flex flex-wrap gap-2" aria-label="What I build">
+        {TAGS.map((tag, i) => (
+          <motion.li
+            key={tag}
+            initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+            animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: easeOut, delay: 0.06 + i * 0.09 }}
+            className="border-line text-faint hover:border-accent hover:text-fg border px-2.5 py-1 font-mono text-[0.64rem] uppercase tracking-[0.16em] transition-colors"
+          >
+            {tag}
+          </motion.li>
+        ))}
+      </ul>
 
       {/* Name */}
       <h1 aria-label={site.name} className="mt-6 font-display leading-[0.92] tracking-[-0.02em]">
@@ -52,11 +64,10 @@ export function Hero() {
       <div className="mt-7 grid gap-x-10 gap-y-6 sm:grid-cols-[auto_1fr] sm:items-start">
         <motion.p
           {...fade(0.35)}
-          className="font-display text-[clamp(1.35rem,1rem+1.6vw,2rem)] leading-tight"
+          className="max-w-[15ch] font-display text-[clamp(1.3rem,1rem+1.5vw,1.9rem)] leading-tight"
         >
-          AI Engineer
-          <br />
-          <span className="text-accent">&</span> Creative Technologist
+          Full-Stack Developer <span className="text-accent">·</span> Python Developer{' '}
+          <span className="text-accent">·</span> GenAI Engineer
         </motion.p>
 
         <motion.p

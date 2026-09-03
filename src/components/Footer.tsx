@@ -11,7 +11,7 @@ export function Footer() {
         <div>
           <p className="font-display text-2xl">Mahak Jain</p>
           <p className="text-faint mt-1 font-mono text-xs uppercase tracking-[0.12em]">
-            AI Engineer · Creative Technologist
+            Full-Stack &amp; GenAI Developer
           </p>
         </div>
 

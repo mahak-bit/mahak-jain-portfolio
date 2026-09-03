@@ -171,7 +171,7 @@ const INTENTS: Intent[] = [
       'her journey',
     ],
     response:
-      'Mahak is an AI Engineer & Creative Technologist. She studied business (BBA), got pulled into building software — AI and GenAI, full-stack, automation — and now ships AI products end to end with an AI-first workflow. The through-line: treat the problem as a product, then build something real for it. The build log has the rough timeline.',
+      'Mahak is a full-stack and GenAI developer, now building toward agentic AI. She studied business (BBA), got pulled into building software — full-stack web, Python, AI and GenAI, automation — and now ships AI products end to end with an AI-first workflow. The through-line: treat the problem as a product, then build something real for it. The build log has the rough timeline.',
     followUps: ["what's she working on now?", "what's she best at?"],
   },
   {

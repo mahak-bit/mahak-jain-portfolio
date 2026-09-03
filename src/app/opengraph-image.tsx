@@ -39,9 +39,11 @@ export default function OpengraphImage() {
             Mahak Jain
           </div>
           <div style={{ display: 'flex', fontSize: 40, marginTop: 20, color: '#efece5' }}>
-            <span>AI Engineer&nbsp;</span>
-            <span style={{ color: '#e2603b' }}>&amp;</span>
-            <span>&nbsp;Creative Technologist</span>
+            <span>Full-Stack&nbsp;</span>
+            <span style={{ color: '#e2603b' }}>·</span>
+            <span>&nbsp;Python&nbsp;</span>
+            <span style={{ color: '#e2603b' }}>·</span>
+            <span>&nbsp;GenAI</span>
           </div>
         </div>
 
