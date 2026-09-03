@@ -14,16 +14,31 @@ export function About() {
         </Reveal>
 
         <Reveal delay={0.05} className="prose-links flex flex-col gap-5 text-[1.06rem] leading-relaxed">
-          <p>
-            I&rsquo;m Mahak. Somewhere between spreadsheets and a late-night &ldquo;wait, can I just
-            build this?&rdquo; I started building for the web — and lately that&rsquo;s mostly meant
-            AI on top of it: apps, agents, and the small automations that remove a step nobody
-            should be doing by hand.
+          <p className="text-faint font-mono text-[0.78rem] leading-relaxed tracking-[0.04em]">
+            Full-Stack Developer <span className="opacity-40">·</span> Python Developer{' '}
+            <span className="opacity-40">·</span> GenAI Engineer{' '}
+            <span className="opacity-40">·</span>{' '}
+            <span className="text-accent">Moving toward Agentic AI</span>
           </p>
           <p>
-            I work AI-first. An assistant handles the repetitive parts; I decide the shape of
-            things — the data model, the boundaries, the places it isn&rsquo;t allowed to break.
-            It&rsquo;s fast, but it&rsquo;s not hands-off.
+            I&rsquo;m Mahak. Somewhere between spreadsheets and a late-night &ldquo;wait, can I just
+            build this?&rdquo;, I started building for the web — and lately, that&rsquo;s
+            increasingly meant putting AI on top of it.
+          </p>
+          <p>
+            I build full-stack web applications, Python backends, AI-powered products, and
+            automations. My work has grown from traditional web development into Generative AI, and
+            I&rsquo;m now going deeper into Agentic AI — building systems that can reason, use tools,
+            work with data, and handle tasks beyond a simple prompt-and-response.
+          </p>
+          <p>
+            I work across the stack: React, Next.js, TypeScript, Python, APIs, databases, and cloud
+            deployment, alongside modern AI tools and frameworks.
+          </p>
+          <p>
+            I work AI-first. An assistant handles the repetitive parts; I decide the architecture —
+            the data model, system boundaries, integrations, and the places where things
+            aren&rsquo;t allowed to break. It&rsquo;s fast, but it&rsquo;s not hands-off.
           </p>
           <p>
             The work here is real and deliberately small. I&rsquo;d rather ship something that
