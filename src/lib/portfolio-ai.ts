@@ -27,10 +27,10 @@ export interface PortfolioAnswer {
 
 export const SUGGESTED_PROMPTS = [
   'what has she actually built?',
-  'is she any good with agents?',
-  'can she build an AI product end to end?',
+  'is she a full-stack developer?',
+  'can she build a website end to end?',
   "what's the tech stack?",
-  'how does she work?',
+  'is she any good with AI agents?',
 ] as const;
 
 interface Intent {
@@ -82,7 +82,7 @@ const INTENTS: Intent[] = [
       'day to day',
     ],
     response:
-      'Day to day: TypeScript, React, Next.js, Node.js, Python, SQL. On the AI side: the OpenAI APIs, Claude, Claude Code, structured outputs and tool calling. For product work: Tailwind, Framer Motion, Prisma and Postgres, Zod, Git, Vercel. The full list is in the "I work with" section.',
+      'Day to day: TypeScript, React, Next.js, Node.js, Python and SQL, with Tailwind, Framer Motion, Prisma and Postgres, Zod, Git and Vercel for shipping. On the AI side: the OpenAI and Anthropic APIs, structured outputs, tool calling, retrieval and evals. The full list is in the "I work with" section.',
     followUps: ["what's she best at?", 'tell me about the web work'],
   },
   {
@@ -101,7 +101,7 @@ const INTENTS: Intent[] = [
       'hire',
     ],
     response:
-      'Yes — the Study Planner is the proof: auth, onboarding, an AI generation layer with validated output, a database, analytics, a tool-calling agent, and a tested critical path, all deployed. The workflow is AI-first, so idea to working product is fast. If you have something in mind, the contact form is at the bottom.',
+      'Yes, end to end. Zazzlers is the fullest example — a complete e-commerce platform with payments, notifications and a full admin back office, built for a clothing label. The Study Planner is the AI-heavy one: auth, onboarding, an AI generation layer with validated output, a database, analytics, a tool-calling agent and a tested critical path. Both went from first commit to deployed. If you have something in mind, the contact form is at the bottom.',
     followUps: ['how does she work?', 'how do I reach her?'],
   },
   {
@@ -118,7 +118,7 @@ const INTENTS: Intent[] = [
       'specializ',
     ],
     response:
-      'Roughly four areas: generative and agentic AI (LLM apps, structured output, tool-calling agents); full-stack product engineering (Next.js, React, TypeScript, APIs, databases); AI-assisted development (moving fast with Claude Code without losing the plot on architecture); and modern UI/UX plus quick prototyping.',
+      'Four areas, starting with the core: full-stack web development — building and shipping complete websites and web apps in Next.js, React and TypeScript, with APIs, databases and deployment. Then generative and agentic AI — LLM apps, structured output, tool-calling agents with real guardrails. Then AI-assisted development — moving fast without losing the plot on architecture. And modern UI/UX with quick, credible prototyping.',
     followUps: ['what has she built?', 'how did she get into this?'],
   },
   {
@@ -126,16 +126,28 @@ const INTENTS: Intent[] = [
     keywords: [
       'web',
       'website',
+      'websites',
+      'web developer',
+      'web dev',
+      'web development',
+      'full stack',
+      'full-stack',
+      'fullstack',
+      'developer',
       'frontend',
       'front-end',
+      'backend',
+      'back-end',
       'ui',
       'interface',
       'react project',
       'design',
+      'deploy',
+      'deployment',
     ],
     response:
-      'Most of the archive is web work. Zazzlers is a full Next.js storefront plus an admin back office. Three of the projects are scroll-driven, GSAP-and-Lenis sites — a rice-mill site, a digital exhibition, and a 911 Carrera concept where the video scrubs to your scroll. The Study Planner and Beauty Match are the app-shaped ones. All deployed, all built for real use.',
-    followUps: ["what's the tech stack?", 'can she build an AI product?'],
+      'First and foremost, Mahak is a professional full-stack web developer. She builds complete websites and web apps end to end — interface, front end, back end, database and deployment — and ships them to production. Most of the archive is web work: Zazzlers is a full Next.js storefront with its own admin back office; three projects are scroll-driven GSAP-and-Lenis sites (a rice-milling company site, a digital exhibition, a 911 Carrera concept); the Study Planner and Beauty Match are the app-shaped builds. All deployed, all built for real use. Increasingly she builds AI into that work, and is moving toward agentic AI — but the foundation is solid production web engineering.',
+    followUps: ["what's the tech stack?", 'can she build a website end to end?'],
   },
   {
     id: 'ai',
@@ -151,13 +163,15 @@ const INTENTS: Intent[] = [
       'artificial intelligence',
     ],
     response:
-      'The focus is generative and agentic AI: building LLM-powered apps, designing tool-calling agents with real guardrails, wiring up the OpenAI APIs and Claude, and using AI to automate the parts of a workflow that don’t need a person. The Study Planner shows most of this end to end — structured generation, a retry/fallback contract, and an agent that can read a user’s context but never write to it.',
+      'On top of the web work, the focus is generative and agentic AI: building LLM-powered features, designing tool-calling agents with real guardrails, integrating the OpenAI and Anthropic APIs, and using AI to automate the parts of a workflow that don’t need a person. The Study Planner shows most of this end to end — structured generation, a retry/fallback contract, and an agent that can read a user’s context but never write to it.',
     followUps: ['is she good with agents?', "what's she working on now?"],
   },
   {
     id: 'about',
     keywords: [
       'who are you',
+      'who is',
+      "who's",
       'about you',
       'about mahak',
       'about her',
@@ -171,7 +185,7 @@ const INTENTS: Intent[] = [
       'her journey',
     ],
     response:
-      'Mahak is a full-stack and GenAI developer, now building toward agentic AI. She studied business (BBA), got pulled into building software — full-stack web, Python, AI and GenAI, automation — and now ships AI products end to end with an AI-first workflow. The through-line: treat the problem as a product, then build something real for it. The build log has the rough timeline.',
+      'Mahak is a professional full-stack developer who builds AI into what she ships, and is now moving toward agentic AI. She studied business (BBA), got pulled into building software — full-stack web, Python, AI and GenAI, automation — and now ships products end to end, from first commit to deployment. The through-line: treat the problem as a product, then build something real for it. The build log has the rough timeline.',
     followUps: ["what's she working on now?", "what's she best at?"],
   },
   {
@@ -194,7 +208,7 @@ const INTENTS: Intent[] = [
       'connect',
     ],
     response:
-      'She’s open to opportunities and collaborations. Fastest route is the contact section at the bottom — there’s a form and a direct email link (mahakj532@gmail.com). GitHub is linked there too; LinkedIn is coming.',
+      'She’s open to opportunities and collaborations. Fastest route is the contact section at the bottom — a form plus a direct email link (mahakj532@gmail.com). GitHub and LinkedIn are linked there too.',
     followUps: ['can she build an AI product?', 'what has she built?'],
   },
   {
@@ -211,7 +225,7 @@ const INTENTS: Intent[] = [
       'develop',
     ],
     response:
-      'AI-first, but engineering-led. An AI coding assistant (Claude Code, plus the OpenAI APIs) sits at the front of the loop for architecture exploration, implementation and testing — while the data model, the boundaries and the guardrails stay deliberate. Fast, but not hands-off.',
+      'AI-first, but engineering-led. She uses modern AI coding tools to move quickly through exploration, implementation and testing, while the data model, the boundaries and the guardrails stay deliberate and hand-designed. Fast, but the architecture decisions are hers — not hands-off.',
     followUps: ["what's the tech stack?", "what's she working on now?"],
   },
   {

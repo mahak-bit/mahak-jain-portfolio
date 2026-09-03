@@ -55,8 +55,8 @@ export function PortfolioAI() {
           Ask my portfolio anything.
         </h2>
         <p className="text-muted mt-4 max-w-md text-[1.05rem] leading-relaxed">
-          Not sure where to start? Ask about the projects, the AI work, the tools, or how I work.
-          It&rsquo;s a small local model of me — no API, runs offline.
+          Not sure where to start? Ask about the projects, the web and AI work, the tools, or how
+          I work. It&rsquo;s a small offline model of me — quick answers, no API calls.
         </p>
       </Reveal>
 
