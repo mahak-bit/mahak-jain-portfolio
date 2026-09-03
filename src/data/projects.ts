@@ -6,8 +6,9 @@
  *  - Unknowns stay as visible [ADD ...] placeholders — never a guess.
  *  - `status: 'placeholder'` renders a clearly-labelled empty slot.
  *
- * Every project below is deployed. Screenshots are marked [ADD SCREENSHOT] —
- * grab them from the live sites (all linked) and drop them in `public/`.
+ * Every project below is deployed. Where a screenshot is missing (src: ''),
+ * a typographic panel built from `poster` + the stack is shown instead — so a
+ * real image is an upgrade, never a requirement. Drop images in `public/`.
  */
 
 export type ProjectStatus = 'live' | 'in-progress' | 'concept' | 'placeholder';
@@ -43,6 +44,12 @@ export interface Project {
 
   /** One sentence: what it is. */
   oneLiner: string;
+
+  /**
+   * Short editorial phrase used for the typographic panel shown in place of a
+   * screenshot (projects with no image yet). Falls back to `oneLiner`.
+   */
+  poster?: string;
 
   /** The mini-story shown on the archive entry. */
   story: {
@@ -235,6 +242,7 @@ const projectList: ProjectInput[] = [
     featured: true,
     oneLiner:
       'A study planner that reshuffles itself when you miss a session — with an AI coach that can actually see your schedule.',
+    poster: 'A study plan that expects you to fall behind.',
     story: {
       solving:
         'Every study planner I’d used broke the moment real life happened. Miss one session and the whole plan is just wrong, sitting there. I wanted one that expected you to fall behind.',
@@ -307,6 +315,7 @@ const projectList: ProjectInput[] = [
     featured: true,
     oneLiner:
       'A scroll-driven digital exhibition on 80 years of Indian independence — history, protest and the questions still open.',
+    poster: 'Eighty years of freedom, told as one scroll.',
     story: {
       solving:
         'I wanted to see whether a serious subject — “what does freedom actually look like at 80?” — could hold up as an interactive exhibition instead of an essay, without cheapening it with stock imagery or AI-generated “history”.',
@@ -377,6 +386,7 @@ const projectList: ProjectInput[] = [
     featured: true,
     oneLiner:
       'A scroll-scrubbed concept microsite for the Porsche 911 Carrera — each clip’s playback position is your scroll position.',
+    poster: 'Your scroll position is the playhead.',
     story: {
       solving:
         'Apple product pages feel incredible because the imagery is tied to your scroll. I wanted that effect without their pipeline — no sliced frame sequences, no 3D, no WebGL.',
@@ -442,6 +452,7 @@ const projectList: ProjectInput[] = [
     featured: true,
     oneLiner:
       'An AI skincare-matching platform with an explainable engine — every recommendation shows its reasoning, never a bare percentage.',
+    poster: 'Every match has to show its reasoning.',
     story: {
       solving:
         'Beauty recommendation quizzes are black boxes — you answer five questions and get a product with no idea why. I wanted one where the match is transparent enough to argue with.',

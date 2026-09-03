@@ -6,6 +6,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import type { Project } from '@/data/projects';
 import { easeOut, viewportOnce } from '@/lib/motion';
 import { cn } from '@/lib/utils';
+import { ProjectPoster } from './ProjectPoster';
 
 type Kind = 'showcase' | 'wide' | 'text' | 'compact';
 const KINDS: Kind[] = ['showcase', 'wide', 'text', 'compact'];
@@ -163,18 +164,20 @@ function TechLine({ project, className }: { project: Project; className?: string
 
 function Visual({ project, ratio }: { project: Project; ratio: string }) {
   const shot = project.screenshots[0];
-  const caption = shot?.caption || `[ADD SCREENSHOT] — ${project.name}`;
   const fit = shot?.fit ?? 'cover';
-  const frame = (
-    <div
-      className={cn(
-        'relative flex items-center justify-center overflow-hidden border',
-        ratio,
-        fit === 'logo' ? 'border-line bg-[#0a0a0a]' : 'border-line bg-raise',
-        project.status === 'placeholder' && 'border-dashed'
-      )}
-    >
-      {shot?.src ? (
+  const isPlaceholder = project.status === 'placeholder';
+
+  let frame: React.ReactNode;
+  if (shot?.src) {
+    frame = (
+      <div
+        className={cn(
+          'relative flex items-center justify-center overflow-hidden border transition-colors',
+          ratio,
+          fit === 'logo' ? 'border-line bg-[#0a0a0a]' : 'border-line bg-raise',
+          'group-hover:border-accent'
+        )}
+      >
         <Image
           src={shot.src}
           alt={shot.alt}
@@ -188,17 +191,31 @@ function Visual({ project, ratio }: { project: Project; ratio: string }) {
                 : 'object-cover'
           }
         />
-      ) : (
-        <span className="text-faint px-6 text-center font-mono text-xs">{caption}</span>
-      )}
-    </div>
-  );
-  if (project.status === 'placeholder') return frame;
+      </div>
+    );
+  } else if (isPlaceholder) {
+    frame = (
+      <div
+        className={cn(
+          'border-line bg-raise flex items-center justify-center overflow-hidden border border-dashed',
+          ratio
+        )}
+      >
+        <span className="text-faint px-6 text-center font-mono text-xs">
+          [ADD SCREENSHOT] — {project.name}
+        </span>
+      </div>
+    );
+  } else {
+    frame = <ProjectPoster project={project} ratio={ratio} />;
+  }
+
+  if (isPlaceholder) return frame;
   return (
     <Link
       href={`/projects/${project.slug}`}
       aria-label={`${project.name} — case study`}
-      className="group hover:border-accent block transition-colors"
+      className="group block"
     >
       {frame}
     </Link>

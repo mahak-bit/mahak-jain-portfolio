@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getProject, projects, type Screenshot } from '@/data/projects';
 import { Reveal } from '@/components/ui/Reveal';
+import { ProjectPoster } from '@/components/archive/ProjectPoster';
 import { site } from '@/lib/site';
 
 export function generateStaticParams() {
@@ -75,7 +76,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       {/* Lead visual */}
       <Reveal delay={0.05} className="mt-12">
-        <Shot shot={project.screenshots[0]} priority />
+        {project.screenshots[0]?.src ? (
+          <Shot shot={project.screenshots[0]} priority />
+        ) : (
+          <ProjectPoster project={project} ratio="aspect-[16/10]" size="lg" />
+        )}
       </Reveal>
 
       {/* Story */}
@@ -130,12 +135,14 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <p>{project.caseStudy.outcome}</p>
         </Block>
 
-        {project.screenshots.length > 0 && (
+        {project.screenshots.some((s) => s.src) && (
           <Block label="Screens">
             <div className="grid gap-4 sm:grid-cols-2">
-              {project.screenshots.map((shot, i) => (
-                <Shot key={i} shot={shot} ratio="aspect-video" />
-              ))}
+              {project.screenshots
+                .filter((s) => s.src)
+                .map((shot, i) => (
+                  <Shot key={i} shot={shot} ratio="aspect-video" />
+                ))}
             </div>
           </Block>
         )}
