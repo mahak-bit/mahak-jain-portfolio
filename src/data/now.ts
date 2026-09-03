@@ -6,8 +6,15 @@
 export const nowUpdated = 'September 2026';
 
 export const now: { verb: string; value: string }[] = [
-  { verb: 'Building', value: 'AI-powered products and web apps' },
+  { verb: 'Building', value: 'AI-powered products and full-stack web apps' },
   { verb: 'Learning', value: 'Agentic AI — how to make agents that plan and actually act' },
-  { verb: 'Exploring', value: 'LLM application patterns, retrieval over private data' },
-  { verb: 'Using', value: 'Claude Code, the OpenAI APIs, Next.js, Python' },
+  { verb: 'Exploring', value: 'LLM patterns, retrieval over private data, evals' },
+  {
+    verb: 'Using',
+    value: 'the OpenAI & Anthropic APIs, the Vercel AI SDK, Next.js, Python',
+  },
+  {
+    verb: 'Keeping up',
+    value: 'with a field that reinvents its tooling every few months — which is half the fun',
+  },
 ];
