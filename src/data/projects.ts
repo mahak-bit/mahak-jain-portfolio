@@ -6,15 +6,15 @@
  *  - Unknowns stay as visible [ADD ...] placeholders — never a guess.
  *  - `status: 'placeholder'` renders a clearly-labelled empty slot.
  *
- * Every project below is deployed. Where a screenshot is missing (src: ''),
- * a typographic panel built from `poster` + the stack is shown instead — so a
- * real image is an upgrade, never a requirement. Drop images in `public/`.
+ * Every project below is deployed. A project with an empty `screenshots` list
+ * shows a typographic panel built from `poster` + the stack instead — so a real
+ * image is an upgrade, never a requirement. Drop images in `public/projects/`.
  */
 
 export type ProjectStatus = 'live' | 'in-progress' | 'concept' | 'placeholder';
 
 export interface Screenshot {
-  /** Empty string → renders an "[ADD SCREENSHOT]" placeholder panel. */
+  /** Path to the image, under /public. */
   src: string;
   alt: string;
   caption?: string;
@@ -110,7 +110,6 @@ const projectList: ProjectInput[] = [
         caption: 'The facility',
         fit: 'contain',
       },
-      { src: '', alt: 'Pawan Industries — the journey', caption: '[ADD SCREENSHOT] — The Journey section' },
     ],
     caseStudy: {
       overview:
@@ -184,7 +183,6 @@ const projectList: ProjectInput[] = [
         caption: 'Zazzlers',
         fit: 'logo',
       },
-      { src: '', alt: 'Zazzlers — admin orders', caption: '[ADD SCREENSHOT] — Admin dashboard' },
     ],
     caseStudy: {
       overview:
@@ -256,10 +254,7 @@ const projectList: ProjectInput[] = [
       demo: 'https://ai-study-planner-three-psi.vercel.app',
       github: 'https://github.com/mahak-bit/ai-study-planner',
     },
-    screenshots: [
-      { src: '', alt: 'AI Study Planner — planner', caption: '[ADD SCREENSHOT] — Planner' },
-      { src: '', alt: 'AI Study Planner — coach', caption: '[ADD SCREENSHOT] — AI Coach' },
-    ],
+    screenshots: [],
     caseStudy: {
       overview:
         'A student enters their subjects, exams and real weekly hours; an AI layer builds a day-by-day schedule, and a deterministic engine keeps it realistic as things get completed or missed. An AI coach answers “why am I behind?” by calling read-only tools scoped to that student’s own data.',
@@ -329,10 +324,7 @@ const projectList: ProjectInput[] = [
       demo: 'https://india-at-80.vercel.app',
       github: 'https://github.com/mahak-bit/india-at-80',
     },
-    screenshots: [
-      { src: '', alt: 'India at 80 — hero', caption: '[ADD SCREENSHOT] — Hero' },
-      { src: '', alt: 'India at 80 — timeline', caption: '[ADD SCREENSHOT] — Timeline' },
-    ],
+    screenshots: [],
     caseStudy: {
       overview:
         'An independent digital exhibition marking 80 years of Indian independence. It treats freedom as inherited, questioned and reimagined by each generation rather than settled — history as narrative, not verdict.',
@@ -400,10 +392,7 @@ const projectList: ProjectInput[] = [
       demo: 'https://porsche-911-carrera-site.vercel.app',
       github: 'https://github.com/mahak-bit/porsche-911-carrera',
     },
-    screenshots: [
-      { src: '', alt: '911 Carrera — hero', caption: '[ADD SCREENSHOT] — Hero' },
-      { src: '', alt: '911 Carrera — performance', caption: '[ADD SCREENSHOT] — Performance' },
-    ],
+    screenshots: [],
     caseStudy: {
       overview:
         'An unofficial, fan-made concept build — no Porsche branding or assets. A study in scroll-driven storytelling: “born from heritage, engineered for speed”, told through nine chapters of scrubbed footage.',
@@ -466,10 +455,7 @@ const projectList: ProjectInput[] = [
       demo: 'https://beauty-match-p.vercel.app',
       github: 'https://github.com/mahak-bit/beauty-match',
     },
-    screenshots: [
-      { src: '', alt: 'Beauty Match — quiz', caption: '[ADD SCREENSHOT] — The quiz' },
-      { src: '', alt: 'Beauty Match — a match with reasoning', caption: '[ADD SCREENSHOT] — A match, explained' },
-    ],
+    screenshots: [],
     caseStudy: {
       overview:
         'A beauty-tech discovery platform: “skincare matched to your skin, not the other way around”. A conversational AI quiz and a static quiz both feed one transparent matching engine over a structured product catalogue.',
