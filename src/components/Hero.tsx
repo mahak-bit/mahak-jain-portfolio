@@ -142,6 +142,19 @@ export function Hero() {
             →
           </span>
         </Link>
+        {site.resumeUrl && (
+          <a
+            href={site.resumeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted hover:text-fg group inline-flex items-center gap-2 text-[0.95rem] transition-colors"
+          >
+            Résumé
+            <span aria-hidden className="transition-transform group-hover:-translate-y-0.5">
+              ↗
+            </span>
+          </a>
+        )}
       </motion.div>
 
       <motion.p {...fade(0.74)} className="text-faint mt-14 font-mono text-xs">

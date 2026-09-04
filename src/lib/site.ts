@@ -19,7 +19,9 @@ export const site = {
   /** Canonical URL — used for OG tags, canonical links and the sitemap. Swap for a custom domain when there is one. */
   url: 'https://mahak-jain-portfolio.vercel.app',
   email: 'mahakj532@gmail.com',
-  resumeUrl: '', // [ADD RESUME] e.g. '/mahak-jain-resume.pdf'
+  /** Résumé — linked from the home hero only. */
+  resumeUrl:
+    'https://claude.ai/code/artifact/a4195a95-a0b7-43ca-bad3-cb1d14ed38f8?org=6a3b26f4-ec32-43b0-996a-ac0dbb78b720',
   socials: {
     github: 'https://github.com/mahak-bit',
     linkedin: 'https://www.linkedin.com/in/mahak-jain-7665432a3/',
