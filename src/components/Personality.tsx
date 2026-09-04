@@ -1,28 +1,31 @@
+'use client';
+
+import { useState } from 'react';
 import { Section } from './ui/Section';
 import { Reveal } from './ui/Reveal';
-import { aboutMeLines } from '@/data/personality';
-
-/** Slight, deliberate indentation drift — designed, not centered-by-default. */
-const indent = ['', 'sm:pl-[4%]', 'sm:pl-[1%]', 'sm:pl-[7%]', 'sm:pl-[2%]', 'sm:pl-[5%]'];
+import { ThoughtCard } from './ThoughtCard';
+import { thoughts } from '@/data/personality';
 
 export function Personality() {
+  const [active, setActive] = useState<number | null>(null);
+
   return (
     <Section id="more" className="ruled">
       <Reveal>
         <h2 className="kicker font-normal">A little more about me</h2>
       </Reveal>
 
-      <div className="mt-8 flex flex-col">
-        {aboutMeLines.map((line, i) => (
-          <Reveal
-            key={line}
-            delay={Math.min(i * 0.04, 0.2)}
-            className={`border-line border-b py-6 first:border-t ${indent[i % indent.length]}`}
-          >
-            <p className="font-display text-[clamp(1.3rem,1rem+1.6vw,2rem)] leading-tight">
-              {line}
-            </p>
-          </Reveal>
+      <div className="mt-8 grid grid-cols-1 gap-4 sm:mt-10 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6">
+        {thoughts.map((thought, i) => (
+          <ThoughtCard
+            key={thought.tag}
+            thought={thought}
+            index={i}
+            number={String(i + 1).padStart(2, '0')}
+            isFlipped={active === i}
+            isDimmed={active !== null && active !== i}
+            onToggle={() => setActive((current) => (current === i ? null : i))}
+          />
         ))}
       </div>
     </Section>
