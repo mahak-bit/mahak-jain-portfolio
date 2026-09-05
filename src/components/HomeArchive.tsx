@@ -13,6 +13,7 @@ import {
 } from 'framer-motion';
 import { Section } from './ui/Section';
 import { Reveal } from './ui/Reveal';
+import { ArchiveBackdrop } from './ArchiveBackdrop';
 import { projects } from '@/data/projects';
 import { easeOut } from '@/lib/motion';
 
@@ -72,8 +73,10 @@ export function HomeArchive() {
   const count = projects.filter((p) => p.status !== 'placeholder').length;
 
   return (
-    <Section id="work" bleed className="ruled overflow-x-clip">
-      <div className="mx-auto max-w-5xl px-5 sm:px-8">
+    <Section id="work" bleed className="ruled relative overflow-x-clip">
+      <ArchiveBackdrop />
+
+      <div className="relative z-10 mx-auto max-w-5xl px-5 sm:px-8">
         <Reveal className="flex flex-col items-center">
           <span className="kicker">The archive</span>
 
