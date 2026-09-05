@@ -67,7 +67,7 @@ export function ArchiveBackdrop() {
         <img
           src={POSTER_SRC}
           alt=""
-          className="h-full w-full object-cover opacity-[0.14] dark:opacity-[0.22]"
+          className="h-full w-full object-cover opacity-[0.25] dark:opacity-[0.40]"
         />
       ) : (
         <video
@@ -79,12 +79,12 @@ export function ArchiveBackdrop() {
           playsInline
           preload="metadata"
           disablePictureInPicture
-          className="h-full w-full object-cover opacity-[0.14] dark:opacity-[0.22]"
+          className="h-full w-full object-cover opacity-[0.25] dark:opacity-[0.40]"
         />
       )}
 
       {/* Scrim in the page's own background colour — keeps the type dominant. */}
-      <div className="bg-bg/55 absolute inset-0" />
+      <div className="bg-bg/45 absolute inset-0" />
     </div>
   );
 }
