@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { Section } from './ui/Section';
+import { Section, SectionMark } from './ui/Section';
 import { Reveal } from './ui/Reveal';
 import { askPortfolio, SUGGESTED_PROMPTS, type PortfolioAnswer } from '@/lib/portfolio-ai';
 
@@ -48,13 +48,11 @@ export function PortfolioAI() {
   }, [status, answer]);
 
   return (
-    <Section id="ask" aria-label="Ask my portfolio" className="ruled">
+    <Section id="ask" aria-label="Ask my portfolio">
+      <SectionMark index="01" label="Ask around" className="mb-10 sm:mb-14" />
       <Reveal>
-        <span className="kicker">Ask around</span>
-        <h2 className="mt-4 text-[clamp(1.9rem,1.3rem+2.6vw,3rem)]">
-          Ask my portfolio anything.
-        </h2>
-        <p className="text-muted mt-4 max-w-md text-[1.05rem] leading-relaxed">
+        <h2 className="display-lg max-w-[13ch]">Ask my portfolio anything.</h2>
+        <p className="text-muted mt-6 max-w-md text-[1rem] leading-relaxed">
           Not sure where to start? Ask about the projects, the web and AI work, the tools, or how
           I work. It&rsquo;s a small offline model of me — quick answers, no API calls.
         </p>

@@ -17,14 +17,12 @@ const VIDEO_SRC = '/archive/archive-bg.mp4';
 const POSTER_SRC = '/archive/archive-bg.jpg';
 
 /**
- * Dissolves the top and bottom edges so the band has no hard seam. The
- * transparent run at the top is measured, not decorative: it keeps the video
- * entirely clear of the "The archive" kicker (which lands 86–136px in,
- * depending on viewport) so the label's contrast is exactly what it is
- * everywhere else on the site.
+ * Dissolves the top and bottom edges so the band has no hard seam. Only the
+ * chapter's display heading runs over this — the 10px section mark sits above
+ * it on clean ground — so an even fade is enough.
  */
 const EDGE_FADE =
-  'linear-gradient(to bottom, transparent 0, transparent 150px, #000 260px, #000 calc(100% - 80px), transparent 100%)';
+  'linear-gradient(to bottom, transparent 0%, #000 22%, #000 78%, transparent 100%)';
 
 export function ArchiveBackdrop() {
   const reduceMotion = useReducedMotion();
@@ -67,7 +65,7 @@ export function ArchiveBackdrop() {
         <img
           src={POSTER_SRC}
           alt=""
-          className="h-full w-full object-cover opacity-[0.25] dark:opacity-[0.40]"
+          className="h-full w-full object-cover opacity-[0.38]"
         />
       ) : (
         <video
@@ -79,7 +77,7 @@ export function ArchiveBackdrop() {
           playsInline
           preload="metadata"
           disablePictureInPicture
-          className="h-full w-full object-cover opacity-[0.25] dark:opacity-[0.40]"
+          className="h-full w-full object-cover opacity-[0.38]"
         />
       )}
 

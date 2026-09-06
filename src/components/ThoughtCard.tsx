@@ -3,15 +3,11 @@
 import { useCallback, useRef, useSyncExternalStore } from 'react';
 import { motion, useMotionValue, useReducedMotion, useSpring } from 'framer-motion';
 import type { Thought } from '@/data/personality';
-import { easeOut, viewportOnce } from '@/lib/motion';
+import { ThoughtVisual } from './thoughts/ThoughtVisuals';
 
-/**
- * One card in the "A little more about me" archive — a front label that
- * flips over on click/tap to reveal the thought. A real <button> under the
- * hood; the tilt, lift and 3D turn are all decoration on top.
- */
+const EASE = [0.16, 1, 0.3, 1] as const;
 
-/** True only on devices with a real mouse — gates the magnetic-tilt effect. */
+/** True only on devices with a real mouse — gates the magnetic tilt. */
 function useCanHover() {
   return useSyncExternalStore(
     (onChange) => {
@@ -24,6 +20,11 @@ function useCanHover() {
   );
 }
 
+/**
+ * One card in the thought archive. The front is a drawn composition with its
+ * number and title; clicking turns the card over to the thought itself. A real
+ * <button> underneath — the tilt, lift and 3D turn are decoration on top.
+ */
 export function ThoughtCard({
   thought,
   number,
@@ -44,21 +45,18 @@ export function ThoughtCard({
   const interactive = canHover && !reduceMotion;
 
   const btnRef = useRef<HTMLButtonElement>(null);
-  const springOpts = { stiffness: 140, damping: 16, mass: 0.4 };
+  const spring = { stiffness: 150, damping: 18, mass: 0.4 };
   const rotate = useMotionValue(thought.rotation);
   const tx = useMotionValue(0);
   const ty = useMotionValue(0);
-  const scale = useMotionValue(1);
-  const sRotate = useSpring(rotate, springOpts);
-  const sTx = useSpring(tx, springOpts);
-  const sTy = useSpring(ty, springOpts);
-  const sScale = useSpring(scale, springOpts);
+  const sRotate = useSpring(rotate, spring);
+  const sTx = useSpring(tx, spring);
+  const sTy = useSpring(ty, spring);
 
   const onEnter = useCallback(() => {
     if (!interactive) return;
     ty.set(-6);
-    scale.set(1.012);
-  }, [interactive, ty, scale]);
+  }, [interactive, ty]);
 
   const onMove = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -66,11 +64,10 @@ export function ThoughtCard({
       const r = btnRef.current.getBoundingClientRect();
       const px = (e.clientX - r.left) / r.width - 0.5;
       const py = (e.clientY - r.top) / r.height - 0.5;
-      // "toward 0deg" + the magnetic wobble are the same move: mostly flattened,
-      // nudged a couple of degrees by the cursor.
-      rotate.set(thought.rotation * 0.25 + px * 4);
-      tx.set(px * 4);
-      ty.set(-6 + py * 3);
+      // Settles toward flat, then takes a couple of degrees from the cursor.
+      rotate.set(thought.rotation * 0.2 + px * 2.4);
+      tx.set(px * 3);
+      ty.set(-6 + py * 2);
     },
     [interactive, rotate, tx, ty, thought.rotation]
   );
@@ -79,25 +76,22 @@ export function ThoughtCard({
     rotate.set(thought.rotation);
     tx.set(0);
     ty.set(0);
-    scale.set(1);
-  }, [rotate, tx, ty, scale, thought.rotation]);
+  }, [rotate, tx, ty, thought.rotation]);
 
-  const tagLabel = thought.tag.replace(/^on\s+/i, '').toLowerCase();
+  const label = thought.tag.replace(/^on\s+/i, '');
 
   return (
     <motion.div
-      initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 28 }}
       whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-      viewport={viewportOnce}
-      transition={{
-        duration: 0.5,
-        ease: easeOut,
-        delay: reduceMotion ? 0 : Math.min(index * 0.08, 0.4),
-      }}
+      viewport={{ once: true, margin: '-10% 0px -10% 0px' }}
+      transition={{ duration: 0.9, ease: EASE, delay: reduceMotion ? 0 : Math.min(index * 0.08, 0.4) }}
+      className="h-full"
     >
       <motion.div
-        animate={{ opacity: isDimmed ? 0.88 : 1 }}
-        transition={{ duration: 0.25, ease: easeOut }}
+        animate={{ opacity: isDimmed ? 0.55 : 1 }}
+        transition={{ duration: 0.4, ease: EASE }}
+        className="h-full"
       >
         <button
           ref={btnRef}
@@ -107,34 +101,28 @@ export function ThoughtCard({
           onMouseMove={onMove}
           onMouseLeave={onLeave}
           aria-pressed={isFlipped}
-          aria-label={`Flip thought about ${tagLabel}`}
-          className="group block w-full appearance-none border-0 bg-transparent p-0 text-left outline-offset-4"
-          style={{ perspective: 1200 }}
+          aria-label={`Turn over the note on ${label}`}
+          className="group block h-full w-full appearance-none border-0 bg-transparent p-0 text-left outline-offset-4"
+          style={{ perspective: 1400 }}
         >
           {reduceMotion ? (
-            <div
-              className="relative min-h-[210px] sm:min-h-[236px]"
-              style={{ rotate: `${thought.rotation}deg` }}
-            >
+            <div className="h-full" style={{ rotate: `${thought.rotation}deg` }}>
               {isFlipped ? (
                 <Back number={number} tag={thought.tag} content={thought.content} />
               ) : (
-                <Front number={number} tag={thought.tag} />
+                <Front number={number} tag={thought.tag} visual={thought.visual} />
               )}
             </div>
           ) : (
-            <motion.div style={{ rotate: sRotate, x: sTx, y: sTy, scale: sScale }}>
+            <motion.div style={{ rotate: sRotate, x: sTx, y: sTy }} className="h-full">
               <motion.div
                 animate={{ rotateY: isFlipped ? 180 : 0 }}
-                transition={{ type: 'spring', stiffness: 220, damping: 22 }}
-                className="relative min-h-[210px] sm:min-h-[236px]"
+                transition={{ type: 'spring', stiffness: 190, damping: 24 }}
+                className="relative h-full"
                 style={{ transformStyle: 'preserve-3d' }}
               >
-                <div
-                  aria-hidden={isFlipped}
-                  className="absolute inset-0 [backface-visibility:hidden]"
-                >
-                  <Front number={number} tag={thought.tag} />
+                <div aria-hidden={isFlipped} className="absolute inset-0 [backface-visibility:hidden]">
+                  <Front number={number} tag={thought.tag} visual={thought.visual} />
                 </div>
                 <div
                   aria-hidden={!isFlipped}
@@ -153,39 +141,56 @@ export function ThoughtCard({
 
 /* ---- faces ------------------------------------------------------------- */
 
-const faceClass =
-  'border-line bg-surface group-hover:border-accent/35 flex h-full flex-col justify-between rounded-[3px] border p-6 shadow-[0_10px_24px_-14px_rgba(0,0,0,0.35)] transition-[border-color,box-shadow] duration-300 group-hover:shadow-[0_18px_36px_-16px_rgba(0,0,0,0.45)] sm:p-7';
+const face =
+  'border-line bg-surface group-hover:border-accent relative flex h-full flex-col overflow-hidden border transition-colors duration-500';
 
-function Front({ number, tag }: { number: string; tag: string }) {
+function Front({
+  number,
+  tag,
+  visual,
+}: {
+  number: string;
+  tag: string;
+  visual: Thought['visual'];
+}) {
   return (
-    <div className={faceClass}>
-      <div className="flex items-start justify-between">
-        <span className="text-faint font-mono text-xs tabular-nums">{number}</span>
-        <span
-          aria-hidden="true"
-          className="text-faint group-hover:text-accent/70 font-mono text-sm transition-transform duration-300 group-hover:rotate-45"
-        >
-          ↻
-        </span>
+    <div className={face}>
+      <div className="text-fg absolute inset-0 opacity-90 transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]">
+        <ThoughtVisual visual={visual} />
       </div>
-      <span className="kicker">{tag}</span>
+      {/* keeps the type legible over whatever the drawing is doing */}
+      <div className="from-surface via-surface/70 absolute inset-0 bg-gradient-to-t to-transparent" />
+
+      <div className="relative flex h-full flex-col justify-between p-5 sm:p-6">
+        <div className="flex items-start justify-between">
+          <span className="meta text-accent">{number}</span>
+          <span
+            aria-hidden
+            className="meta group-hover:text-accent transition-all duration-500 group-hover:rotate-90"
+          >
+            ↻
+          </span>
+        </div>
+        <h3 className="display-md max-w-[9ch]">{tag}</h3>
+      </div>
     </div>
   );
 }
 
 function Back({ number, tag, content }: { number: string; tag: string; content: string }) {
   return (
-    <div className={faceClass}>
-      <p className="font-display text-[clamp(1.05rem,0.9rem+0.9vw,1.3rem)] leading-snug text-balance">
-        {content}
-      </p>
-      <div className="flex items-end justify-between gap-3">
-        <span className="kicker">
-          {number} · {tag}
-        </span>
-        <span aria-hidden="true" className="text-faint font-mono text-sm">
-          ↻
-        </span>
+    <div className={face}>
+      <div className="flex h-full flex-col justify-between p-5 sm:p-6">
+        <span className="meta text-accent">{number}</span>
+        <p className="text-fg max-w-[26ch] text-[clamp(1rem,0.85rem+0.7vw,1.4rem)] leading-snug">
+          {content}
+        </p>
+        <div className="border-line flex items-end justify-between border-t pt-3">
+          <span className="meta">{tag}</span>
+          <span aria-hidden className="meta">
+            ↻
+          </span>
+        </div>
       </div>
     </div>
   );

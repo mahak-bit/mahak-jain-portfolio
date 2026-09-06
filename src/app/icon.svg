@@ -1,10 +1,10 @@
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="32" height="32" rx="6" fill="#1a1917" />
+  <rect width="32" height="32" fill="#f7f5f0" />
   <path
     d="M7 24V8l9 9 9-9v16"
-    stroke="#d1394c"
+    stroke="#002fa7"
     stroke-width="2.6"
-    stroke-linecap="round"
-    stroke-linejoin="round"
+    stroke-linecap="square"
+    stroke-linejoin="miter"
   />
 </svg>

@@ -1,26 +1,28 @@
-import { Section } from './ui/Section';
+import { Section, SectionMark } from './ui/Section';
 import { Reveal } from './ui/Reveal';
 import { now, nowUpdated } from '@/data/now';
 
 export function Now() {
   return (
-    <Section id="now" className="ruled">
-      <Reveal className="flex items-end justify-between gap-4">
-        <h2 className="font-display text-[clamp(3rem,2rem+6vw,6rem)] leading-none">Now</h2>
-        <span className="kicker pb-2">Updated {nowUpdated}</span>
+    <Section id="now" className="pt-0 sm:pt-0 lg:pt-0">
+      <SectionMark index="04" label="Now" />
+
+      <Reveal className="mt-10 flex flex-wrap items-end justify-between gap-6 sm:mt-14">
+        <h2 className="display-lg">Now</h2>
+        <span className="meta pb-2">Updated {nowUpdated}</span>
       </Reveal>
 
-      <Reveal delay={0.05} className="mt-10">
+      <Reveal delay={0.05} className="mt-12 sm:mt-16">
         <dl className="border-line border-t">
           {now.map((row) => (
             <div
               key={row.verb}
-              className="border-line grid grid-cols-1 gap-1 border-b py-5 sm:grid-cols-[10rem_1fr] sm:gap-8"
+              className="border-line grid grid-cols-12 items-baseline gap-x-4 gap-y-1 border-b py-6"
             >
-              <dt className="text-faint font-mono text-xs uppercase tracking-[0.12em] sm:pt-1.5">
-                {row.verb}
-              </dt>
-              <dd className="text-[1.12rem] leading-snug">{row.value}</dd>
+              <dt className="meta col-span-12 sm:col-span-3">{row.verb}</dt>
+              <dd className="text-fg col-span-12 text-[1.05rem] leading-snug sm:col-span-9">
+                {row.value}
+              </dd>
             </div>
           ))}
         </dl>

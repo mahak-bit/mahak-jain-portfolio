@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
 import { projects } from '@/data/projects';
 import { ArchiveEntry } from './ArchiveEntry';
-import { easeOut } from '@/lib/motion';
+
+const EASE = [0.16, 1, 0.3, 1] as const;
 
 export function ArchiveList() {
   const reduceMotion = useReducedMotion();
@@ -14,45 +15,54 @@ export function ArchiveList() {
     reduceMotion
       ? {}
       : {
-          initial: { opacity: 0, y: 12 },
+          initial: { opacity: 0, y: 20 },
           animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.55, ease: easeOut, delay },
+          transition: { duration: 1, ease: EASE, delay },
         };
 
   return (
-    <div className="mx-auto max-w-5xl px-5 pb-28 pt-24 sm:px-8 sm:pt-32">
-      <Link
-        href="/#work"
-        className="text-muted hover:text-fg inline-flex items-center gap-1.5 text-sm transition-colors"
-      >
-        ← Back
-      </Link>
+    <div className="gutter-x mx-auto w-full max-w-[1500px] pt-24 pb-28 sm:pt-32">
+      <div className="border-line flex items-baseline justify-between border-b pb-4">
+        <Link href="/#work" className="meta hover:text-fg transition-colors">
+          ← Index
+        </Link>
+        <span className="meta">
+          {count} {count === 1 ? 'piece' : 'pieces'}
+        </span>
+      </div>
 
-      <header className="mt-10">
-        <motion.h1
-          {...rise(0.05)}
-          className="font-display text-[clamp(2.6rem,1.7rem+5vw,6rem)] leading-[0.92]"
-        >
+      <header className="mt-14 sm:mt-20">
+        <motion.h1 {...rise(0.05)} className="display-xl max-w-[8ch]">
           The Archive
         </motion.h1>
-        <motion.p {...rise(0.14)} className="text-muted mt-5 max-w-md text-[1.1rem] leading-relaxed">
-          Everything I&rsquo;ve built — {count} {count === 1 ? 'piece' : 'pieces'}, one collection,
-          no particular order.
+        <motion.p
+          {...rise(0.14)}
+          className="text-muted mt-8 max-w-[42ch] text-[1.02rem] leading-relaxed"
+        >
+          Everything I&rsquo;ve built — one collection, no particular order.
         </motion.p>
       </header>
 
-      <div className="mt-16 flex flex-col gap-12 sm:mt-24 sm:gap-20">
+      <div className="mt-20 flex flex-col gap-24 sm:mt-28 sm:gap-36">
         {projects.map((project, i) => (
           <ArchiveEntry key={project.slug} project={project} position={i} />
         ))}
       </div>
 
-      <div className="border-line mt-20 border-t pt-10">
+      <div className="border-line mt-28 border-t pt-10">
         <Link
           href="/#contact"
-          className="border-fg hover:border-accent inline-block border-b pb-0.5 text-[0.95rem] transition-colors"
+          className="group border-line hover:border-accent inline-flex items-baseline gap-4 border-b pb-2 transition-colors"
         >
-          Start a conversation →
+          <span className="display-md group-hover:text-accent transition-colors">
+            Start a conversation
+          </span>
+          <span
+            aria-hidden
+            className="text-faint group-hover:text-accent text-sm transition-[color,transform] duration-500 group-hover:translate-x-1"
+          >
+            →
+          </span>
         </Link>
       </div>
     </div>

@@ -12,7 +12,7 @@ export const site = {
   statement:
     'I build full-stack web apps, Python backends and AI-powered products — and lately that’s meant going deeper into GenAI and agents. Came from a business degree, got curious about how software actually gets made, and haven’t really stopped since.',
 
-  /** Handwritten annotation in the hero. Truthful + editable. */
+  /** Short editorial note beside the roles in the hero. Truthful + editable. */
   annotation: 'Building toward Agentic AI',
 
   location: 'India',

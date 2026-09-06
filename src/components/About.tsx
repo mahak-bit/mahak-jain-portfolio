@@ -1,25 +1,34 @@
-import { Section } from './ui/Section';
+import { Section, SectionMark } from './ui/Section';
 import { Reveal } from './ui/Reveal';
+
+const ROLES = ['Full-Stack Developer', 'Python Developer', 'GenAI Engineer'];
 
 export function About() {
   return (
-    <Section id="about" className="pt-8 sm:pt-10">
-      <div className="grid gap-x-12 gap-y-10 md:grid-cols-[1fr_1.4fr]">
-        <Reveal className="md:sticky md:top-24 md:self-start">
-          <span className="kicker">About</span>
-          <h2 className="mt-4 text-[clamp(1.7rem,1.2rem+2vw,2.6rem)]">
-            I studied business. Then I got more interested in the thing everyone was building on
-            top of.
+    <Section id="about">
+      <SectionMark index="03" label="About" />
+
+      <div className="mt-10 grid gap-x-12 gap-y-12 sm:mt-14 md:grid-cols-12">
+        <Reveal className="md:sticky md:top-28 md:col-span-5 md:self-start">
+          <h2 className="display-lg max-w-[12ch]">
+            I studied business. Then I got more interested in the thing everyone was building on top
+            of.
           </h2>
+
+          <ul className="mt-8 flex flex-col gap-1.5">
+            {ROLES.map((role) => (
+              <li key={role} className="meta">
+                {role}
+              </li>
+            ))}
+            <li className="meta text-accent">Moving toward Agentic AI</li>
+          </ul>
         </Reveal>
 
-        <Reveal delay={0.05} className="prose-links flex flex-col gap-5 text-[1.06rem] leading-relaxed">
-          <p className="text-faint font-mono text-[0.78rem] leading-relaxed tracking-[0.04em]">
-            Full-Stack Developer <span className="opacity-40">·</span> Python Developer{' '}
-            <span className="opacity-40">·</span> GenAI Engineer{' '}
-            <span className="opacity-40">·</span>{' '}
-            <span className="text-accent">Moving toward Agentic AI</span>
-          </p>
+        <Reveal
+          delay={0.05}
+          className="prose-links text-muted flex flex-col gap-5 text-[1.02rem] leading-relaxed md:col-span-6 md:col-start-7"
+        >
           <p>
             I&rsquo;m Mahak. Somewhere between spreadsheets and a late-night &ldquo;wait, can I just
             build this?&rdquo;, I started building for the web — and lately, that&rsquo;s
@@ -41,11 +50,11 @@ export function About() {
             aren&rsquo;t allowed to break. It&rsquo;s fast, but it&rsquo;s not hands-off.
           </p>
           <p>
-            The work here is real and deliberately small. I&rsquo;d rather ship something that
-            works than write a paragraph about something that might.
+            The work here is real and deliberately small. I&rsquo;d rather ship something that works
+            than write a paragraph about something that might.
           </p>
 
-          <p className="annotation mt-3 max-w-sm -rotate-1">
+          <p className="border-accent text-fg mt-6 border-l-2 pl-5 font-display text-[clamp(1.2rem,1rem+1.1vw,1.75rem)] leading-tight">
             Most of my ideas start as a random thought and end up as a repo.
           </p>
         </Reveal>

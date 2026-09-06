@@ -1,36 +1,32 @@
 import type { Metadata, Viewport } from 'next';
-import { Caveat, Fraunces, Hanken_Grotesk, JetBrains_Mono } from 'next/font/google';
+import { Hanken_Grotesk, JetBrains_Mono, Playfair_Display } from 'next/font/google';
 import './globals.css';
 
-import { ThemeProvider } from '@/components/ThemeProvider';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { KeyboardNav } from '@/components/KeyboardNav';
 import { ProgressRail } from '@/components/ProgressRail';
 import { site, seo } from '@/lib/site';
 
-const fraunces = Fraunces({
+/** Display — a high-contrast editorial serif, set very large and very tight. */
+const playfair = Playfair_Display({
   subsets: ['latin'],
-  variable: '--font-fraunces',
+  variable: '--font-playfair',
   display: 'swap',
   style: ['normal', 'italic'],
 });
 
+/** Body. */
 const hanken = Hanken_Grotesk({
   subsets: ['latin'],
   variable: '--font-hanken',
   display: 'swap',
 });
 
+/** Every technical label, number, year and category on the site. */
 const jetbrains = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-jetbrains',
-  display: 'swap',
-});
-
-const caveat = Caveat({
-  subsets: ['latin'],
-  variable: '--font-caveat',
   display: 'swap',
 });
 
@@ -61,20 +57,16 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  colorScheme: 'dark light',
-  themeColor: [
-    { media: '(prefers-color-scheme: dark)', color: '#1a1917' },
-    { media: '(prefers-color-scheme: light)', color: '#f6f4ef' },
-  ],
+  colorScheme: 'light',
+  themeColor: '#f7f5f0',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
-      suppressHydrationWarning
       data-scroll-behavior="smooth"
-      className={`${fraunces.variable} ${hanken.variable} ${jetbrains.variable} ${caveat.variable}`}
+      className={`${playfair.variable} ${hanken.variable} ${jetbrains.variable}`}
     >
       <head>
         <noscript>
@@ -82,27 +74,38 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </noscript>
       </head>
       <body className="relative min-h-dvh">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem={false}
-          disableTransitionOnChange
-        >
-          <div className="grain" aria-hidden />
-          <a
-            href="#main"
-            className="bg-surface text-fg border-line sr-only z-[70] rounded border px-4 py-2 text-sm font-medium focus-visible:not-sr-only focus-visible:fixed focus-visible:left-4 focus-visible:top-4"
-          >
-            Skip to content
-          </a>
-          <div className="relative z-[1]">
-            <Navbar />
-            <ProgressRail />
-            <main id="main">{children}</main>
-            <Footer />
+        {/* The structure the page is measured against, and the tooth on the ivory. */}
+        <div className="editorial-grid" aria-hidden>
+          <div>
+            <span />
+            <span />
+            <span />
+            <span />
+            <span className="hidden md:block" />
+            <span className="hidden md:block" />
+            <span className="hidden md:block" />
+            <span className="hidden md:block" />
+            <span className="hidden md:block" />
+            <span className="hidden md:block" />
+            <span className="hidden md:block" />
+            <span className="hidden md:block" />
           </div>
-          <KeyboardNav />
-        </ThemeProvider>
+        </div>
+        <div className="grain" aria-hidden />
+
+        <a
+          href="#main"
+          className="bg-surface text-fg border-line sr-only z-[70] border px-4 py-2 text-sm font-medium focus-visible:not-sr-only focus-visible:fixed focus-visible:top-4 focus-visible:left-4"
+        >
+          Skip to content
+        </a>
+        <div className="relative z-[1]">
+          <Navbar />
+          <ProgressRail />
+          <main id="main">{children}</main>
+          <Footer />
+        </div>
+        <KeyboardNav />
       </body>
     </html>
   );

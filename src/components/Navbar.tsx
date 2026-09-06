@@ -3,10 +3,14 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { navItems } from '@/lib/site';
-import { ThemeToggle } from './ThemeToggle';
+import { navItems, site } from '@/lib/site';
 import { cn } from '@/lib/utils';
 
+/**
+ * A deliberately quiet masthead: the name on the left, three destinations on
+ * the right, everything at label scale. It gains a hairline rule and a ground
+ * once the page moves, and otherwise stays out of the composition's way.
+ */
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -32,49 +36,40 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        'sticky top-0 z-50 transition-[background-color,border-color,backdrop-filter]',
-        scrolled
-          ? 'bg-bg/85 border-line border-b backdrop-blur'
-          : 'border-transparent bg-transparent'
+        'sticky top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-500',
+        scrolled ? 'bg-bg/80 border-line border-b backdrop-blur-sm' : 'border-transparent'
       )}
     >
       <div
         className={cn(
-          'mx-auto flex max-w-5xl items-baseline justify-between px-5 transition-[padding] sm:px-8',
-          scrolled ? 'py-3' : 'py-5'
+          'gutter-x flex items-center justify-between transition-[padding] duration-500',
+          scrolled ? 'py-3.5' : 'py-6'
         )}
       >
-        <Link
-          href="/"
-          className="font-mono text-[0.82rem] font-semibold uppercase tracking-[0.16em]"
-        >
-          Mahak Jain
+        <Link href="/" className="meta text-fg hover:text-accent transition-colors">
+          {site.name}
         </Link>
 
-        <nav className="hidden items-baseline gap-7 md:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-9 md:flex" aria-label="Primary">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={`/${item.href}`}
-              className="text-muted hover:text-fg text-[0.9rem] transition-colors"
+              className="meta hover:text-fg transition-colors"
             >
               {item.label}
             </Link>
           ))}
-          <ThemeToggle />
         </nav>
 
-        <div className="flex items-center gap-4 md:hidden">
-          <ThemeToggle />
-          <button
-            type="button"
-            onClick={() => setOpen(true)}
-            aria-label="Open menu"
-            className="font-mono text-[0.8rem] uppercase tracking-[0.14em]"
-          >
-            Menu
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          aria-label="Open menu"
+          className="meta hover:text-fg transition-colors md:hidden"
+        >
+          Menu
+        </button>
       </div>
 
       <AnimatePresence>
@@ -84,22 +79,17 @@ export function Navbar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.18 }}
+            transition={{ duration: 0.25 }}
           >
             <div className="bg-bg absolute inset-0" onClick={() => setOpen(false)} />
-            <nav
-              className="relative flex h-dvh flex-col px-6 pb-12 pt-5"
-              aria-label="Mobile"
-            >
-              <div className="flex items-baseline justify-between">
-                <span className="font-mono text-[0.8rem] font-semibold uppercase tracking-[0.16em]">
-                  Mahak Jain
-                </span>
+            <nav className="gutter-x relative flex h-dvh flex-col pt-6 pb-14" aria-label="Mobile">
+              <div className="flex items-center justify-between">
+                <span className="meta text-fg">{site.name}</span>
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
                   aria-label="Close menu"
-                  className="font-mono text-[0.8rem] uppercase tracking-[0.14em]"
+                  className="meta hover:text-fg transition-colors"
                 >
                   Close
                 </button>
@@ -109,20 +99,18 @@ export function Navbar() {
                 {navItems.map((item, i) => (
                   <motion.div
                     key={item.href}
-                    initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+                    initial={reduceMotion ? false : { opacity: 0, y: 14 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.04 + i * 0.04, duration: 0.25 }}
+                    transition={{ delay: 0.05 + i * 0.05, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                     className="border-line border-t"
                   >
                     <Link
                       href={`/${item.href}`}
                       onClick={() => setOpen(false)}
-                      className="flex items-baseline gap-4 py-5"
+                      className="flex items-baseline gap-5 py-5"
                     >
-                      <span className="text-faint font-mono text-xs">
-                        0{i + 1}
-                      </span>
-                      <span className="font-display text-3xl">{item.label}</span>
+                      <span className="meta">{String(i + 1).padStart(2, '0')}</span>
+                      <span className="display-md">{item.label}</span>
                     </Link>
                   </motion.div>
                 ))}

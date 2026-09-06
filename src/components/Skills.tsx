@@ -2,51 +2,49 @@
 
 import { useRef } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
-import { Section } from './ui/Section';
+import { Section, SectionMark } from './ui/Section';
 import { Reveal } from './ui/Reveal';
 import { iWorkWith, pokingAt } from '@/data/skills';
 
+/**
+ * The toolset set as a run of display type rather than a badge wall, with the
+ * two halves drifting past each other as the section crosses the viewport.
+ */
 export function Skills() {
   const reduceMotion = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  });
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
 
-  // A small, opposite-direction drift on the two halves as the section passes.
-  const xA = useTransform(scrollYProgress, [0, 1], ['1.5%', '-1.5%']);
-  const xB = useTransform(scrollYProgress, [0, 1], ['-2%', '2%']);
+  const xA = useTransform(scrollYProgress, [0, 1], ['2%', '-2.5%']);
+  const xB = useTransform(scrollYProgress, [0, 1], ['-3%', '2.5%']);
 
   const mid = Math.ceil(iWorkWith.length / 2);
   const rowA = iWorkWith.slice(0, mid);
   const rowB = iWorkWith.slice(mid);
 
   return (
-    <Section id="skills" bleed className="ruled overflow-x-clip">
-      <div ref={ref} className="mx-auto max-w-5xl px-5 sm:px-8">
-        <Reveal>
-          <span className="kicker">Tools</span>
-          <h2 className="mt-4 text-[clamp(1.7rem,1.2rem+2vw,2.6rem)]">I work with</h2>
+    <Section id="skills" bleed className="overflow-x-clip pt-0 sm:pt-0 lg:pt-0">
+      <div ref={ref} className="mx-auto w-full max-w-[1500px]">
+        <SectionMark index="05" label="Tools" />
+
+        <Reveal className="mt-10 sm:mt-14">
+          <h2 className="display-lg">I work with</h2>
         </Reveal>
 
-        <div className="mt-10 font-display text-[clamp(1.35rem,1rem+2vw,2.35rem)] leading-[1.3]">
+        <div className="font-display mt-12 text-[clamp(1.4rem,1rem+2.4vw,3rem)] leading-[1.25] tracking-[-0.02em] sm:mt-16">
           <motion.p style={reduceMotion ? undefined : { x: xA }}>{rowA.join(', ')},</motion.p>
           <motion.p style={reduceMotion ? undefined : { x: xB }} className="text-muted mt-1">
             {rowB.join(', ')}.
           </motion.p>
         </div>
 
-        <Reveal delay={0.05} className="mt-10">
-          <p className="text-faint text-[0.95rem]">
-            <span className="text-accent font-mono text-xs uppercase tracking-[0.12em]">
-              Still poking at
+        <Reveal delay={0.05} className="border-line mt-12 border-t pt-5 sm:mt-16">
+          <div className="grid grid-cols-12 items-baseline gap-x-4 gap-y-2">
+            <span className="meta text-accent col-span-12 sm:col-span-3">Still poking at</span>
+            <span className="text-muted col-span-12 text-[1rem] sm:col-span-9">
+              {pokingAt.join(', ')}
             </span>
-            <span className="mx-3" aria-hidden>
-              &mdash;
-            </span>
-            {pokingAt.join(', ')}
-          </p>
+          </div>
         </Reveal>
       </div>
     </Section>

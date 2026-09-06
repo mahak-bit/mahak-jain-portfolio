@@ -16,8 +16,8 @@ export default function OpengraphImage() {
           flexDirection: 'column',
           justifyContent: 'space-between',
           padding: 84,
-          background: '#1a1917',
-          color: '#efece5',
+          background: '#f7f5f0',
+          color: '#151515',
           fontFamily: 'Georgia, serif',
         }}
       >
@@ -27,7 +27,7 @@ export default function OpengraphImage() {
             fontSize: 22,
             letterSpacing: 4,
             textTransform: 'uppercase',
-            color: '#9a9488',
+            color: '#726e67',
             fontFamily: 'ui-monospace, monospace',
           }}
         >
@@ -38,11 +38,11 @@ export default function OpengraphImage() {
           <div style={{ display: 'flex', fontSize: 148, lineHeight: 0.95, letterSpacing: -3 }}>
             Mahak Jain
           </div>
-          <div style={{ display: 'flex', fontSize: 40, marginTop: 20, color: '#efece5' }}>
+          <div style={{ display: 'flex', fontSize: 40, marginTop: 20, color: '#151515' }}>
             <span>Full-Stack&nbsp;</span>
-            <span style={{ color: '#d1394c' }}>·</span>
+            <span style={{ color: '#002fa7' }}>·</span>
             <span>&nbsp;Python&nbsp;</span>
-            <span style={{ color: '#d1394c' }}>·</span>
+            <span style={{ color: '#002fa7' }}>·</span>
             <span>&nbsp;GenAI</span>
           </div>
         </div>
@@ -51,7 +51,7 @@ export default function OpengraphImage() {
           style={{
             display: 'flex',
             fontSize: 24,
-            color: '#9a9488',
+            color: '#726e67',
             fontFamily: 'ui-monospace, monospace',
           }}
         >

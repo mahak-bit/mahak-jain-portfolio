@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Section } from './ui/Section';
+import { Section, SectionMark } from './ui/Section';
 import { Reveal } from './ui/Reveal';
 import { Button } from './ui/Button';
 import { site } from '@/lib/site';
@@ -40,13 +40,11 @@ export function Contact() {
   )}&body=${encodeURIComponent(values.message || '')}`;
 
   return (
-    <Section id="contact" className="ruled">
+    <Section id="contact">
+      <SectionMark index="07" label="Contact" className="mb-10 sm:mb-14" />
       <div className="grid gap-x-12 gap-y-12 md:grid-cols-[1fr_1fr]">
         <Reveal>
-          <span className="kicker">Contact</span>
-          <h2 className="mt-4 text-[clamp(2rem,1.4rem+3vw,3.4rem)] leading-[1.05]">
-            Got something you want built?
-          </h2>
+          <h2 className="display-lg max-w-[11ch]">Got something you want built?</h2>
           <p className="text-muted prose-links mt-5 max-w-sm text-[1.05rem] leading-relaxed">
             An AI product, a website, an automation, or a half-formed idea you want a second
             opinion on — I&rsquo;d like to hear it.

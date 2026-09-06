@@ -1,165 +1,174 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useRef } from 'react';
 import Link from 'next/link';
-import { motion, useReducedMotion } from 'framer-motion';
-import { site } from '@/lib/site';
-import { easeOut } from '@/lib/motion';
-import { cn } from '@/lib/utils';
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { HeroCharacter } from './HeroCharacter';
+import { site } from '@/lib/site';
 
-const NAME = ['Mahak', 'Jain'];
 const TAGS = ['Web Apps', 'Python Systems', 'GenAI Products', 'Agents'];
 const ROLES = ['Full-Stack Developer', 'Python Developer', 'GenAI Engineer'];
 
+const EASE = [0.16, 1, 0.3, 1] as const;
+
+/**
+ * The opening page. Composed like a title spread rather than a landing page:
+ * the name is set enormous and allowed to run to the measure, everything that
+ * supports it is set at label scale, and the space between them does the work.
+ */
 export function Hero() {
   const reduceMotion = useReducedMotion();
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
 
-  // A slow spotlight that moves across the three roles.
-  const [lit, setLit] = useState(0);
-  useEffect(() => {
-    if (reduceMotion) return;
-    const id = setInterval(() => setLit((n) => (n + 1) % ROLES.length), 2200);
-    return () => clearInterval(id);
-  }, [reduceMotion]);
+  // The display type leaves a little slower than everything around it.
+  const nameY = useTransform(scrollYProgress, [0, 1], ['0%', '22%']);
+  const metaY = useTransform(scrollYProgress, [0, 1], ['0%', '60%']);
+  const fade = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
 
-  const line = (i: number) => ({
-    initial: reduceMotion ? false : { y: '108%' },
-    animate: reduceMotion ? undefined : { y: '0%' },
-    transition: { duration: 0.7, ease: easeOut, delay: 0.05 + i * 0.09 },
-  });
-
-  const fade = (delay: number) =>
+  const rise = (delay: number) =>
     reduceMotion
       ? {}
       : {
-          initial: { opacity: 0, y: 8 },
+          initial: { opacity: 0, y: 18 },
           animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.55, ease: easeOut, delay },
+          transition: { duration: 1, ease: EASE, delay },
         };
 
   return (
     <section
+      ref={ref}
       aria-label="Introduction"
-      className="relative mx-auto flex min-h-[88svh] max-w-5xl flex-col justify-center px-5 pb-16 pt-20 sm:px-8"
+      className="gutter-x relative flex min-h-[100svh] flex-col justify-between pt-10 pb-8"
     >
-      {/* What I build — animated tag boxes */}
-      <ul className="flex flex-wrap gap-2" aria-label="What I build">
-        {TAGS.map((tag, i) => (
-          <motion.li
-            key={tag}
-            initial={reduceMotion ? false : { opacity: 0, y: 10 }}
-            animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: easeOut, delay: 0.06 + i * 0.09 }}
-            className="border-line text-faint hover:border-accent hover:text-fg border px-2.5 py-1 font-mono text-[0.64rem] uppercase tracking-[0.16em] transition-colors"
-          >
-            {tag}
-          </motion.li>
-        ))}
-      </ul>
-
-      {/* Name */}
-      <h1 aria-label={site.name} className="mt-6 font-display leading-[0.92] tracking-[-0.02em]">
-        {NAME.map((word, i) => (
-          <span key={word} className="block overflow-hidden">
-            <motion.span
-              {...line(i)}
-              className="block text-[clamp(3.4rem,1.5rem+13vw,9rem)]"
-            >
-              {word}
-            </motion.span>
-          </span>
-        ))}
-      </h1>
-
-      {/* Role + annotation */}
-      <div className="mt-6 flex flex-col gap-4">
-        <p className="flex flex-wrap items-center font-mono text-[0.8rem] tracking-[0.02em]">
-          {ROLES.map((role, i) => (
-            <motion.span
-              key={role}
-              initial={reduceMotion ? false : { opacity: 0, y: 6 }}
-              animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, ease: easeOut, delay: 0.35 + i * 0.1 }}
-              className="inline-flex items-center whitespace-nowrap"
-            >
-              {i > 0 && (
-                <span aria-hidden className="text-accent/40 mx-1.5 select-none">
-                  ·
-                </span>
-              )}
-              <span
-                className={cn(
-                  'rounded-[3px] px-1.5 py-0.5 transition-colors duration-700 ease-out',
-                  !reduceMotion && lit === i
-                    ? 'bg-accent/15 text-accent'
-                    : 'text-muted'
-                )}
-              >
-                {role}
-              </span>
-            </motion.span>
-          ))}
-        </p>
-
-        <motion.p {...fade(0.5)} className="annotation -rotate-2">
-          {site.annotation} →
-        </motion.p>
-      </div>
-
-      {/* Greeting character — in flow on small screens, floated right on desktop */}
-      <div className="mt-10 flex justify-end lg:absolute lg:top-1/2 lg:right-8 lg:mt-0 lg:block lg:-translate-y-1/2">
-        <HeroCharacter />
-      </div>
-
-      {/* Statement — indented, narrow measure */}
-      <motion.p
-        {...fade(0.58)}
-        className="text-muted mt-10 max-w-md text-[1.08rem] leading-relaxed sm:ml-[8%]"
+      {/* Top register — the page's own filing information. */}
+      <motion.div
+        style={reduceMotion ? undefined : { opacity: fade }}
+        className="flex items-start justify-between"
       >
-        {site.statement}
-      </motion.p>
-
-      {/* Links */}
-      <motion.div {...fade(0.66)} className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-3">
-        <Link
-          href="/#work"
-          className="group inline-flex items-center gap-2 text-[0.95rem] font-medium"
-        >
-          <span className="border-fg group-hover:border-accent border-b pb-0.5 transition-colors">
-            See the work
-          </span>
-          <span aria-hidden className="transition-transform group-hover:translate-y-0.5">
-            ↓
-          </span>
-        </Link>
-        <Link
-          href="/#contact"
-          className="text-muted hover:text-fg group inline-flex items-center gap-2 text-[0.95rem] transition-colors"
-        >
-          Say hi
-          <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
-            →
-          </span>
-        </Link>
-        {site.resumeUrl && (
-          <a
-            href={site.resumeUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-muted hover:text-fg group inline-flex items-center gap-2 text-[0.95rem] transition-colors"
-          >
-            Résumé
-            <span aria-hidden className="transition-transform group-hover:-translate-y-0.5">
-              ↗
-            </span>
-          </a>
-        )}
+        <motion.p {...rise(0)} className="meta">
+          Portfolio
+          <span className="text-line mx-2">/</span>
+          {site.location}
+        </motion.p>
+        <motion.p {...rise(0.06)} className="meta text-right">
+          Available for work
+        </motion.p>
       </motion.div>
 
-      <motion.p {...fade(0.74)} className="text-faint mt-14 font-mono text-xs">
-        Open to good problems — AI products, web apps, automation.
-      </motion.p>
+      {/* The name, and the character standing beside it. */}
+      <div className="relative py-14 sm:py-16">
+        <motion.h1
+          aria-label={site.name}
+          style={reduceMotion ? undefined : { y: nameY }}
+          className="display-xl relative z-10 max-w-[13ch]"
+        >
+          {['Mahak', 'Jain'].map((word, i) => (
+            <span key={word} className="block overflow-hidden">
+              <motion.span
+                className="block"
+                initial={reduceMotion ? false : { y: '110%' }}
+                animate={reduceMotion ? undefined : { y: '0%' }}
+                transition={{ duration: 1.15, ease: EASE, delay: 0.08 + i * 0.1 }}
+              >
+                {word}
+              </motion.span>
+            </span>
+          ))}
+        </motion.h1>
+
+        {/* Set against the type, not centred under it. */}
+        <motion.div
+          {...rise(0.5)}
+          className="pointer-events-none absolute right-0 -bottom-2 z-0 flex justify-end sm:bottom-0 lg:right-[4%]"
+        >
+          <div className="pointer-events-auto">
+            <HeroCharacter />
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Bottom register — roles, statement, what she builds, where to go. */}
+      <motion.div
+        style={reduceMotion ? undefined : { y: metaY, opacity: fade }}
+        className="border-line grid gap-x-10 gap-y-9 border-t pt-7 md:grid-cols-12"
+      >
+        <div className="md:col-span-4">
+          <p className="meta mb-3">Role</p>
+          <ul className="flex flex-col gap-1.5">
+            {ROLES.map((role, i) => (
+              <motion.li key={role} {...rise(0.55 + i * 0.05)} className="text-fg text-[0.94rem]">
+                {role}
+              </motion.li>
+            ))}
+          </ul>
+          <motion.p {...rise(0.72)} className="meta text-accent mt-4">
+            {site.annotation}
+          </motion.p>
+        </div>
+
+        <motion.div {...rise(0.6)} className="md:col-span-5">
+          <p className="meta mb-3">Statement</p>
+          <p className="text-muted max-w-[46ch] text-[0.98rem] leading-relaxed">{site.statement}</p>
+        </motion.div>
+
+        <motion.div {...rise(0.68)} className="md:col-span-3">
+          <p className="meta mb-3">Index</p>
+          <ul className="mb-6 flex flex-col gap-1.5">
+            {TAGS.map((tag) => (
+              <li key={tag} className="text-fg text-[0.94rem]">
+                {tag}
+              </li>
+            ))}
+          </ul>
+
+          <div className="flex flex-col gap-2.5">
+            <HeroLink href="/#work" label="See the work" mark="↓" />
+            <HeroLink href="/#contact" label="Say hi" mark="→" />
+            {site.resumeUrl ? (
+              <HeroLink href={site.resumeUrl} label="Résumé" mark="↗" external />
+            ) : null}
+          </div>
+        </motion.div>
+      </motion.div>
     </section>
+  );
+}
+
+function HeroLink({
+  href,
+  label,
+  mark,
+  external = false,
+}: {
+  href: string;
+  label: string;
+  mark: string;
+  external?: boolean;
+}) {
+  const cls =
+    'group border-line hover:border-accent flex items-center justify-between border-b pb-1.5 transition-colors';
+  const inner = (
+    <>
+      <span className="text-fg group-hover:text-accent text-[0.94rem] transition-colors">
+        {label}
+      </span>
+      <span aria-hidden className="text-faint group-hover:text-accent text-xs transition-colors">
+        {mark}
+      </span>
+    </>
+  );
+
+  if (external) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" className={cls}>
+        {inner}
+      </a>
+    );
+  }
+  return (
+    <Link href={href} className={cls}>
+      {inner}
+    </Link>
   );
 }

@@ -11,7 +11,7 @@ const SECTIONS: { id: string; label: string }[] = [
   { id: 'now', label: 'Now' },
   { id: 'skills', label: 'Tools' },
   { id: 'log', label: 'Log' },
-  { id: 'more', label: 'More' },
+  { id: 'more', label: 'Notes' },
   { id: 'contact', label: 'Contact' },
 ];
 

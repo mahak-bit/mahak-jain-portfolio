@@ -44,25 +44,27 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const next = idx < projects.length - 1 ? projects[idx + 1] : null;
 
   return (
-    <article className="mx-auto max-w-3xl px-5 pb-24 pt-14 sm:px-8 sm:pt-20">
-      <Link
-        href="/archive"
-        className="text-muted hover:text-fg inline-flex items-center gap-1.5 text-sm transition-colors"
-      >
-        ← The Archive
-      </Link>
+    <article className="gutter-x mx-auto w-full max-w-[1100px] pt-14 pb-24 sm:pt-20">
+      <div className="border-line flex items-baseline justify-between border-b pb-4">
+        <Link href="/archive" className="meta hover:text-fg transition-colors">
+          ← The Archive
+        </Link>
+        <span className="meta">{project.number}</span>
+      </div>
 
-      <Reveal className="mt-10">
-        <p className="kicker">
-          {project.number} · {project.year} ·{' '}
-          {isPlaceholder ? 'Open slot' : (project.context ?? project.status)}
+      <Reveal className="mt-14 sm:mt-20">
+        <div className="grid grid-cols-12 items-baseline gap-x-4 gap-y-2">
+          <span className="meta col-span-6 sm:col-span-3">{project.year}</span>
+          <span className="meta col-span-6 sm:col-span-4">
+            {isPlaceholder ? 'Open slot' : (project.context ?? project.status)}
+          </span>
+        </div>
+        <h1 className="display-xl mt-6 max-w-[11ch]">{project.name}</h1>
+        <p className="text-muted mt-8 max-w-[46ch] text-[1.1rem] leading-snug">
+          {project.oneLiner}
         </p>
-        <h1 className="mt-4 text-[clamp(2.2rem,1.5rem+3.6vw,3.8rem)] leading-[1.02]">
-          {project.name}
-        </h1>
-        <p className="text-muted mt-4 max-w-xl text-[1.15rem] leading-snug">{project.oneLiner}</p>
 
-        <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-[0.9rem]">
+        <div className="border-line mt-8 flex flex-wrap gap-x-8 gap-y-2 border-t pt-4 text-[0.9rem]">
           <LinkOrPlaceholder label="Live" href={project.links.demo} placeholder="[ADD LIVE URL]" />
           {project.links.github ? (
             <LinkOrPlaceholder label="Source" href={project.links.github} placeholder="" />

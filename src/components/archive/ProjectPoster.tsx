@@ -23,7 +23,7 @@ export function ProjectPoster({
   return (
     <div
       className={cn(
-        'bg-raise border-line group-hover:border-accent relative isolate flex flex-col justify-end overflow-hidden border transition-colors',
+        'bg-raise border-line group-hover/entry:border-accent relative isolate flex flex-col justify-end overflow-hidden border transition-colors duration-500',
         ratio,
         size === 'lg' ? 'p-8 sm:p-11' : 'p-6 sm:p-8'
       )}
@@ -31,7 +31,7 @@ export function ProjectPoster({
       {/* The name, oversized and faint, clipped by the frame — texture, not text. */}
       <span
         aria-hidden
-        className="text-fg pointer-events-none absolute -right-[0.06em] -bottom-[0.12em] -z-10 max-w-none leading-[0.7] font-display tracking-tight whitespace-nowrap opacity-[0.06] select-none dark:opacity-[0.08]"
+        className="text-fg pointer-events-none absolute -right-[0.06em] -bottom-[0.12em] -z-10 max-w-none leading-[0.7] font-display tracking-tight whitespace-nowrap opacity-[0.07] select-none"
         style={{
           fontSize:
             size === 'lg' ? 'clamp(6rem, 4rem + 13vw, 13rem)' : 'clamp(4.5rem, 3rem + 9vw, 9rem)',

@@ -1,185 +1,164 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import Link from 'next/link';
-import {
-  motion,
-  AnimatePresence,
-  useMotionValue,
-  useSpring,
-  useReducedMotion,
-  type Variants,
-} from 'framer-motion';
-import { Section } from './ui/Section';
+import { AnimatePresence, motion, useMotionValue, useReducedMotion, useSpring } from 'framer-motion';
+import { SectionMark } from './ui/Section';
 import { Reveal } from './ui/Reveal';
 import { ArchiveBackdrop } from './ArchiveBackdrop';
 import { projects } from '@/data/projects';
-import { easeOut } from '@/lib/motion';
 
-const cover: Variants = {
-  rest: { rotateX: 0, y: 0 },
-  hover: { rotateX: -15, y: -6 },
-};
+const EASE = [0.16, 1, 0.3, 1] as const;
 
-const sheet: Variants = {
-  rest: { y: 0, x: 0, rotate: 0, transition: { duration: 0.35, ease: easeOut } },
-  hover: (i: number) => ({
-    y: -10 - i * 4,
-    x: (i - 1) * 12,
-    rotate: (i - 1) * 2.4,
-    transition: { duration: 0.4, ease: easeOut },
-  }),
-};
-
+/**
+ * The work, presented as an index rather than a wall of cards: one ruled row
+ * per project carrying its number, name, context, year and stack. On a mouse,
+ * hovering a row raises a small plate of that project near the cursor.
+ * The featured, full compositions live on /archive.
+ */
 export function HomeArchive() {
-  const router = useRouter();
   const reduceMotion = useReducedMotion();
+  const [hovered, setHovered] = useState<number | null>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
-  const [opening, setOpening] = useState(false);
-  const [focused, setFocused] = useState(false);
-  const pushed = useRef(false);
 
-  const rx = useMotionValue(0);
-  const ry = useMotionValue(0);
-  const srx = useSpring(rx, { stiffness: 140, damping: 16, mass: 0.4 });
-  const sry = useSpring(ry, { stiffness: 140, damping: 16, mass: 0.4 });
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const sx = useSpring(mx, { stiffness: 220, damping: 28, mass: 0.5 });
+  const sy = useSpring(my, { stiffness: 220, damping: 28, mass: 0.5 });
 
-  function onMove(e: React.MouseEvent) {
+  const onMove = (e: React.MouseEvent) => {
     if (reduceMotion || !wrapRef.current) return;
     const r = wrapRef.current.getBoundingClientRect();
-    ry.set(((e.clientX - r.left) / r.width - 0.5) * 7);
-    rx.set(-((e.clientY - r.top) / r.height - 0.5) * 7);
-  }
-  function onLeave() {
-    rx.set(0);
-    ry.set(0);
-  }
+    mx.set(e.clientX - r.left);
+    my.set(e.clientY - r.top);
+  };
 
-  function go() {
-    if (pushed.current) return;
-    pushed.current = true;
-    router.push('/archive');
-  }
-
-  function handleOpen(e: React.MouseEvent) {
-    if (reduceMotion || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    e.preventDefault();
-    setOpening(true);
-    window.setTimeout(go, 850); // fallback if onAnimationComplete misses
-  }
-
-  const previews = projects.slice(0, 3);
   const count = projects.filter((p) => p.status !== 'placeholder').length;
+  const active = hovered !== null ? projects[hovered] : null;
+  const activeShot = active?.screenshots?.[0];
 
   return (
-    <Section id="work" bleed className="ruled relative overflow-x-clip">
-      <ArchiveBackdrop />
-
-      <div className="relative z-10 mx-auto max-w-5xl px-5 sm:px-8">
-        <Reveal className="flex flex-col items-center">
-          <span className="kicker">The archive</span>
-
-          <div
-            ref={wrapRef}
-            onMouseMove={onMove}
-            onMouseLeave={onLeave}
-            className="mt-12 w-full max-w-[30rem] [perspective:1400px] sm:mt-14"
-          >
-            <Link
-              href="/archive"
-              onClick={handleOpen}
-              onFocus={() => setFocused(true)}
-              onBlur={() => setFocused(false)}
-              aria-label="Open the archive — everything Mahak has built"
-              className="block rounded-[3px] focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-accent"
-            >
-              <motion.div
-                className="group relative [transform-style:preserve-3d]"
-                initial="rest"
-                animate={!reduceMotion && focused ? 'hover' : 'rest'}
-                whileHover={reduceMotion ? undefined : 'hover'}
-                style={reduceMotion ? undefined : { rotateX: srx, rotateY: sry }}
-              >
-                {/* prints peeking out the top */}
-                <div className="absolute inset-x-7 -top-7 flex flex-col gap-1.5">
-                  {previews.map((p, i) => (
-                    <motion.div
-                      key={p.slug}
-                      custom={i}
-                      variants={reduceMotion ? undefined : sheet}
-                      style={{ zIndex: -i - 1 }}
-                      className="border-line bg-raise flex items-center justify-between gap-4 rounded-[2px] border px-4 py-2"
-                    >
-                      <span className="text-faint font-mono text-[0.62rem]">{p.number}</span>
-                      <span className="text-muted truncate font-mono text-[0.68rem]">
-                        {p.name}
-                      </span>
-                    </motion.div>
-                  ))}
-                </div>
-
-                {/* the cover */}
-                <motion.div
-                  variants={reduceMotion ? undefined : cover}
-                  transition={{ type: 'spring', stiffness: 180, damping: 20 }}
-                  style={{ transformOrigin: 'bottom' }}
-                  className="border-line bg-surface relative z-10 flex aspect-[4/3] flex-col justify-between rounded-[3px] border p-8 shadow-[0_28px_60px_-30px_rgba(0,0,0,0.4)] transition-shadow group-hover:shadow-[0_50px_90px_-36px_rgba(0,0,0,0.5)] sm:p-11"
-                >
-                  <span className="border-line bg-surface text-faint absolute -top-[1.6rem] left-9 border border-b-0 px-3 py-1.5 font-mono text-[0.58rem] uppercase tracking-[0.22em]">
-                    M · J
-                  </span>
-
-                  <div>
-                    <h2 className="font-display text-[clamp(2rem,1.4rem+3vw,3.1rem)] leading-[0.95]">
-                      The Archive
-                    </h2>
-                    <span className="bg-line my-4 block h-px w-12" />
-                    <p className="text-muted text-[1.05rem]">Everything I&rsquo;ve built.</p>
-                  </div>
-
-                  <div className="flex items-end justify-between">
-                    <span className="text-faint font-mono text-xs">
-                      {count} {count === 1 ? 'piece' : 'pieces'}
-                    </span>
-                    <span className="inline-flex items-center gap-2 text-sm font-medium">
-                      <span className="border-fg group-hover:border-accent border-b pb-0.5 transition-colors">
-                        Open archive
-                      </span>
-                      <span aria-hidden className="transition-transform group-hover:translate-x-1">
-                        →
-                      </span>
-                    </span>
-                  </div>
-                </motion.div>
-              </motion.div>
-            </Link>
-          </div>
-        </Reveal>
+    <section id="work" aria-label="Selected work" className="relative scroll-mt-24">
+      {/* The mark sits on clean ground — only display type runs over the collage. */}
+      <div className="gutter-x pt-24 sm:pt-32 lg:pt-40">
+        <div className="mx-auto w-full max-w-[1500px]">
+          <SectionMark index="02" label="Selected work" />
+        </div>
       </div>
 
-      <AnimatePresence>
-        {opening && (
-          <motion.div
-            aria-hidden
-            className="bg-bg fixed inset-0 z-[90] flex items-center justify-center [perspective:1200px]"
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <motion.div
-              className="border-line bg-surface flex aspect-[4/3] w-[min(30rem,82vw)] flex-col justify-between rounded-[3px] border p-10"
-              style={{ transformOrigin: 'bottom' }}
-              initial={{ rotateX: -15, y: -6, scale: 1, opacity: 1 }}
-              animate={{ rotateX: -112, scale: 1.5, opacity: 0 }}
-              transition={{ duration: 0.6, ease: easeOut }}
-              onAnimationComplete={go}
+      {/* Chapter opening. */}
+      <div className="gutter-x relative overflow-hidden py-12 sm:py-16">
+        <ArchiveBackdrop />
+        <div className="relative z-10 mx-auto w-full max-w-[1500px]">
+          <Reveal className="flex flex-wrap items-end justify-between gap-6">
+            <h2 className="display-lg max-w-[10ch]">The Archive</h2>
+            <p className="text-fg pb-2 font-mono text-xs tracking-[0.16em] uppercase">
+              {count} {count === 1 ? 'piece' : 'pieces'}
+            </p>
+          </Reveal>
+        </div>
+      </div>
+
+      {/* The index. */}
+      <div
+        ref={wrapRef}
+        onMouseMove={onMove}
+        className="gutter-x relative pb-24 sm:pb-32 lg:pb-40"
+      >
+        <div className="mx-auto w-full max-w-[1500px]">
+          <ul className="border-line border-t">
+            {projects.map((project, i) => (
+              <motion.li
+                key={project.slug}
+                initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+                whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-8% 0px' }}
+                transition={{ duration: 0.7, ease: EASE, delay: Math.min(i * 0.05, 0.3) }}
+                className="border-line border-b"
+                onMouseEnter={() => setHovered(i)}
+                onMouseLeave={() => setHovered(null)}
+              >
+                <Link
+                  href={`/projects/${project.slug}`}
+                  className="group grid grid-cols-12 items-baseline gap-x-4 gap-y-1 py-6 sm:py-7"
+                >
+                  <span className="meta group-hover:text-accent col-span-2 transition-colors sm:col-span-1">
+                    {project.number}
+                  </span>
+
+                  <span className="col-span-10 sm:col-span-4">
+                    <span className="display-md group-hover:text-accent inline-block transition-[color,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-2">
+                      {project.name}
+                    </span>
+                  </span>
+
+                  <span className="meta col-span-6 sm:col-span-2">
+                    {project.context ?? project.status}
+                  </span>
+                  <span className="meta col-span-6 sm:col-span-1">{project.year}</span>
+
+                  <span className="meta col-span-11 truncate sm:col-span-3">
+                    {project.tech.slice(0, 3).join(' / ')}
+                  </span>
+
+                  <span
+                    aria-hidden
+                    className="text-faint group-hover:text-accent col-span-1 text-right text-sm transition-[color,transform] duration-500 group-hover:translate-x-1"
+                  >
+                    →
+                  </span>
+                </Link>
+              </motion.li>
+            ))}
+          </ul>
+
+          <Reveal className="mt-10">
+            <Link
+              href="/archive"
+              className="group border-line hover:border-accent inline-flex items-baseline gap-4 border-b pb-2 transition-colors"
             >
-              <h2 className="font-display text-4xl leading-none">The Archive</h2>
-              <p className="text-muted text-[1.05rem]">Everything I&rsquo;ve built.</p>
-            </motion.div>
-          </motion.div>
+              <span className="display-md group-hover:text-accent transition-colors">
+                Open the archive
+              </span>
+              <span
+                aria-hidden
+                className="text-faint group-hover:text-accent text-sm transition-[color,transform] duration-500 group-hover:translate-x-1"
+              >
+                →
+              </span>
+            </Link>
+          </Reveal>
+        </div>
+
+        {/* The plate that follows the cursor. Desktop, mouse, motion-on only. */}
+        {!reduceMotion && (
+          <AnimatePresence>
+            {activeShot?.src ? (
+              <motion.div
+                key={active?.slug}
+                aria-hidden
+                initial={{ opacity: 0, scale: 0.94 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.97 }}
+                transition={{ duration: 0.45, ease: EASE }}
+                style={{ x: sx, y: sy }}
+                className="pointer-events-none absolute top-0 left-0 z-20 hidden lg:block"
+              >
+                <div className="border-line bg-surface relative -translate-x-1/2 -translate-y-1/2 overflow-hidden border">
+                  <Image
+                    src={activeShot.src}
+                    alt=""
+                    width={260}
+                    height={180}
+                    className="h-[180px] w-[260px] object-cover"
+                  />
+                </div>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
         )}
-      </AnimatePresence>
-    </Section>
+      </div>
+    </section>
   );
 }
