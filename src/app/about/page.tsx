@@ -25,7 +25,13 @@ export default function AboutPage() {
     <>
       <Chapter tone="ivory">
         <About />
+      </Chapter>
+
+      <Chapter tone="charcoal">
         <Now />
+      </Chapter>
+
+      <Chapter tone="ivory">
         <Skills />
       </Chapter>
 

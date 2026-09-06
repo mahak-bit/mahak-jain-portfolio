@@ -1,9 +1,10 @@
 'use client';
 
-import { useRef } from 'react';
-import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Section, SectionMark } from './ui/Section';
 import { Reveal } from './ui/Reveal';
+import { progression } from '@/data/buildlog';
+import { cn } from '@/lib/utils';
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const ROLES = ['Full-Stack Developer', 'Python Developer', 'GenAI Engineer'];
@@ -17,78 +18,90 @@ const PARAGRAPHS = [
 ];
 
 /**
- * The motion here is deliberately cheap: every animated property is transform
- * or opacity, so the compositor does the work and layout is never re-run.
+ * The opening of the About page: the claim, the roles, the arc that got here,
+ * then the story itself.
  *
- * Reveals are IntersectionObserver-driven and fire once. The only scroll-linked
- * element is the reading rule in the sticky column, and it is rendered from lg
- * up only — continuous scroll work is what actually costs on a phone, and a
- * progress line beside a column that isn't sticky yet has nothing to say.
+ * Motion is deliberately cheap — every animated property is transform or
+ * opacity, so the compositor does the work and layout is never re-run, and
+ * every reveal is IntersectionObserver-driven and fires once.
  */
 export function About() {
   const reduceMotion = useReducedMotion();
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start 60%', 'end 80%'],
-  });
-  // A spring so the rule settles rather than tracking the wheel exactly.
-  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 28, mass: 0.4 });
-  const scaleY = useTransform(progress, [0, 1], [0, 1]);
+
+  const rise = (delay: number) =>
+    reduceMotion
+      ? {}
+      : {
+          initial: { opacity: 0, y: 22 },
+          whileInView: { opacity: 1, y: 0 },
+          viewport: { once: true, margin: '-12% 0px -12% 0px' },
+          transition: { duration: 0.9, ease: EASE, delay },
+        };
 
   return (
     <Section id="about">
       <SectionMark index="03" label="About" />
 
-      <div ref={ref} className="mt-10 grid gap-x-12 gap-y-12 sm:mt-14 md:grid-cols-12">
-        <Reveal className="md:sticky md:top-28 md:col-span-5 md:self-start">
-          <h2 className="display-lg max-w-[12ch]">
-            I studied business. Then I got more interested in the thing everyone was building on top
-            of.
-          </h2>
+      <Reveal className="mt-10 sm:mt-14">
+        <h1 className="display-lg max-w-[15ch]">
+          I studied business. Then I got more interested in the thing everyone was building on top
+          of.
+        </h1>
+      </Reveal>
 
-          <div className="mt-8 flex gap-5">
-            {/* The reading rule — desktop only, pure scaleY. */}
-            <div
-              aria-hidden
-              className="bg-line relative hidden w-px shrink-0 overflow-hidden lg:block"
+      <motion.ul
+        {...rise(0.1)}
+        className="mt-12 flex flex-wrap gap-x-9 gap-y-2 sm:mt-14 md:ml-[2%]"
+      >
+        {ROLES.map((role) => (
+          <li key={role} className="meta">
+            {role}
+          </li>
+        ))}
+        <li className="meta text-accent">Moving toward Agentic AI</li>
+      </motion.ul>
+
+      {/* The arc, as four marks — business, code, GenAI, agents. */}
+      <motion.ol
+        {...rise(0.18)}
+        aria-label="How the work got here"
+        className="border-line mt-14 flex flex-wrap gap-x-9 gap-y-3 border-t pt-7"
+      >
+        {progression.map((step) => (
+          <li key={step.n} className="flex items-baseline gap-2.5">
+            <span
+              className={cn('font-mono text-[0.68rem]', step.current ? 'text-accent' : 'text-faint')}
             >
-              <motion.span
-                className="bg-accent absolute inset-0 block origin-top"
-                style={reduceMotion ? { transform: 'scaleY(1)' } : { scaleY }}
-              />
-            </div>
+              {step.n}
+            </span>
+            <span
+              className={cn(
+                'meta',
+                step.current ? 'text-accent font-semibold' : 'text-faint font-normal'
+              )}
+            >
+              {step.label}
+            </span>
+          </li>
+        ))}
+      </motion.ol>
 
-            <ul className="flex flex-col gap-1.5">
-              {ROLES.map((role) => (
-                <li key={role} className="meta">
-                  {role}
-                </li>
-              ))}
-              <li className="meta text-accent">Moving toward Agentic AI</li>
-            </ul>
-          </div>
+      {/* The story */}
+      <div className="mt-20 grid gap-x-12 gap-y-8 sm:mt-24 md:grid-cols-12">
+        <Reveal className="md:col-span-3">
+          <p className="meta">The story</p>
         </Reveal>
 
-        <div className="prose-links text-muted flex flex-col gap-5 text-[1.02rem] leading-relaxed md:col-span-6 md:col-start-7">
+        <div className="prose-links text-muted flex flex-col gap-5 text-[1.02rem] leading-relaxed md:col-span-8 md:col-start-5">
           {PARAGRAPHS.map((text, i) => (
-            <motion.p
-              key={i}
-              initial={reduceMotion ? false : { opacity: 0, y: 18 }}
-              whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-12% 0px -12% 0px' }}
-              transition={{ duration: 0.8, ease: EASE, delay: Math.min(i * 0.06, 0.24) }}
-            >
+            <motion.p key={i} {...rise(Math.min(i * 0.06, 0.24))}>
               {text}
             </motion.p>
           ))}
 
           <motion.p
-            initial={reduceMotion ? false : { opacity: 0, y: 20 }}
-            whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-12% 0px -12% 0px' }}
-            transition={{ duration: 0.9, ease: EASE, delay: 0.1 }}
-            className="border-accent text-fg font-display mt-6 border-l-2 pl-5 text-[clamp(1.2rem,1rem+1.1vw,1.75rem)] leading-tight"
+            {...rise(0.1)}
+            className="border-accent text-fg font-display mt-6 border-l-2 pl-5 text-[clamp(1.2rem,1rem+1.1vw,1.75rem)] leading-tight italic"
           >
             Most of my ideas start as a random thought and end up as a repo.
           </motion.p>

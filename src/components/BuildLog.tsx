@@ -1,65 +1,71 @@
 import Link from 'next/link';
 import { Section, SectionMark } from './ui/Section';
 import { Reveal } from './ui/Reveal';
-import { buildLog } from '@/data/buildlog';
+import { buildLog, type LogEntry } from '@/data/buildlog';
 
+/**
+ * The record: date, what happened, and the thing itself — the title set in the
+ * display face and its qualifier alongside in the body face, so a row reads as
+ * one line rather than three columns of equal weight.
+ */
 export function BuildLog() {
   return (
     <Section id="log">
       <SectionMark index="06" label="Record" />
 
       <Reveal className="mt-10 flex flex-wrap items-end justify-between gap-6 sm:mt-14">
-        <h2 className="display-lg max-w-[9ch]">Build log</h2>
-        <p className="text-muted max-w-[24ch] pb-2 text-[0.95rem] leading-snug">
+        <h2 className="display-lg font-display italic">Build log</h2>
+        <p className="text-muted max-w-[26ch] pb-2 text-[0.95rem] leading-snug">
           A running list of what I&rsquo;ve been making and learning. Newest first.
         </p>
       </Reveal>
 
-      <Reveal delay={0.05} className="border-line mt-12 border-t sm:mt-16">
-        {buildLog.map((item, i) => {
-          const body = (
-            <div className="grid grid-cols-12 items-baseline gap-x-4 gap-y-1 py-6">
-              <span className="meta col-span-5 sm:col-span-2">{item.date}</span>
-              <span className="meta text-accent col-span-7 sm:col-span-2">{item.verb}</span>
-              <span className="text-fg col-span-12 text-[1.02rem] leading-snug sm:col-span-8">
-                {item.entry}
-                {item.href && (
-                  <span aria-hidden className="text-faint ml-2">
-                    ↗
-                  </span>
-                )}
-              </span>
-            </div>
-          );
-
-          const external = item.href?.startsWith('http');
-          return (
-            <div key={i} className="border-line border-b">
-              {item.href ? (
-                external ? (
-                  <a
-                    href={item.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hover:bg-raise -mx-3 block px-3 transition-colors"
-                  >
-                    {body}
-                  </a>
-                ) : (
-                  <Link
-                    href={item.href}
-                    className="hover:bg-raise -mx-3 block px-3 transition-colors"
-                  >
-                    {body}
-                  </Link>
-                )
-              ) : (
-                body
-              )}
-            </div>
-          );
-        })}
-      </Reveal>
+      <div className="mt-14 sm:mt-16">
+        {buildLog.map((entry, i) => (
+          <Reveal key={`${entry.title}-${i}`} delay={Math.min(i * 0.05, 0.35)}>
+            <LogRow entry={entry} />
+          </Reveal>
+        ))}
+      </div>
     </Section>
+  );
+}
+
+function LogRow({ entry }: { entry: LogEntry }) {
+  const body = (
+    <div className="border-line grid grid-cols-2 items-baseline gap-x-5 gap-y-2 border-b py-5 sm:grid-cols-[minmax(90px,120px)_minmax(90px,140px)_minmax(0,1fr)]">
+      <span className="text-faint font-mono text-[0.7rem]">{entry.date}</span>
+      <span className="meta text-accent">{entry.verb}</span>
+      <span className="col-span-2 sm:col-span-1">
+        <span className="font-display text-fg group-hover:text-accent text-[1.08rem] transition-colors duration-500">
+          {entry.title}
+        </span>
+        <span className="text-muted text-[0.92rem]">
+          {' '}
+          &mdash; {entry.detail}
+          {entry.href?.startsWith('http') ? (
+            <span aria-hidden className="text-faint ml-1.5">
+              ↗
+            </span>
+          ) : null}
+        </span>
+      </span>
+    </div>
+  );
+
+  if (!entry.href) return <div className="group">{body}</div>;
+
+  const external = entry.href.startsWith('http');
+  if (external) {
+    return (
+      <a href={entry.href} target="_blank" rel="noreferrer" className="group block outline-offset-2">
+        {body}
+      </a>
+    );
+  }
+  return (
+    <Link href={entry.href} className="group block outline-offset-2">
+      {body}
+    </Link>
   );
 }

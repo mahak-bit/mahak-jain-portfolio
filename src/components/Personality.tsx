@@ -7,41 +7,35 @@ import { ThoughtCard } from './ThoughtCard';
 import { thoughts } from '@/data/personality';
 
 /**
- * Five notes, laid out asymmetrically rather than as a row of equals — the
- * spans and heights vary so the set reads as a composition instead of a grid.
+ * Five notes as an even row of cards that wrap down to one per line on a
+ * phone. More than one can be left turned over — they are independent notes,
+ * not a single-answer control.
  */
-const LAYOUT = [
-  'md:col-span-7 min-h-[300px] sm:min-h-[360px]',
-  'md:col-span-5 min-h-[300px] sm:min-h-[360px]',
-  'md:col-span-5 min-h-[300px] sm:min-h-[330px]',
-  'md:col-span-7 min-h-[300px] sm:min-h-[330px]',
-  'md:col-span-12 min-h-[280px] sm:min-h-[320px]',
-];
-
 export function Personality() {
-  const [active, setActive] = useState<number | null>(null);
+  const [flipped, setFlipped] = useState<boolean[]>(() => thoughts.map(() => false));
+
+  const toggle = (i: number) =>
+    setFlipped((prev) => prev.map((value, index) => (index === i ? !value : value)));
 
   return (
     <Section id="more">
-      <SectionMark index="05" label="Notes" />
+      <SectionMark index="07" label="Notes" />
 
       <Reveal className="mt-10 sm:mt-14">
-        <h2 className="display-lg max-w-[14ch]">A little more about me</h2>
-        <p className="meta mt-6">Turn a card over</p>
+        <h2 className="display-lg font-display italic">A little more about me</h2>
+        <p className="meta mt-5">Turn a card over</p>
       </Reveal>
 
-      <div className="mt-12 grid grid-cols-1 gap-4 sm:mt-16 md:grid-cols-12 md:gap-5">
+      <div className="mt-14 grid grid-cols-1 gap-6 sm:mt-16 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {thoughts.map((thought, i) => (
-          <div key={thought.tag} className={LAYOUT[i]}>
-            <ThoughtCard
-              thought={thought}
-              index={i}
-              number={String(i + 1).padStart(2, '0')}
-              isFlipped={active === i}
-              isDimmed={active !== null && active !== i}
-              onToggle={() => setActive((cur) => (cur === i ? null : i))}
-            />
-          </div>
+          <ThoughtCard
+            key={thought.tag}
+            thought={thought}
+            index={i}
+            number={String(i + 1).padStart(2, '0')}
+            isFlipped={flipped[i]}
+            onToggle={() => toggle(i)}
+          />
         ))}
       </div>
     </Section>

@@ -5,76 +5,83 @@ import { IndiaClock } from './IndiaClock';
 import { now, nowUpdated, type NowRow } from '@/data/now';
 
 /**
- * "Now" — a status line rather than a feature grid, and the one section that
- * is literally about this moment, so it carries a live clock.
+ * "Now" — numbered rows, each one followable to wherever that claim is
+ * actually backed up on the site. This is the one section literally about the
+ * present moment, so it carries a live clock.
  *
- * Each row that has evidence somewhere on the site is a link to it: the claim
- * can be followed rather than just read. Rows without evidence stay inert
- * instead of getting a decorative one.
+ * Hover and keyboard focus drive the same treatment: the number and category
+ * take the accent, the row shifts, and an accent rule draws under the line.
  */
 export function Now() {
   return (
-    <Section id="now" className="pt-0 sm:pt-0 lg:pt-0">
+    <Section id="now">
       <SectionMark index="04" label="Now" />
 
       <Reveal className="mt-10 flex flex-wrap items-end justify-between gap-x-8 gap-y-3 sm:mt-14">
-        <h2 className="display-lg">Now</h2>
+        <h2 className="display-lg font-display italic">What I&rsquo;m doing now</h2>
         <p className="meta pb-2">
           Updated {nowUpdated}
-          <span className="text-line mx-2">/</span>
+          {/* decorative divider, deliberately faint — not information */}
+          <span aria-hidden className="text-line mx-2">
+            /
+          </span>
           <span className="text-accent">
             <IndiaClock />
           </span>
         </p>
       </Reveal>
 
-      <div className="mt-12 sm:mt-16">
-        <dl className="border-line border-t">
-          {now.map((row, i) => (
-            <Reveal key={row.verb} delay={Math.min(i * 0.05, 0.25)}>
-              <NowEntry row={row} />
-            </Reveal>
-          ))}
-        </dl>
+      <div className="mt-14 sm:mt-16">
+        {now.map((row, i) => (
+          <Reveal key={row.verb} delay={Math.min(i * 0.06, 0.28)}>
+            <NowEntry row={row} number={String(i + 1).padStart(2, '0')} />
+          </Reveal>
+        ))}
       </div>
     </Section>
   );
 }
 
-function NowEntry({ row }: { row: NowRow }) {
+function NowEntry({ row, number }: { row: NowRow; number: string }) {
   const body = (
-    <div className="grid grid-cols-12 items-baseline gap-x-4 gap-y-1 py-6">
-      <dt className="meta group-hover:text-accent col-span-12 transition-colors duration-500 sm:col-span-3">
-        {row.verb}
-      </dt>
-      <dd className="col-span-12 sm:col-span-9">
-        <span className="text-fg inline-block text-[1.05rem] leading-snug transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-2">
+    <div className="border-line grid grid-cols-[2.5rem_minmax(0,1fr)] items-start gap-x-5 gap-y-3 border-b py-6 sm:grid-cols-[3rem_minmax(0,1fr)_auto]">
+      <span className="text-faint group-hover:text-accent font-mono text-[0.75rem] transition-colors duration-500">
+        {number}
+      </span>
+
+      <div className="min-w-0">
+        <p className="meta group-hover:text-accent mb-2.5 transition-colors duration-500">
+          {row.verb}
+        </p>
+        <p className="font-display text-fg max-w-[56ch] text-[clamp(1.05rem,0.9rem+0.7vw,1.4rem)] leading-[1.35]">
           {row.value}
-        </span>
-        {row.evidence ? (
-          <span className="meta text-accent ml-3 inline-block opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100">
-            {row.evidence} →
+        </p>
+        {/* the rule that draws across as you arrive on the row */}
+        <span
+          aria-hidden
+          className="bg-accent mt-4 block h-px max-w-[56ch] origin-left scale-x-0 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100 group-focus-visible:scale-x-100"
+        />
+      </div>
+
+      {row.evidence ? (
+        <span className="meta group-hover:text-accent col-start-2 whitespace-nowrap transition-colors duration-500 sm:col-start-3 sm:pt-0.5">
+          {row.evidence}
+          <span
+            aria-hidden
+            className="ml-2 inline-block transition-transform duration-500 group-hover:translate-x-1"
+          >
+            →
           </span>
-        ) : null}
-      </dd>
+        </span>
+      ) : null}
     </div>
   );
 
-  if (!row.href) {
-    return <div className="border-line border-b">{body}</div>;
-  }
+  if (!row.href) return <div className="group">{body}</div>;
 
-  // `group` sits on the link itself so both hover and keyboard focus drive the
-  // same treatment — a sibling rule would be out of the group's reach.
   return (
-    <div className="border-line border-b">
-      <Link href={row.href} className="group relative block outline-offset-2">
-        <span
-          aria-hidden
-          className="bg-accent absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100 group-focus-visible:scale-x-100"
-        />
-        {body}
-      </Link>
-    </div>
+    <Link href={row.href} className="group block outline-offset-2">
+      {body}
+    </Link>
   );
 }
