@@ -242,6 +242,16 @@ function TitleSlide() {
               <Link href="/contact" className="text-fg hover:text-accent text-[0.92rem] transition-colors">
                 Contact →
               </Link>
+              {site.socials.github ? (
+                <a
+                  href={site.socials.github}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-fg hover:text-accent text-[0.92rem] transition-colors"
+                >
+                  GitHub ↗
+                </a>
+              ) : null}
               {site.resumeUrl ? (
                 <a
                   href={site.resumeUrl}
@@ -297,7 +307,7 @@ function ProjectSlide({ project }: { project: (typeof projects)[number] }) {
             {shot?.src ? (
               <div
                 className={cn(
-                  'border-line group-hover:border-accent relative aspect-[16/10] overflow-hidden border transition-colors duration-500',
+                  'border-line group-hover:border-accent relative aspect-[16/9] overflow-hidden border transition-colors duration-500',
                   fit === 'logo' ? 'bg-[#0a0a0a]' : 'bg-raise'
                 )}
               >

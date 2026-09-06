@@ -60,16 +60,38 @@ export function Navbar() {
               {item.label}
             </Link>
           ))}
+          {site.resumeUrl ? (
+            <a
+              href={site.resumeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="meta border-line hover:border-accent hover:text-accent border px-3 py-1.5 transition-colors"
+            >
+              Résumé ↗
+            </a>
+          ) : null}
         </nav>
 
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          aria-label="Open menu"
-          className="meta hover:text-fg transition-colors md:hidden"
-        >
-          Menu
-        </button>
+        <div className="flex items-center gap-4 md:hidden">
+          {site.resumeUrl ? (
+            <a
+              href={site.resumeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="meta border-line hover:border-accent hover:text-accent border px-2.5 py-1 transition-colors"
+            >
+              Résumé ↗
+            </a>
+          ) : null}
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            aria-label="Open menu"
+            className="meta hover:text-fg transition-colors"
+          >
+            Menu
+          </button>
+        </div>
       </div>
 
       <AnimatePresence>

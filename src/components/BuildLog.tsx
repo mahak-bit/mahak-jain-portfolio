@@ -32,12 +32,27 @@ export function BuildLog() {
             </div>
           );
 
+          const external = item.href?.startsWith('http');
           return (
             <div key={i} className="border-line border-b">
               {item.href ? (
-                <Link href={item.href} className="hover:bg-raise -mx-3 block px-3 transition-colors">
-                  {body}
-                </Link>
+                external ? (
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:bg-raise -mx-3 block px-3 transition-colors"
+                  >
+                    {body}
+                  </a>
+                ) : (
+                  <Link
+                    href={item.href}
+                    className="hover:bg-raise -mx-3 block px-3 transition-colors"
+                  >
+                    {body}
+                  </Link>
+                )
               ) : (
                 body
               )}

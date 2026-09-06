@@ -49,6 +49,7 @@ export const buildLog: LogEntry[] = [
     date: 'Jul–Aug 2026',
     verb: 'Built',
     entry: 'Python AI experiments — a RAG Q&A system, a multi-agent setup, an agent bot',
+    href: 'https://github.com/mahak-bit?tab=repositories',
   },
   {
     date: 'Aug 2026',
