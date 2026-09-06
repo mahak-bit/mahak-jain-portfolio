@@ -36,7 +36,14 @@ export function Skills() {
         <div className="font-display mt-12 text-[clamp(1.25rem,0.9rem+1.7vw,2.35rem)] leading-[1.3] tracking-[-0.02em] sm:mt-16">
           <motion.p style={reduceMotion ? undefined : { x: xA }}>{rowA.join(', ')},</motion.p>
           <motion.p style={reduceMotion ? undefined : { x: xB }} className="text-muted mt-1">
-            {rowB.join(', ')}.
+            {rowB.join(', ')}
+            {/* The list stops; the sentence doesn't. Set as an aside in the
+                display italic — smaller, accent, positive tracking so the
+                italic breathes — against the long upright run before it. */}
+            {/* max() keeps it legible on a phone, where 0.56em would fall to ~11px */}
+            <span className="text-accent ml-3 inline-block text-[max(0.9rem,0.56em)] leading-none tracking-[0.01em] italic">
+              &mdash;&thinsp;and it goes on
+            </span>
           </motion.p>
         </div>
 
