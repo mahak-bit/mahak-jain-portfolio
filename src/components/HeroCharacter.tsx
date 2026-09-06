@@ -12,19 +12,28 @@ import { useReducedMotion } from 'framer-motion';
  * then holds the last frame with a barely-there idle float. No animation
  * library — a <video> element, one CSS keyframe and a little state.
  *
- * The clip can't carry an alpha channel across every browser, so it ships
- * pre-composited against the page ground. She stands in the ivory hero, and
- * that composite was rendered on #f7f5f0 — the ivory token exactly. Reduced
- * motion: the transparent poster frame only — no video, no float, no entrance
- * transition; a tap still shows the "Hi!" bubble.
+ * She ships twice. The WebM is a true cutout (VP9 with an alpha channel), so
+ * where it plays the page grid and grain run behind her with no panel at all.
+ * Safari can't decode VP9 alpha, so it falls back to an MP4 pre-composited on
+ * #f7f5f0 — the ivory token exactly — which is an opaque rectangle, and gets a
+ * stronger radial feather to dissolve its edges. Reduced motion: the
+ * transparent poster only — no video, no float, no entrance; a tap still
+ * shows the "Hi!" bubble.
  */
-const VIDEO_SRC = '/character/mahak-character-light.mp4';
+const WEBM_SRC = '/character/mahak-character.webm';
+const MP4_SRC = '/character/mahak-character-light.mp4';
 const POSTER_SRC = '/character/mahak-character.webp';
 
-// A gentle feather — dissolves the mid-thigh crop and any faint matte rim so she
-// settles into the hero instead of ending on a hard edge.
-const EDGE_FADE =
-  'radial-gradient(ellipse 100% 92% at 50% 40%, #000 74%, rgba(0, 0, 0, 0) 100%)';
+/** Cutout: only the mid-thigh crop needs softening. */
+const FADE_ALPHA = 'linear-gradient(to bottom, #000 78%, rgba(0, 0, 0, 0) 100%)';
+
+/**
+ * Composited fallback: the edges have to dissolve or the rectangle shows. The
+ * radius has to sit near 50% of the box — anything wider leaves the edges
+ * inside the opaque stop, which is exactly how the visible panel got shipped.
+ */
+const FADE_OPAQUE =
+  'radial-gradient(ellipse 58% 60% at 50% 44%, #000 30%, rgba(0, 0, 0, 0) 100%)';
 
 export function HeroCharacter() {
   const reduceMotion = useReducedMotion();
@@ -33,6 +42,17 @@ export function HeroCharacter() {
   const greeted = useRef(false);
   const [entered, setEntered] = useState(false);
   const [greeting, setGreeting] = useState(false);
+  // Assume the cutout until we learn otherwise, so the common path never
+  // flashes the heavier mask.
+  const [alphaOk, setAlphaOk] = useState(true);
+
+  useEffect(() => {
+    const id = window.setTimeout(() => {
+      const v = document.createElement('video');
+      setAlphaOk(v.canPlayType('video/webm; codecs="vp9"') !== '');
+    }, 0);
+    return () => window.clearTimeout(id);
+  }, []);
 
   const flashBubble = useCallback(() => {
     setGreeting(true);
@@ -93,7 +113,6 @@ export function HeroCharacter() {
               entered ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0',
             ].join(' '),
       ].join(' ')}
-      style={{ filter: 'drop-shadow(0 16px 24px rgba(0,0,0,0.18))' }}
     >
       <div
         className={
@@ -122,7 +141,11 @@ export function HeroCharacter() {
           <span
             aria-hidden="true"
             className="absolute inset-0"
-            style={{ maskImage: EDGE_FADE, WebkitMaskImage: EDGE_FADE }}
+            style={
+              reduceMotion || alphaOk
+                ? { maskImage: FADE_ALPHA, WebkitMaskImage: FADE_ALPHA }
+                : { maskImage: FADE_OPAQUE, WebkitMaskImage: FADE_OPAQUE }
+            }
           >
             {reduceMotion ? (
               <Image
@@ -135,7 +158,6 @@ export function HeroCharacter() {
             ) : (
               <video
                 ref={videoRef}
-                src={VIDEO_SRC}
                 poster={POSTER_SRC}
                 muted
                 playsInline
@@ -143,7 +165,12 @@ export function HeroCharacter() {
                 aria-hidden="true"
                 disablePictureInPicture
                 className="h-full w-full object-cover object-[center_top]"
-              />
+              >
+                {/* the true cutout first; the composited rectangle only if
+                    the browser can't decode VP9 alpha */}
+                <source src={WEBM_SRC} type="video/webm" />
+                <source src={MP4_SRC} type="video/mp4" />
+              </video>
             )}
           </span>
         </button>

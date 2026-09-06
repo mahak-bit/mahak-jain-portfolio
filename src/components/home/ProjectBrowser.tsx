@@ -320,12 +320,29 @@ function TitleSlide() {
     >
       <div className="mx-auto w-full max-w-[1500px]">
         <div className="relative">
-          <h1 aria-label={site.name} className="display-hero relative z-10 max-w-[11ch]">
+          {/*
+            Each word is masked so it can rise into place. Playfair's glyph box
+            runs ~0.23em past the 0.86 line box at both ends, so a mask clipped
+            to the line box cuts the descender clean off — which is what was
+            eating the tail of the J. The mask is padded to give that back and
+            pulled by the same amount so the line rhythm is unchanged; the
+            travel is raised past the taller mask so nothing peeks at rest.
+          */}
+          {/* flex-col so the negative margins add instead of collapsing into
+              one — as siblings in normal flow they would, and the line rhythm
+              came out 141px instead of 110px. */}
+          <h1
+            aria-label={site.name}
+            className="display-hero relative z-10 flex max-w-[11ch] flex-col"
+          >
             {['Mahak', 'Jain'].map((word, i) => (
-              <span key={word} className="block overflow-hidden">
+              <span
+                key={word}
+                className="block overflow-hidden pt-[0.24em] pb-[0.24em] mt-[-0.24em] mb-[-0.24em]"
+              >
                 <motion.span
                   className="block"
-                  initial={reduceMotion ? false : { y: '110%' }}
+                  initial={reduceMotion ? false : { y: '175%' }}
                   animate={reduceMotion ? undefined : { y: '0%' }}
                   transition={{ duration: 1.1, ease: EASE, delay: 0.05 + i * 0.09 }}
                 >
@@ -350,7 +367,9 @@ function TitleSlide() {
             screen — it lives in full on /about. */}
         <motion.div
           {...rise(0.42)}
-          className="border-line mt-7 grid grid-cols-2 gap-x-6 gap-y-6 border-t pt-5 sm:mt-10 sm:gap-x-10 sm:pt-6 md:grid-cols-12"
+          // extra top margin: the descender now paints ~0.24em below the name's
+          // flow box, so the rule needs clearance it did not need before
+          className="border-line mt-9 grid grid-cols-2 gap-x-6 gap-y-6 border-t pt-5 sm:mt-14 sm:gap-x-10 sm:pt-6 md:grid-cols-12"
         >
           <div className="md:col-span-4">
             <p className="meta mb-2.5">Role</p>
@@ -365,9 +384,7 @@ function TitleSlide() {
           </div>
           <div className="hidden md:col-span-5 md:block">
             <p className="meta mb-2.5">Statement</p>
-            <p className="text-muted max-w-[44ch] text-[0.95rem] leading-relaxed">
-              {site.statement}
-            </p>
+            <StatementReveal text={site.statement} />
           </div>
           <div className="md:col-span-3">
             <p className="meta mb-2.5">Index</p>
@@ -403,6 +420,48 @@ function TitleSlide() {
         </motion.div>
       </div>
     </section>
+  );
+}
+
+/**
+ * The statement, revealed a word at a time — each one rising out of its own
+ * mask on a short stagger, so the sentence assembles rather than fading in as
+ * a block. Whitespace is preserved by giving every word a trailing space
+ * inside its mask rather than relying on the gap between inline-blocks.
+ */
+function StatementReveal({ text }: { text: string }) {
+  const reduceMotion = useReducedMotion();
+  const words = text.split(' ');
+
+  if (reduceMotion) {
+    return <p className="text-muted max-w-[44ch] text-[0.95rem] leading-relaxed">{text}</p>;
+  }
+
+  return (
+    <p aria-label={text} className="text-muted max-w-[44ch] text-[0.95rem] leading-relaxed">
+      {words.map((word, i) => (
+        <span
+          key={`${word}-${i}`}
+          aria-hidden
+          className="inline-block overflow-hidden align-bottom"
+        >
+          <motion.span
+            className="inline-block"
+            initial={{ y: '110%' }}
+            animate={{ y: '0%' }}
+            transition={{
+              duration: 0.75,
+              ease: EASE,
+              // settles quickly at first, then eases out across the sentence
+              delay: 0.55 + Math.min(i * 0.022, 0.9),
+            }}
+          >
+            {word}
+            {i < words.length - 1 ? ' ' : ''}
+          </motion.span>
+        </span>
+      ))}
+    </p>
   );
 }
 
