@@ -31,7 +31,9 @@ export function Skills() {
           <h2 className="display-lg">I work with</h2>
         </Reveal>
 
-        <div className="font-display mt-12 text-[clamp(1.4rem,1rem+2.4vw,3rem)] leading-[1.25] tracking-[-0.02em] sm:mt-16">
+        {/* The list is long on purpose — it is the breadth. Sized so the whole
+            run stays a readable block rather than becoming a wall of display. */}
+        <div className="font-display mt-12 text-[clamp(1.25rem,0.9rem+1.7vw,2.35rem)] leading-[1.3] tracking-[-0.02em] sm:mt-16">
           <motion.p style={reduceMotion ? undefined : { x: xA }}>{rowA.join(', ')},</motion.p>
           <motion.p style={reduceMotion ? undefined : { x: xB }} className="text-muted mt-1">
             {rowB.join(', ')}.
