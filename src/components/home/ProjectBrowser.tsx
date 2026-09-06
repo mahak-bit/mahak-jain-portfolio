@@ -29,6 +29,7 @@ export function ProjectBrowser() {
   const reduceMotion = useReducedMotion();
   const [index, setIndex] = useState(0);
   const [dir, setDir] = useState(1);
+  const [indexOpen, setIndexOpen] = useState(false);
   const lock = useRef(false);
   const accum = useRef(0);
   const touchY = useRef<number | null>(null);
@@ -59,6 +60,7 @@ export function ProjectBrowser() {
 
   // Wheel / trackpad. Accumulate so a light trackpad flick doesn't skip three.
   useEffect(() => {
+    if (indexOpen) return;
     const onWheel = (e: WheelEvent) => {
       // Let the browser handle scrolling inside anything genuinely scrollable.
       e.preventDefault();
@@ -71,10 +73,11 @@ export function ProjectBrowser() {
     };
     window.addEventListener('wheel', onWheel, { passive: false });
     return () => window.removeEventListener('wheel', onWheel);
-  }, [step]);
+  }, [step, indexOpen]);
 
   // Touch.
   useEffect(() => {
+    if (indexOpen) return;
     const start = (e: TouchEvent) => {
       touchY.current = e.touches[0]?.clientY ?? null;
     };
@@ -90,13 +93,25 @@ export function ProjectBrowser() {
       window.removeEventListener('touchstart', start);
       window.removeEventListener('touchend', end);
     };
-  }, [step]);
+  }, [step, indexOpen]);
 
   // Keyboard — the accessible path through a hijacked page.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const el = document.activeElement;
       if (el && /^(INPUT|TEXTAREA)$/.test(el.tagName)) return;
+
+      if (e.key === 'Escape') {
+        setIndexOpen(false);
+        return;
+      }
+      if (e.key === 'i' || e.key === 'I') {
+        e.preventDefault();
+        setIndexOpen((o) => !o);
+        return;
+      }
+      if (indexOpen) return;
+
       switch (e.key) {
         case 'ArrowDown':
         case 'ArrowRight':
@@ -122,7 +137,7 @@ export function ProjectBrowser() {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [step, go]);
+  }, [step, go, indexOpen]);
 
   // The document itself never scrolls while the browser is mounted.
   useEffect(() => {
@@ -157,8 +172,129 @@ export function ProjectBrowser() {
         </motion.div>
       </AnimatePresence>
 
-      <Chrome index={index} total={TOTAL} project={project} onStep={step} />
+      <Chrome
+        index={index}
+        total={TOTAL}
+        project={project}
+        onStep={step}
+        onOpenIndex={() => setIndexOpen(true)}
+      />
+
+      <ProjectIndex
+        open={indexOpen}
+        current={index}
+        onClose={() => setIndexOpen(false)}
+        onPick={(i) => {
+          setIndexOpen(false);
+          go(i, i > index ? 1 : -1);
+        }}
+      />
     </div>
+  );
+}
+
+/* ---- the index ---------------------------------------------------------
+   Hijacked scroll costs you the ability to skim, so the whole set is one
+   keystroke away — every project as a metadata row, jump straight to any.
+------------------------------------------------------------------------ */
+
+function ProjectIndex({
+  open,
+  current,
+  onClose,
+  onPick,
+}: {
+  open: boolean;
+  current: number;
+  onClose: () => void;
+  onPick: (i: number) => void;
+}) {
+  const reduceMotion = useReducedMotion();
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  // Move focus in when it opens so the list is immediately keyboard-operable.
+  useEffect(() => {
+    if (!open) return;
+    const id = window.setTimeout(() => {
+      panelRef.current?.querySelector('button')?.focus();
+    }, 60);
+    return () => window.clearTimeout(id);
+  }, [open]);
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          className="bg-bg fixed inset-0 z-[60] flex flex-col"
+          initial={reduceMotion ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={reduceMotion ? undefined : { opacity: 0 }}
+          transition={{ duration: 0.3, ease: EASE }}
+          role="dialog"
+          aria-modal="true"
+          aria-label="All projects"
+        >
+          <div className="gutter-x flex items-center justify-between py-6">
+            <span className="meta">Index — {projects.length} pieces</span>
+            <button type="button" onClick={onClose} className="meta hover:text-accent transition-colors">
+              Close (esc)
+            </button>
+          </div>
+
+          <div ref={panelRef} className="gutter-x flex min-h-0 flex-1 items-center overflow-y-auto">
+            <ul className="border-line mx-auto w-full max-w-[1500px] border-t">
+              {projects.map((p, i) => (
+                <motion.li
+                  key={p.slug}
+                  initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, ease: EASE, delay: 0.04 + i * 0.04 }}
+                  className="border-line border-b"
+                >
+                  <button
+                    type="button"
+                    onClick={() => onPick(i + 1)}
+                    aria-current={current === i + 1 ? 'true' : undefined}
+                    className="group grid w-full grid-cols-12 items-baseline gap-x-4 gap-y-1 py-5 text-left"
+                  >
+                    <span
+                      className={cn(
+                        'meta col-span-2 transition-colors sm:col-span-1',
+                        current === i + 1 && 'text-accent'
+                      )}
+                    >
+                      {p.number}
+                    </span>
+                    <span className="col-span-10 sm:col-span-4">
+                      <span className="display-md group-hover:text-accent inline-block transition-[color,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-2">
+                        {p.name}
+                      </span>
+                    </span>
+                    <span className="meta col-span-6 sm:col-span-2">{p.context ?? p.status}</span>
+                    <span className="meta col-span-6 sm:col-span-1">{p.year}</span>
+                    <span className="meta col-span-11 truncate sm:col-span-3">
+                      {p.tech.slice(0, 3).join(' / ')}
+                    </span>
+                    <span
+                      aria-hidden
+                      className="text-faint group-hover:text-accent col-span-1 text-right text-sm transition-[color,transform] duration-500 group-hover:translate-x-1"
+                    >
+                      →
+                    </span>
+                  </button>
+                </motion.li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="gutter-x py-6">
+            <Link href="/archive" className="meta hover:text-accent transition-colors">
+              Read the full archive ↗
+            </Link>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -408,11 +544,13 @@ function Chrome({
   total,
   project,
   onStep,
+  onOpenIndex,
 }: {
   index: number;
   total: number;
   project: (typeof projects)[number] | null;
   onStep: (d: number) => void;
+  onOpenIndex: () => void;
 }) {
   const atEnd = index === total - 1;
 
@@ -451,9 +589,14 @@ function Chrome({
             {atEnd ? 'Back ↑' : 'Scroll ↓'}
           </button>
 
-          <Link href="/archive" className="meta hover:text-accent transition-colors">
-            List ↗
-          </Link>
+          <button
+            type="button"
+            onClick={onOpenIndex}
+            aria-haspopup="dialog"
+            className="meta hover:text-accent transition-colors"
+          >
+            Index <span className="text-line">(i)</span>
+          </button>
         </div>
       </div>
     </div>
