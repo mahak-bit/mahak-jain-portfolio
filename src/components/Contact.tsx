@@ -12,12 +12,15 @@ import { cn } from '@/lib/utils';
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 type Errors = Partial<Record<'name' | 'email' | 'message', string>>;
 
+/** `fallback` means the message is written but the server can't post it. */
+type Status = 'idle' | 'sending' | 'sent' | 'fallback' | 'error';
+
 export function Contact() {
   const reduceMotion = useReducedMotion();
   const formRef = useRef<HTMLFormElement>(null);
-  const [values, setValues] = useState({ name: '', email: '', message: '' });
+  const [values, setValues] = useState({ name: '', email: '', message: '', company: '' });
   const [errors, setErrors] = useState<Errors>({});
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<Status>('idle');
 
   function validate() {
     const next: Errors = {};
@@ -28,11 +31,33 @@ export function Contact() {
     return Object.keys(next).length === 0;
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!validate()) return;
-    // No backend yet — to wire it up, POST `values` to a route handler.
-    setSent(true);
+    if (status === 'sending' || !validate()) return;
+    setStatus('sending');
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values),
+      });
+      const data = (await res.json().catch(() => ({}))) as {
+        ok?: boolean;
+        code?: string;
+        errors?: Errors;
+      };
+
+      if (data.ok) return setStatus('sent');
+      if (data.code === 'invalid' && data.errors) {
+        setErrors(data.errors);
+        return setStatus('idle');
+      }
+      // Nothing the visitor did wrong — hand them their own mail client.
+      setStatus(data.code === 'not_configured' ? 'fallback' : 'error');
+    } catch {
+      setStatus('error');
+    }
   }
 
   const mailto = `mailto:${site.email}?subject=${encodeURIComponent(
@@ -68,16 +93,32 @@ export function Contact() {
         </Reveal>
 
         <Reveal delay={0.05}>
-          {sent ? (
+          {status === 'sent' ? (
+            <motion.div
+              initial={reduceMotion ? false : { opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="border-accent flex h-full flex-col items-start justify-center gap-4 border-l-2 pl-8"
+            >
+              <p className="meta text-accent">Sent</p>
+              <p className="font-display text-2xl">Thanks, {values.name.split(' ')[0]}.</p>
+              <p className="text-muted max-w-sm text-[0.95rem] leading-relaxed">
+                That&rsquo;s in my inbox. I read everything and reply to anything real — usually
+                within a day or two.
+              </p>
+            </motion.div>
+          ) : status === 'fallback' || status === 'error' ? (
             <motion.div
               initial={reduceMotion ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
               className="border-line flex h-full flex-col items-start justify-center gap-4 border-l pl-8"
             >
-              <p className="font-display text-2xl">Thanks, {values.name.split(' ')[0]}.</p>
+              <p className="meta">
+                {status === 'fallback' ? 'Not connected yet' : 'That didn’t go through'}
+              </p>
+              <p className="font-display text-2xl">Send it directly instead.</p>
               <p className="text-muted max-w-sm text-[0.95rem] leading-relaxed">
-                Small honesty note: this form isn&rsquo;t wired to a backend yet. Hit the button
-                and it&rsquo;ll drop the same message straight into my inbox.
+                Your message is safe — this opens it in your own mail app, already written, so
+                nothing is lost.
               </p>
               <a
                 href={mailto}
@@ -85,9 +126,29 @@ export function Contact() {
               >
                 Open it in email →
               </a>
+              <button
+                type="button"
+                onClick={() => setStatus('idle')}
+                className="meta hover:text-accent transition-colors"
+              >
+                ← Back to the form
+              </button>
             </motion.div>
           ) : (
             <form ref={formRef} onSubmit={handleSubmit} noValidate className="flex flex-col gap-6">
+              {/* Honeypot — hidden from people, tempting to bots. */}
+              <div aria-hidden className="absolute h-px w-px overflow-hidden opacity-0">
+                <label>
+                  Company
+                  <input
+                    name="company"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={values.company}
+                    onChange={(e) => setValues((s) => ({ ...s, company: e.target.value }))}
+                  />
+                </label>
+              </div>
               <Field
                 label="Name"
                 name="name"
@@ -111,9 +172,17 @@ export function Contact() {
                 error={errors.message}
                 onChange={(v) => setValues((s) => ({ ...s, message: v }))}
               />
-              <Button type="submit" size="md" className="self-start">
-                Send it
+              <Button
+                type="submit"
+                size="md"
+                className="self-start"
+                disabled={status === 'sending'}
+              >
+                {status === 'sending' ? 'Sending…' : 'Send it'}
               </Button>
+              <p aria-live="polite" className="sr-only">
+                {status === 'sending' ? 'Sending your message' : ''}
+              </p>
             </form>
           )}
         </Reveal>
