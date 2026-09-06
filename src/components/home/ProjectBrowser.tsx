@@ -175,11 +175,16 @@ function TitleSlide() {
           transition: { duration: 0.9, ease: EASE, delay },
         };
 
+  // pt/pb reserve the masthead and the counter chrome, so the centring happens
+  // in the space that is actually free rather than the whole viewport.
   return (
-    <section aria-label="Introduction" className="gutter-x flex h-full flex-col justify-center">
+    <section
+      aria-label="Introduction"
+      className="gutter-x flex h-full flex-col justify-center pt-20 pb-24"
+    >
       <div className="mx-auto w-full max-w-[1500px]">
         <div className="relative">
-          <h1 aria-label={site.name} className="display-xl relative z-10 max-w-[11ch]">
+          <h1 aria-label={site.name} className="display-hero relative z-10 max-w-[11ch]">
             {['Mahak', 'Jain'].map((word, i) => (
               <span key={word} className="block overflow-hidden">
                 <motion.span
@@ -204,22 +209,25 @@ function TitleSlide() {
           </motion.div>
         </div>
 
+        {/* Two compact columns on a phone; the full three-part record from md up.
+            The statement is the one thing that has to give on a fixed-height
+            screen — it lives in full on /about. */}
         <motion.div
           {...rise(0.42)}
-          className="border-line mt-10 grid gap-x-10 gap-y-8 border-t pt-6 md:grid-cols-12"
+          className="border-line mt-7 grid grid-cols-2 gap-x-6 gap-y-6 border-t pt-5 sm:mt-10 sm:gap-x-10 sm:pt-6 md:grid-cols-12"
         >
           <div className="md:col-span-4">
             <p className="meta mb-2.5">Role</p>
             <ul className="flex flex-col gap-1">
               {ROLES.map((r) => (
-                <li key={r} className="text-fg text-[0.92rem]">
+                <li key={r} className="text-fg text-[0.88rem] sm:text-[0.92rem]">
                   {r}
                 </li>
               ))}
             </ul>
             <p className="meta text-accent mt-3">{site.annotation}</p>
           </div>
-          <div className="md:col-span-5">
+          <div className="hidden md:col-span-5 md:block">
             <p className="meta mb-2.5">Statement</p>
             <p className="text-muted max-w-[44ch] text-[0.95rem] leading-relaxed">
               {site.statement}
