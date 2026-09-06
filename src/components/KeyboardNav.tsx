@@ -3,24 +3,29 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+/**
+ * `g` then a letter. Values beginning with "/" are routes; the rest are
+ * section ids on whichever page is open.
+ */
 const JUMPS: Record<string, string> = {
-  k: 'ask',
-  w: 'work',
-  a: 'about',
+  w: '/',
+  a: '/about',
+  c: '/contact',
+  r: '/archive',
   n: 'now',
   s: 'skills',
   l: 'log',
   m: 'more',
-  c: 'contact',
 };
 
 const SHORTCUTS: [string, string][] = [
-  ['/', 'search — focus the ask bar'],
-  ['g then w', 'go to the archive'],
-  ['g then a', 'go to about'],
-  ['g then n', 'go to now'],
-  ['g then c', 'go to contact'],
+  ['↑ ↓', 'move through the work'],
+  ['g then w', 'the work'],
+  ['g then a', 'about'],
+  ['g then c', 'contact'],
+  ['g then r', 'the archive list'],
   ['g then t', 'back to top'],
+  ['/', 'focus the ask bar'],
   ['?', 'this list'],
   ['esc', 'close'],
 ];
@@ -32,12 +37,16 @@ function isTypingTarget(el: EventTarget | null) {
   return tag === 'INPUT' || tag === 'TEXTAREA' || node.isContentEditable;
 }
 
-function goTo(id: string) {
-  if (id === 'top') {
+function goTo(target: string) {
+  if (target === 'top') {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     return;
   }
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (target.startsWith('/')) {
+    window.location.href = target;
+    return;
+  }
+  document.getElementById(target)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 export function KeyboardNav() {

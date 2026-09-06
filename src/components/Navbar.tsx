@@ -54,7 +54,7 @@ export function Navbar() {
           {navItems.map((item) => (
             <Link
               key={item.href}
-              href={`/${item.href}`}
+              href={item.href}
               className="meta hover:text-fg transition-colors"
             >
               {item.label}
@@ -105,7 +105,7 @@ export function Navbar() {
                     className="border-line border-t"
                   >
                     <Link
-                      href={`/${item.href}`}
+                      href={item.href}
                       onClick={() => setOpen(false)}
                       className="flex items-baseline gap-5 py-5"
                     >

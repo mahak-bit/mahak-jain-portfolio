@@ -4,23 +4,23 @@ import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
+/** The About page is the only long, scrolling page — the rail belongs there. */
+const RAIL_PATH = '/about';
+
 const SECTIONS: { id: string; label: string }[] = [
-  { id: 'ask', label: 'Ask' },
-  { id: 'work', label: 'Archive' },
   { id: 'about', label: 'About' },
   { id: 'now', label: 'Now' },
   { id: 'skills', label: 'Tools' },
   { id: 'log', label: 'Log' },
   { id: 'more', label: 'Notes' },
-  { id: 'contact', label: 'Contact' },
 ];
 
 export function ProgressRail() {
   const pathname = usePathname();
-  const [active, setActive] = useState<string>('ask');
+  const [active, setActive] = useState<string>('about');
 
   useEffect(() => {
-    if (pathname !== '/') return;
+    if (pathname !== RAIL_PATH) return;
 
     function onScroll() {
       const line = window.innerHeight * 0.35;
@@ -41,7 +41,7 @@ export function ProgressRail() {
     };
   }, [pathname]);
 
-  if (pathname !== '/') return null;
+  if (pathname !== RAIL_PATH) return null;
 
   return (
     <nav

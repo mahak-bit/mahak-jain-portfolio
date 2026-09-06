@@ -49,10 +49,12 @@ export const seo = {
   ],
 };
 
-/** Nav — kept short on purpose. Hrefs are in-page anchors. */
+/**
+ * Nav — three destinations, kept short on purpose. The home page is the work
+ * browser itself, so "Work" points back to it.
+ */
 export const navItems = [
-  { label: 'Archive', href: '#work' },
-  { label: 'About', href: '#about' },
-  { label: 'Now', href: '#now' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Work', href: '/' },
+  { label: 'About', href: '/about' },
+  { label: 'Contact', href: '/contact' },
 ] as const;

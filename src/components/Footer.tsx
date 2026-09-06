@@ -1,9 +1,16 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { navItems, site } from '@/lib/site';
 import { IndiaClock } from './IndiaClock';
 
 export function Footer() {
+  const pathname = usePathname();
   const year = new Date().getFullYear();
+
+  // The home page is a fixed-viewport browser — there is nothing to scroll to.
+  if (pathname === '/') return null;
 
   return (
     <footer className="chapter-dark">
@@ -18,7 +25,7 @@ export function Footer() {
               {navItems.map((item) => (
                 <Link
                   key={item.href}
-                  href={`/${item.href}`}
+                  href={item.href}
                   className="text-fg hover:text-accent text-[0.94rem] transition-colors"
                 >
                   {item.label}
