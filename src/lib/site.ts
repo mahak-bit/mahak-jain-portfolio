@@ -15,6 +15,16 @@ export const site = {
   /** Short editorial note beside the roles in the hero. Truthful + editable. */
   annotation: 'Building toward Agentic AI',
 
+  /**
+   * The pull quote on the opening slide. `emphasis` is the one word set in the
+   * accent — it must appear in `text` verbatim or it is simply not highlighted.
+   */
+  pullQuote: {
+    label: 'The shift',
+    text: 'I didn’t switch from business to tech. I connected the two.',
+    emphasis: 'business',
+  },
+
   location: 'India',
   /** Canonical URL — used for OG tags, canonical links and the sitemap. Swap for a custom domain when there is one. */
   url: 'https://mahak-jain-portfolio.vercel.app',

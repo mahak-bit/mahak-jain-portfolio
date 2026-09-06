@@ -352,6 +352,11 @@ function TitleSlide() {
             ))}
           </h1>
 
+          {/* Sits beside the name only where there is genuine room for it —
+              below lg it would either crowd the name or collide with the
+              character, and the slide has a fixed height budget. */}
+          <PullQuote className="absolute top-1/2 left-[42%] z-10 hidden max-w-[24ch] -translate-y-1/2 lg:block xl:left-[40%]" />
+
           <motion.div
             {...rise(0.5)}
             className="pointer-events-none absolute -top-4 right-0 z-0 hidden justify-end sm:flex lg:right-[6%]"
@@ -420,6 +425,53 @@ function TitleSlide() {
         </motion.div>
       </div>
     </section>
+  );
+}
+
+/**
+ * The pull quote beside the name — a numbered label and one sentence in the
+ * display italic, with a single word carried in the accent. The emphasis is
+ * matched out of the string rather than stored as markup, so the copy stays
+ * one editable sentence in site.ts; if the word isn't found the quote simply
+ * renders unhighlighted rather than breaking.
+ */
+function PullQuote({ className }: { className?: string }) {
+  const reduceMotion = useReducedMotion();
+  const { label, text, emphasis } = site.pullQuote;
+  const at = emphasis ? text.indexOf(emphasis) : -1;
+  const parts =
+    at === -1
+      ? [text]
+      : [text.slice(0, at), text.slice(at, at + emphasis.length), text.slice(at + emphasis.length)];
+
+  const rise = (delay: number) =>
+    reduceMotion
+      ? {}
+      : {
+          initial: { opacity: 0, y: 14 },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 0.9, ease: EASE, delay },
+        };
+
+  return (
+    <motion.figure {...rise(0.62)} className={className}>
+      <figcaption className="meta mb-4 flex items-baseline gap-2.5">
+        <span className="text-accent">01</span>
+        <span className="text-line">/</span>
+        <span>{label}</span>
+      </figcaption>
+      <blockquote className="font-display text-[clamp(1.15rem,0.7rem+1.15vw,1.85rem)] leading-[1.3] tracking-[-0.02em] text-balance italic">
+        {parts.length === 1 ? (
+          parts[0]
+        ) : (
+          <>
+            {parts[0]}
+            <span className="text-accent">{parts[1]}</span>
+            {parts[2]}
+          </>
+        )}
+      </blockquote>
+    </motion.figure>
   );
 }
 
