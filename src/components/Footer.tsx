@@ -26,7 +26,7 @@ export function Footer() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="text-fg hover:text-accent text-[0.94rem] transition-colors"
+                  className="text-fg hover:text-accent block py-1 text-[0.94rem] transition-colors"
                 >
                   {item.label}
                 </Link>
@@ -39,7 +39,7 @@ export function Footer() {
             <div className="flex flex-col gap-1.5">
               <a
                 href={`mailto:${site.email}`}
-                className="text-fg hover:text-accent text-[0.94rem] transition-colors"
+                className="text-fg hover:text-accent block py-1 text-[0.94rem] transition-colors"
               >
                 Email ↗
               </a>
@@ -48,7 +48,7 @@ export function Footer() {
                   href={site.socials.github}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-fg hover:text-accent text-[0.94rem] transition-colors"
+                  className="text-fg hover:text-accent block py-1 text-[0.94rem] transition-colors"
                 >
                   GitHub ↗
                 </a>
@@ -58,7 +58,7 @@ export function Footer() {
                   href={site.socials.linkedin}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-fg hover:text-accent text-[0.94rem] transition-colors"
+                  className="text-fg hover:text-accent block py-1 text-[0.94rem] transition-colors"
                 >
                   LinkedIn ↗
                 </a>

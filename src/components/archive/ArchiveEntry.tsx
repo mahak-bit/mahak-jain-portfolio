@@ -223,7 +223,7 @@ function FootLinks({ project, className }: { project: Project; className?: strin
         className
       )}
     >
-      <Link href={`/projects/${project.slug}`} className="group meta hover:text-accent transition-colors">
+      <Link href={`/projects/${project.slug}`} className="group meta hover:text-accent py-1.5 transition-colors">
         Case study
         <span aria-hidden className="ml-2 inline-block transition-transform group-hover:translate-x-1">
           →
@@ -234,7 +234,7 @@ function FootLinks({ project, className }: { project: Project; className?: strin
           href={project.links.demo}
           target="_blank"
           rel="noreferrer"
-          className="meta hover:text-accent transition-colors"
+          className="meta hover:text-accent py-1.5 transition-colors"
         >
           Live ↗
         </a>
@@ -244,7 +244,7 @@ function FootLinks({ project, className }: { project: Project; className?: strin
           href={project.links.github}
           target="_blank"
           rel="noreferrer"
-          className="meta hover:text-accent transition-colors"
+          className="meta hover:text-accent py-1.5 transition-colors"
         >
           GitHub ↗
         </a>

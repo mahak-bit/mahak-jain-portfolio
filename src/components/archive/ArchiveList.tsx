@@ -23,7 +23,7 @@ export function ArchiveList() {
   return (
     <div className="gutter-x mx-auto w-full max-w-[1500px] pt-24 pb-28 sm:pt-32">
       <div className="border-line flex items-baseline justify-between border-b pb-4">
-        <Link href="/#work" className="meta hover:text-fg transition-colors">
+        <Link href="/#work" className="meta tap hover:text-fg transition-colors">
           ← Index
         </Link>
         <span className="meta">

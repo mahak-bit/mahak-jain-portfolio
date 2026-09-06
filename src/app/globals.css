@@ -232,6 +232,27 @@
 }
 
 /* ---------------------------------------------------------------------------
+   Touch target. The metadata type is deliberately tiny, which leaves some
+   controls only ~13px tall — under the 24px minimum, and awkward under a
+   thumb. This lends a control a 44px-tall hit area via a pseudo-element, so
+   the target grows without the visible box moving and without disturbing the
+   line rhythm around it. Only for controls with nothing else within 44px
+   vertically; where neighbours are close, space them for real instead.
+--------------------------------------------------------------------------- */
+@utility tap {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: 50%;
+    translate: 0 -50%;
+    height: max(100%, 44px);
+  }
+}
+
+/* ---------------------------------------------------------------------------
    Ground texture — fine film grain, not a pattern. Just enough to keep the
    ivory from reading as flat #fff.
 --------------------------------------------------------------------------- */

@@ -46,7 +46,7 @@ export function Navbar() {
           scrolled ? 'py-3.5' : 'py-6'
         )}
       >
-        <Link href="/" className="meta text-fg hover:text-accent transition-colors">
+        <Link href="/" className="meta tap text-fg hover:text-accent transition-colors">
           {site.name}
         </Link>
 
@@ -65,7 +65,7 @@ export function Navbar() {
               href={site.resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="meta border-line hover:border-accent hover:text-accent border px-3 py-1.5 transition-colors"
+              className="meta border-line hover:border-accent hover:text-accent border px-3 py-2 transition-colors"
             >
               Résumé ↗
             </a>
@@ -78,7 +78,7 @@ export function Navbar() {
               href={site.resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="meta border-line hover:border-accent hover:text-accent border px-2.5 py-1 transition-colors"
+              className="meta border-line hover:border-accent hover:text-accent border px-2.5 py-2 transition-colors"
             >
               Résumé ↗
             </a>
@@ -87,7 +87,7 @@ export function Navbar() {
             type="button"
             onClick={() => setOpen(true)}
             aria-label="Open menu"
-            className="meta hover:text-fg transition-colors"
+            className="meta tap hover:text-fg transition-colors"
           >
             Menu
           </button>
@@ -111,7 +111,7 @@ export function Navbar() {
                   type="button"
                   onClick={() => setOpen(false)}
                   aria-label="Close menu"
-                  className="meta hover:text-fg transition-colors"
+                  className="meta tap hover:text-fg transition-colors"
                 >
                   Close
                 </button>

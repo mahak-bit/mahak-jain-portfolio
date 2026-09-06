@@ -394,10 +394,10 @@ function TitleSlide() {
           <div className="md:col-span-3">
             <p className="meta mb-2.5">Index</p>
             <div className="flex flex-col gap-1.5">
-              <Link href="/about" className="text-fg hover:text-accent text-[0.92rem] transition-colors">
+              <Link href="/about" className="text-fg hover:text-accent block py-1 text-[0.92rem] transition-colors">
                 About →
               </Link>
-              <Link href="/contact" className="text-fg hover:text-accent text-[0.92rem] transition-colors">
+              <Link href="/contact" className="text-fg hover:text-accent block py-1 text-[0.92rem] transition-colors">
                 Contact →
               </Link>
               {site.socials.github ? (
@@ -405,7 +405,7 @@ function TitleSlide() {
                   href={site.socials.github}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-fg hover:text-accent text-[0.92rem] transition-colors"
+                  className="text-fg hover:text-accent block py-1 text-[0.92rem] transition-colors"
                 >
                   GitHub ↗
                 </a>
@@ -415,7 +415,7 @@ function TitleSlide() {
                   href={site.resumeUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-fg hover:text-accent text-[0.92rem] transition-colors"
+                  className="text-fg hover:text-accent block py-1 text-[0.92rem] transition-colors"
                 >
                   Résumé ↗
                 </a>
@@ -612,7 +612,7 @@ function ProjectSlide({ project }: { project: (typeof projects)[number] }) {
           <motion.div {...rise(0.38)} className="mt-7 flex flex-wrap gap-x-8 gap-y-2">
             <Link
               href={`/projects/${project.slug}`}
-              className="group meta hover:text-accent transition-colors"
+              className="group meta hover:text-accent py-1.5 transition-colors"
             >
               Case study
               <span aria-hidden className="ml-2 inline-block transition-transform group-hover:translate-x-1">
@@ -624,7 +624,7 @@ function ProjectSlide({ project }: { project: (typeof projects)[number] }) {
                 href={project.links.demo}
                 target="_blank"
                 rel="noreferrer"
-                className="meta hover:text-accent transition-colors"
+                className="meta hover:text-accent py-1.5 transition-colors"
               >
                 Live ↗
               </a>
@@ -634,7 +634,7 @@ function ProjectSlide({ project }: { project: (typeof projects)[number] }) {
                 href={project.links.github}
                 target="_blank"
                 rel="noreferrer"
-                className="meta hover:text-accent transition-colors"
+                className="meta hover:text-accent py-1.5 transition-colors"
               >
                 GitHub ↗
               </a>
@@ -695,7 +695,7 @@ function Chrome({
           <button
             type="button"
             onClick={() => onStep(atEnd ? -1 : 1)}
-            className="meta hover:text-accent transition-colors"
+            className="meta tap hover:text-accent transition-colors"
           >
             {atEnd ? 'Back ↑' : 'Scroll ↓'}
           </button>
@@ -704,7 +704,7 @@ function Chrome({
             type="button"
             onClick={onOpenIndex}
             aria-haspopup="dialog"
-            className="meta hover:text-accent transition-colors"
+            className="meta tap hover:text-accent transition-colors"
           >
             Index <span className="text-line">(i)</span>
           </button>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
 /**
  * `g` then a letter. Values beginning with "/" are routes; the rest are
@@ -51,6 +51,7 @@ function goTo(target: string) {
 
 export function KeyboardNav() {
   const [helpOpen, setHelpOpen] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     let awaitingJump = false;
@@ -113,10 +114,10 @@ export function KeyboardNav() {
       {helpOpen && (
         <motion.div
           className="fixed inset-0 z-[80] flex items-center justify-center px-6"
-          initial={{ opacity: 0 }}
+          initial={reduceMotion ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.15 }}
+          exit={reduceMotion ? undefined : { opacity: 0 }}
+          transition={{ duration: reduceMotion ? 0 : 0.15 }}
         >
           <button
             type="button"
@@ -127,10 +128,10 @@ export function KeyboardNav() {
           <motion.div
             role="dialog"
             aria-label="Keyboard shortcuts"
-            initial={{ opacity: 0, y: 8 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 8 }}
-            transition={{ duration: 0.18 }}
+            exit={reduceMotion ? undefined : { opacity: 0, y: 8 }}
+            transition={{ duration: reduceMotion ? 0 : 0.18 }}
             className="border-line bg-surface relative w-full max-w-sm rounded-md border p-6"
           >
             <p className="kicker mb-4">Keyboard</p>

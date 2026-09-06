@@ -106,7 +106,7 @@ export function PortfolioAI() {
               <button
                 type="submit"
                 disabled={!query.trim() || busy}
-                className="meta hover:text-accent shrink-0 transition-colors disabled:opacity-35"
+                className="meta tap hover:text-accent shrink-0 transition-colors disabled:opacity-35"
               >
                 {busy ? 'Asking…' : 'Ask ↵'}
               </button>

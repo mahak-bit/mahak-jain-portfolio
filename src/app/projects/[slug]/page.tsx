@@ -46,7 +46,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   return (
     <article className="gutter-x mx-auto w-full max-w-[1100px] pt-14 pb-24 sm:pt-20">
       <div className="border-line flex items-baseline justify-between border-b pb-4">
-        <Link href="/archive" className="meta hover:text-fg transition-colors">
+        <Link href="/archive" className="meta tap hover:text-fg transition-colors">
           ← The Archive
         </Link>
         <span className="meta">{project.number}</span>
