@@ -319,7 +319,11 @@ function TitleSlide() {
       className="gutter-x flex h-full flex-col justify-center pt-20 pb-24"
     >
       <div className="mx-auto w-full max-w-[1500px]">
-        <div className="relative">
+        {/* On a phone she sits in the flow beside the name, so the row sizes
+            itself and nothing lands on top of the record below. From sm up
+            there is room to lift her out and let her overlap behind the
+            name, which is the composition on a wider screen. */}
+        <div className="relative flex items-start justify-between gap-3 sm:block">
           {/*
             Each word is masked so it can rise into place. Playfair's glyph box
             runs ~0.23em past the 0.86 line box at both ends, so a mask clipped
@@ -359,7 +363,7 @@ function TitleSlide() {
 
           <motion.div
             {...rise(0.5)}
-            className="pointer-events-none absolute -top-4 right-0 z-0 hidden justify-end sm:flex lg:right-[6%]"
+            className="z-0 flex shrink-0 justify-end sm:pointer-events-none sm:absolute sm:-top-4 sm:right-0 lg:right-[6%]"
           >
             <div className="pointer-events-auto">
               <HeroCharacter />
