@@ -61,27 +61,23 @@ export function Navbar() {
             </Link>
           ))}
           {site.resumeUrl ? (
-            <a
+            <Link
               href={site.resumeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
               className="meta border-line hover:border-accent hover:text-accent border px-3 py-2 transition-colors"
             >
-              Résumé ↗
-            </a>
+              Résumé
+            </Link>
           ) : null}
         </nav>
 
         <div className="flex items-center gap-4 md:hidden">
           {site.resumeUrl ? (
-            <a
+            <Link
               href={site.resumeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
               className="meta border-line hover:border-accent hover:text-accent border px-2.5 py-2 transition-colors"
             >
-              Résumé ↗
-            </a>
+              Résumé
+            </Link>
           ) : null}
           <button
             type="button"

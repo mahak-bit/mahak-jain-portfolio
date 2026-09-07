@@ -379,6 +379,40 @@
     word-break: break-all;
   }
 
+  /* -------------------------------------------------------------------------
+     The résumé prints as a document rather than a screenshot of the page. Its
+     links already read as their own URL, so the generic annotation above would
+     print each one twice; and the on-screen rhythm, which is deliberately
+     airy, has to tighten to sit sensibly on paper.
+     ---------------------------------------------------------------------- */
+  #resume a[href^='http']::after {
+    content: none;
+  }
+
+  #resume .resume-block {
+    margin-top: 1.5rem !important;
+  }
+
+  #resume h1 {
+    font-size: 1.9rem;
+    line-height: 1.1;
+  }
+
+  #resume h2 {
+    font-size: 1.05rem;
+    margin: 0.5rem 0 0.6rem;
+  }
+
+  #resume h3 {
+    font-size: 0.95rem;
+  }
+
+  #resume li,
+  #resume p {
+    font-size: 0.8rem;
+    line-height: 1.45;
+  }
+
   @page {
     margin: 16mm;
   }

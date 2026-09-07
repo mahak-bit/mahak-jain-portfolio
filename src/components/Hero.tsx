@@ -126,7 +126,7 @@ export function Hero() {
             <HeroLink href="/#work" label="See the work" mark="↓" />
             <HeroLink href="/#contact" label="Say hi" mark="→" />
             {site.resumeUrl ? (
-              <HeroLink href={site.resumeUrl} label="Résumé" mark="↗" external />
+              <HeroLink href={site.resumeUrl} label="Résumé" mark="→" />
             ) : null}
           </div>
         </motion.div>

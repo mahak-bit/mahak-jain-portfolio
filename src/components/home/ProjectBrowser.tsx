@@ -411,14 +411,12 @@ function TitleSlide() {
                 </a>
               ) : null}
               {site.resumeUrl ? (
-                <a
+                <Link
                   href={site.resumeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="text-fg hover:text-accent block py-1 text-[0.92rem] transition-colors"
                 >
-                  Résumé ↗
-                </a>
+                  Résumé →
+                </Link>
               ) : null}
             </div>
           </div>
