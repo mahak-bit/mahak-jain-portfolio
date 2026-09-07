@@ -38,6 +38,7 @@ export const site = {
   socials: {
     github: 'https://github.com/mahak-bit',
     linkedin: 'https://www.linkedin.com/in/mahak-jain-7665432a3/',
+    instagram: 'https://www.instagram.com/tech._bloom/',
     x: '', // [ADD X / TWITTER] (optional)
   },
 } as const;

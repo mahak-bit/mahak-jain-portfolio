@@ -44,6 +44,11 @@ export const resumeHeader = {
       text: 'linkedin.com/in/mahak-jain-7665432a3',
       href: 'https://www.linkedin.com/in/mahak-jain-7665432a3/',
     },
+    {
+      label: 'Instagram',
+      text: 'instagram.com/tech._bloom',
+      href: 'https://www.instagram.com/tech._bloom/',
+    },
   ],
 } as const;
 

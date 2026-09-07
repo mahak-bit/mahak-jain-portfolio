@@ -6,7 +6,7 @@ import { Section, SectionMark } from './ui/Section';
 import { Reveal } from './ui/Reveal';
 import { Button } from './ui/Button';
 import { site } from '@/lib/site';
-import { GithubIcon, LinkedinIcon } from './ui/BrandIcons';
+import { GithubIcon, InstagramIcon, LinkedinIcon } from './ui/BrandIcons';
 import { cn } from '@/lib/utils';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -88,6 +88,12 @@ export function Contact() {
               value={pretty(site.socials.linkedin) || '[ADD LINKEDIN]'}
               href={site.socials.linkedin || undefined}
               icon={<LinkedinIcon className="size-3.5" />}
+            />
+            <ContactRow
+              label="Instagram"
+              value={pretty(site.socials.instagram) || '[ADD INSTAGRAM]'}
+              href={site.socials.instagram || undefined}
+              icon={<InstagramIcon className="size-3.5" />}
             />
           </ul>
         </Reveal>

@@ -63,6 +63,16 @@ export function Footer() {
                   LinkedIn ↗
                 </a>
               )}
+              {site.socials.instagram && (
+                <a
+                  href={site.socials.instagram}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-fg hover:text-accent block py-1 text-[0.94rem] transition-colors"
+                >
+                  Instagram ↗
+                </a>
+              )}
             </div>
           </div>
 
