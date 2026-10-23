@@ -180,7 +180,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       <Reveal className="ruled mt-14 pt-14">
         <p className="font-display text-2xl">Want something like this?</p>
         <Link
-          href="/#contact"
+          href="/contact"
           className="border-fg hover:border-accent mt-3 inline-block border-b pb-0.5 text-[0.95rem] transition-colors"
         >
           Get in touch →

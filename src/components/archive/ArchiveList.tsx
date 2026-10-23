@@ -51,7 +51,7 @@ export function ArchiveList() {
 
       <div className="border-line mt-28 border-t pt-10">
         <Link
-          href="/#contact"
+          href="/contact"
           className="group border-line hover:border-accent inline-flex items-baseline gap-4 border-b pb-2 transition-colors"
         >
           <span className="display-md group-hover:text-accent transition-colors">
