@@ -64,11 +64,12 @@ export const seo = {
 };
 
 /**
- * Nav — three destinations, kept short on purpose. The home page is the work
+ * Nav — four destinations, kept short on purpose. The home page is the work
  * browser itself, so "Work" points back to it.
  */
 export const navItems = [
   { label: 'Work', href: '/' },
   { label: 'About', href: '/about' },
+  { label: 'Templates', href: '/templates' },
   { label: 'Contact', href: '/contact' },
 ] as const;
