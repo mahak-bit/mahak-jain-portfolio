@@ -6,7 +6,7 @@
 export const site = {
   name: 'Mahak Jain',
   firstName: 'Mahak',
-  role: 'Full-Stack Developer · Python Developer · GenAI Engineer',
+  role: 'AI/ML Engineer · Full-Stack Developer · Python Developer',
 
   /** Hero statement — short, spoken, first person. */
   statement:

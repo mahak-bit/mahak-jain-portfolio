@@ -12,7 +12,7 @@ import { site } from '@/lib/site';
 import { cn } from '@/lib/utils';
 
 const EASE = [0.16, 1, 0.3, 1] as const;
-const ROLES = ['Full-Stack Developer', 'Python Developer', 'GenAI Engineer'];
+const ROLES = ['AI/ML Engineer', 'Full-Stack Developer', 'Python Developer'];
 
 /** Slide 0 is the title; 1..n are the projects. */
 const TOTAL = projects.length + 1;
@@ -390,7 +390,6 @@ function TitleSlide() {
                 </li>
               ))}
             </ul>
-            <p className="meta text-accent mt-3">{site.annotation}</p>
           </div>
           <div className="hidden md:col-span-5 md:block">
             <p className="meta mb-2.5">Statement</p>

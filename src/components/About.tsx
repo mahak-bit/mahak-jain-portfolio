@@ -8,7 +8,7 @@ import { progression } from '@/data/buildlog';
 import { cn } from '@/lib/utils';
 
 const EASE = [0.16, 1, 0.3, 1] as const;
-const ROLES = ['Full-Stack Developer', 'Python Developer', 'GenAI Engineer'];
+const ROLES = ['AI/ML Engineer', 'Full-Stack Developer', 'Python Developer'];
 
 const PARAGRAPHS = [
   'I’m Mahak. Somewhere between spreadsheets and a late-night “wait, can I just build this?”, I started building for the web — and lately, that’s increasingly meant putting AI on top of it.',
@@ -59,7 +59,6 @@ export function About() {
             {role}
           </li>
         ))}
-        <li className="meta text-accent">Moving toward Agentic AI</li>
       </motion.ul>
 
       {/* The arc, as four marks — business, code, GenAI, agents. */}
