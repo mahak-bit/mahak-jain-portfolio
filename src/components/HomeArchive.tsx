@@ -3,7 +3,8 @@
 import { useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { AnimatePresence, motion, useMotionValue, useReducedMotion, useSpring } from 'framer-motion';
+import { AnimatePresence, motion, useMotionValue, useSpring } from 'framer-motion';
+import { useReducedMotion } from '@/lib/useReducedMotion';
 import { SectionMark } from './ui/Section';
 import { Reveal } from './ui/Reveal';
 import { ArchiveBackdrop } from './ArchiveBackdrop';

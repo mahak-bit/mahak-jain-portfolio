@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useReducedMotion } from '@/lib/useReducedMotion';
 import { projects } from '@/data/projects';
 import { ProjectPoster } from '@/components/archive/ProjectPoster';
 import { HeroCharacter } from '@/components/HeroCharacter';

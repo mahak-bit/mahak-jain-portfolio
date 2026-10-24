@@ -1,7 +1,8 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { motion, useReducedMotion, type HTMLMotionProps } from 'framer-motion';
+import { motion, type HTMLMotionProps } from 'framer-motion';
+import { useReducedMotion } from '@/lib/useReducedMotion';
 import { enter, viewportOnce } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 

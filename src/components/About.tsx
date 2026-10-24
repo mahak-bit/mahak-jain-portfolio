@@ -1,6 +1,7 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { useReducedMotion } from '@/lib/useReducedMotion';
 import { Section, SectionMark } from './ui/Section';
 import { Reveal } from './ui/Reveal';
 import { progression } from '@/data/buildlog';

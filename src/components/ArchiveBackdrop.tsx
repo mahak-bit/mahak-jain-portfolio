@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useReducedMotion } from 'framer-motion';
+import { useReducedMotion } from '@/lib/useReducedMotion';
 
 /**
  * A quiet moving backdrop for the Archive section — a desaturated collage of

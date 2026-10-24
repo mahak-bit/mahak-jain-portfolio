@@ -1,6 +1,7 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { useReducedMotion } from '@/lib/useReducedMotion';
 import type { Thought } from '@/data/personality';
 import { ThoughtVisual } from './thoughts/ThoughtVisuals';
 

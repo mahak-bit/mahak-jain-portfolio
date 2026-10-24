@@ -1,7 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useReducedMotion } from '@/lib/useReducedMotion';
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const SESSION_KEY = 'mj-intro-seen';

@@ -6,6 +6,7 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { KeyboardNav } from '@/components/KeyboardNav';
 import { ProgressRail } from '@/components/ProgressRail';
+import { ReducedMotionBoundary } from '@/components/ReducedMotionBoundary';
 import { site, seo } from '@/lib/site';
 
 /** Display — a high-contrast editorial serif, set very large and very tight. */
@@ -102,7 +103,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="relative z-[1]">
           <Navbar />
           <ProgressRail />
-          <main id="main">{children}</main>
+          <main id="main">
+            <ReducedMotionBoundary>{children}</ReducedMotionBoundary>
+          </main>
           <Footer />
         </div>
         <KeyboardNav />

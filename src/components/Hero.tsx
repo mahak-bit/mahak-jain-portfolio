@@ -2,7 +2,8 @@
 
 import { useRef } from 'react';
 import Link from 'next/link';
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useReducedMotion } from '@/lib/useReducedMotion';
 import { HeroCharacter } from './HeroCharacter';
 import { site } from '@/lib/site';
 

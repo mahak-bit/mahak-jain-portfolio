@@ -2,7 +2,8 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { useReducedMotion } from '@/lib/useReducedMotion';
 import type { Project } from '@/data/projects';
 import { cn } from '@/lib/utils';
 import { ProjectPoster } from './ProjectPoster';
