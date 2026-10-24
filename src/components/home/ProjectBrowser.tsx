@@ -378,8 +378,13 @@ function TitleSlide() {
         <motion.div
           {...rise(0.42)}
           // extra top margin: the descender now paints ~0.24em below the name's
-          // flow box, so the rule needs clearance it did not need before
-          className="border-line mt-9 grid grid-cols-2 gap-x-6 gap-y-6 border-t pt-5 sm:mt-14 sm:gap-x-10 sm:pt-6 md:grid-cols-12"
+          // flow box, so the rule needs clearance it did not need before.
+          //
+          // From lg she hangs well below the rule, and her box swallows clicks,
+          // so the record keeps clear of her: the right padding is her width
+          // (HeroCharacter's lg width) + her offset (lg:right-[6%] above) + a
+          // gap. The rule is the border, so it still runs the full width.
+          className="border-line mt-9 grid grid-cols-2 gap-x-6 gap-y-6 border-t pt-5 sm:mt-14 sm:gap-x-10 sm:pt-6 md:grid-cols-12 lg:pr-[calc(clamp(264px,25vw,352px)_+_6%_+_1.5rem)]"
         >
           <div className="md:col-span-4">
             <p className="meta mb-2.5">Role</p>
