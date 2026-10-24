@@ -26,7 +26,7 @@ export type ResumeRole = {
 
 export const resumeHeader = {
   name: 'Mahak Jain',
-  roles: 'AI / Generative AI Developer · Full-Stack Developer · AI Product Builder',
+  roles: 'AI/ML Engineer · Full-Stack Developer · AI Product Builder',
   location: 'Kota, Rajasthan, India',
   email: 'mahakj532@gmail.com',
   /**

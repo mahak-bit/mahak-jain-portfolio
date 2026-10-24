@@ -10,10 +10,7 @@ export const site = {
 
   /** Hero statement — short, spoken, first person. */
   statement:
-    'I build full-stack web apps, Python backends and AI-powered products — and lately that’s meant going deeper into GenAI and agents. Came from a business degree, got curious about how software actually gets made, and haven’t really stopped since.',
-
-  /** Short editorial note beside the roles in the hero. Truthful + editable. */
-  annotation: 'Building toward Agentic AI',
+    'I build AI-powered products, full-stack web apps and Python backends. Came from a business degree, got curious about how software actually gets made, and haven’t really stopped since.',
 
   /**
    * The pull quote on the opening slide. `emphasis` is the one word set in the
@@ -44,14 +41,15 @@ export const site = {
 } as const;
 
 export const seo = {
-  title: 'Mahak Jain — Full-Stack & GenAI Developer',
+  title: 'Mahak Jain — AI/ML Engineer & Full-Stack Developer',
   description:
-    'Mahak Jain builds full-stack web apps, Python systems and GenAI products — and is moving toward agentic AI. Based in India.',
+    'Mahak Jain is an AI/ML engineer and full-stack developer building AI-powered products, Python backends and web apps. Based in India.',
   keywords: [
     'Mahak Jain',
+    'AI/ML Engineer',
+    'AI Engineer',
     'Full-Stack Developer',
     'Python Developer',
-    'GenAI Engineer',
     'Generative AI',
     'Agentic AI',
     'LLM applications',

@@ -7,8 +7,8 @@ import { useReducedMotion } from '@/lib/useReducedMotion';
 import { HeroCharacter } from './HeroCharacter';
 import { site } from '@/lib/site';
 
-const TAGS = ['Web Apps', 'Python Systems', 'GenAI Products', 'Agents'];
-const ROLES = ['Full-Stack Developer', 'Python Developer', 'GenAI Engineer'];
+const TAGS = ['AI Products', 'Web Apps', 'Python Systems', 'Agents'];
+const ROLES = ['AI/ML Engineer', 'Full-Stack Developer', 'Python Developer'];
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -103,9 +103,6 @@ export function Hero() {
               </motion.li>
             ))}
           </ul>
-          <motion.p {...rise(0.72)} className="meta text-accent mt-4">
-            {site.annotation}
-          </motion.p>
         </div>
 
         <motion.div {...rise(0.6)} className="md:col-span-5">

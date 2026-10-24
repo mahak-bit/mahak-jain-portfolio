@@ -10,7 +10,7 @@ import { site } from '@/lib/site';
 export const metadata: Metadata = {
   title: 'About',
   description:
-    'Mahak Jain — a full-stack developer building AI into what she ships, and moving toward agentic AI.',
+    'Mahak Jain — an AI/ML engineer and full-stack developer who builds AI into what she ships.',
   alternates: { canonical: '/about' },
   openGraph: {
     title: `About — ${site.name}`,

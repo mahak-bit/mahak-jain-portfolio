@@ -78,12 +78,11 @@ export const buildLog: LogEntry[] = [
 ];
 
 /**
- * The arc, as four marks. Truthful shorthand for the story told just above it
- * on the About page — business, then code, then GenAI, now agents.
+ * The arc, as three marks. Truthful shorthand for the story told just below it
+ * on the About page — business, then code, now AI/ML.
  */
 export const progression: { n: string; label: string; current?: boolean }[] = [
   { n: '01', label: 'Business' },
   { n: '02', label: 'Code' },
-  { n: '03', label: 'GenAI' },
-  { n: '04', label: 'Agentic AI', current: true },
+  { n: '03', label: 'AI/ML', current: true },
 ];

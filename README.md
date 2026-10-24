@@ -1,6 +1,6 @@
 # Mahak Jain — Portfolio
 
-Personal portfolio for **Mahak Jain**, AI Engineer & Creative Technologist. A single-page,
+Personal portfolio for **Mahak Jain**, AI/ML Engineer & Full-Stack Developer. A single-page,
 editorial site with dynamic project case studies.
 
 Built with **Next.js 16 (App Router)**, **TypeScript**, **Tailwind CSS v4**, **Framer Motion**
@@ -35,7 +35,7 @@ Everything you'd want to change lives in a handful of files — no component edi
 
 | File                      | Contains                                                                 |
 | ------------------------- | ----------------------------------------------------------------------- |
-| `src/lib/site.ts`         | Name, role, hero statement + annotation, **email, GitHub, LinkedIn, resume**, SEO copy, nav |
+| `src/lib/site.ts`         | Name, role, hero statement, **email, GitHub, LinkedIn, resume**, SEO copy, nav |
 | `src/data/projects.ts`    | Projects — one-liner, the mini-story (problem / built / learned), and the deeper case study. Add one here and its card + `/projects/<slug>` page appear automatically. |
 | `src/data/now.ts`         | The "Now" list (building / learning / exploring / using / reading)       |
 | `src/data/buildlog.ts`    | The "Build log" — a personal changelog, newest first                     |

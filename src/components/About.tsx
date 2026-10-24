@@ -12,7 +12,7 @@ const ROLES = ['AI/ML Engineer', 'Full-Stack Developer', 'Python Developer'];
 
 const PARAGRAPHS = [
   'I’m Mahak. Somewhere between spreadsheets and a late-night “wait, can I just build this?”, I started building for the web — and lately, that’s increasingly meant putting AI on top of it.',
-  'I build full-stack web applications, Python backends, AI-powered products, and automations. My work has grown from traditional web development into Generative AI, and I’m now going deeper into Agentic AI — building systems that can reason, use tools, work with data, and handle tasks beyond a simple prompt-and-response.',
+  'I’m an AI/ML engineer who builds full-stack web applications, Python backends, AI-powered products, and automations. My work grew out of traditional web development into LLM applications and agents — systems that can reason, use tools, work with data, and handle tasks beyond a simple prompt-and-response.',
   'I work across the stack: React, Next.js, TypeScript, Python, APIs, databases, and cloud deployment, alongside modern AI tools and frameworks.',
   'I work AI-first. An assistant handles the repetitive parts; I decide the architecture — the data model, system boundaries, integrations, and the places where things aren’t allowed to break. It’s fast, but it’s not hands-off.',
   'The work here is real and deliberately small. I’d rather ship something that works than write a paragraph about something that might.',
@@ -61,7 +61,7 @@ export function About() {
         ))}
       </motion.ul>
 
-      {/* The arc, as four marks — business, code, GenAI, agents. */}
+      {/* The arc, as three marks — business, code, AI/ML. */}
       <motion.ol
         {...rise(0.18)}
         aria-label="How the work got here"

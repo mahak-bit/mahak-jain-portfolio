@@ -27,7 +27,7 @@ export interface PortfolioAnswer {
 
 export const SUGGESTED_PROMPTS = [
   'what has she actually built?',
-  'is she a full-stack developer?',
+  'is she an AI/ML engineer?',
   'can she build a website end to end?',
   "what's the tech stack?",
   'is she any good with AI agents?',
@@ -118,7 +118,7 @@ const INTENTS: Intent[] = [
       'specializ',
     ],
     response:
-      'Four areas, starting with the core: full-stack web development — building and shipping complete websites and web apps in Next.js, React and TypeScript, with APIs, databases and deployment. Then generative and agentic AI — LLM apps, structured output, tool-calling agents with real guardrails. Then AI-assisted development — moving fast without losing the plot on architecture. And modern UI/UX with quick, credible prototyping.',
+      'Four areas, starting with the core: AI/ML engineering — LLM apps, structured output, retrieval, tool-calling agents with real guardrails. Then full-stack web development — building and shipping complete websites and web apps in Next.js, React and TypeScript, with APIs, databases and deployment. Then AI-assisted development — moving fast without losing the plot on architecture. And modern UI/UX with quick, credible prototyping.',
     followUps: ['what has she built?', 'how did she get into this?'],
   },
   {
@@ -146,12 +146,16 @@ const INTENTS: Intent[] = [
       'deployment',
     ],
     response:
-      'First and foremost, Mahak is a professional full-stack web developer. She builds complete websites and web apps end to end — interface, front end, back end, database and deployment — and ships them to production. Most of the archive is web work: Zazzlers is a full Next.js storefront with its own admin back office; three projects are scroll-driven GSAP-and-Lenis sites (a rice-milling company site, a digital exhibition, a 911 Carrera concept); the Study Planner and Beauty Match are the app-shaped builds. All deployed, all built for real use. Increasingly she builds AI into that work, and is moving toward agentic AI — but the foundation is solid production web engineering.',
+      'Alongside the AI/ML work, Mahak is a professional full-stack web developer. She builds complete websites and web apps end to end — interface, front end, back end, database and deployment — and ships them to production. Most of the archive is web work: Zazzlers is a full Next.js storefront with its own admin back office; three projects are scroll-driven GSAP-and-Lenis sites (a rice-milling company site, a digital exhibition, a 911 Carrera concept); the Study Planner and Beauty Match are the app-shaped builds. All deployed, all built for real use. That solid production web foundation is what the AI work sits on.',
     followUps: ["what's the tech stack?", 'can she build a website end to end?'],
   },
   {
     id: 'ai',
     keywords: [
+      'ai/ml',
+      'ml engineer',
+      'ai engineer',
+      'machine learning',
       'genai',
       'gen ai',
       'generative',
@@ -179,7 +183,7 @@ const INTENTS: Intent[] = [
       'latest ai',
     ],
     response:
-      'On top of the web work, the focus is generative and agentic AI — LLM-powered features, tool-calling agents with real guardrails, retrieval over private data, and automating the workflow steps that don’t need a person. She’s not loyal to one provider: OpenAI or Anthropic, whichever model fits the task, kept behind one clean interface so swapping is a one-line change. And since the field reinvents itself roughly every quarter, keeping up is half the job and half the fun. The Study Planner shows most of it end to end — structured generation, a retry-then-typed-error contract, and an agent that can read a user’s context but never write to it.',
+      'AI/ML engineering is the headline role: LLM-powered features, tool-calling agents with real guardrails, retrieval over private data, and automating the workflow steps that don’t need a person. She’s not loyal to one provider: OpenAI or Anthropic, whichever model fits the task, kept behind one clean interface so swapping is a one-line change. And since the field reinvents itself roughly every quarter, keeping up is half the job and half the fun. The Study Planner shows most of it end to end — structured generation, a retry-then-typed-error contract, and an agent that can read a user’s context but never write to it.',
     followUps: ['is she good with agents?', "what's she working on now?"],
   },
   {
@@ -201,7 +205,7 @@ const INTENTS: Intent[] = [
       'her journey',
     ],
     response:
-      'Mahak is a professional full-stack developer who builds AI into what she ships, and is now moving toward agentic AI. She studied business (BBA), got pulled into building software — full-stack web, Python, AI and GenAI, automation — and now ships products end to end, from first commit to deployment. The through-line: treat the problem as a product, then build something real for it. The build log has the rough timeline.',
+      'Mahak is an AI/ML engineer and full-stack developer. She studied business (BBA), got pulled into building software — full-stack web, Python, AI and LLM apps, automation — and now ships products end to end, from first commit to deployment. The through-line: treat the problem as a product, then build something real for it. The build log has the rough timeline.',
     followUps: ["what's she working on now?", "what's she best at?"],
   },
   {

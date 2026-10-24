@@ -22,7 +22,7 @@ import {
 export const metadata: Metadata = {
   title: 'Résumé',
   description:
-    'Résumé — Mahak Jain, AI / Generative AI developer, full-stack developer and AI product builder based in Kota, Rajasthan.',
+    'Résumé — Mahak Jain, AI/ML engineer, full-stack developer and AI product builder based in Kota, Rajasthan.',
   alternates: { canonical: '/resume' },
   openGraph: {
     title: `Résumé — ${site.name}`,
