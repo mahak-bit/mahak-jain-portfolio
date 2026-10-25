@@ -54,6 +54,32 @@ Search the repo for `[ADD` to find them all. Public contact email: `mahakj532@gm
 `src/lib/portfolio-ai.ts` exposes one `askPortfolio(query)` function the UI calls. Swap its body
 for a `fetch('/api/ask', …)` and nothing else changes.
 
+## The 3D exhibition (`/exhibition`)
+
+The work as a walk-through installation: a large metal ring standing in a pale room, the real
+projects laid out as cards on the floor, and a camera that travels with the scroll. Pick a card and
+it comes forward with its real details; the **DESIGN — CODE** control turns every card from the work
+as it looks to how it is built. Built with three.js and `@react-three/fiber`, loaded only on this
+route.
+
+It is **not linked from the site and is set to `noindex`** until it is promoted (below).
+
+- **Reads, never invents:** projects from `src/data/projects.ts`, the DESIGN / CODE lists from
+  `src/data/skills.ts`, name, role, statement and contact links from `src/lib/site.ts`.
+- **Where things live:** `src/components/exhibition/` — `scene/` is everything three.js (the only
+  code that imports it, behind a lazy boundary), `ui/` is the words and controls over it,
+  `scene/layout.ts` is where everything stands and how the camera moves, `timeline.ts` is where each
+  scene sits on the scroll. Device tiers (pixel ratio, shadow size, texture size) are in
+  `src/lib/gpu.ts`.
+- **Fallbacks:** no WebGL2 (or only a software renderer), `prefers-reduced-motion`, or the
+  **List view** button all give the same content as an ordinary page (`ExhibitionStatic`). With
+  reduced motion there is an "Explore in 3D" button; the scene then runs without easing or drift.
+- **Test hooks:** `?view=list` (force the list), `?tier=mobile|tablet|desktop` (force a quality
+  tier), `?debug` (exposes `window.__ex` with each card's screen rectangle and renderer stats).
+- **Make it the home page:** render `<Exhibition projects={projects.map(toExhibitProject)} />` from
+  `src/app/page.tsx` (see `src/app/exhibition/page.tsx`), add a nav entry in `src/lib/site.ts`, drop
+  the `robots` line from the route's metadata, and add it to `src/app/sitemap.ts`.
+
 ## Deployment (Vercel)
 
 1. This repo is at `github.com/mahak-bit/mahak-jain-portfolio`.

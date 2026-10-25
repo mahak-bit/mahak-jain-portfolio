@@ -417,3 +417,76 @@
     margin: 16mm;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   The exhibition (/exhibition). Only what Tailwind can't say: a keyframe or
+   two and the DESIGN/CODE range. Everything else is utilities in the markup.
+--------------------------------------------------------------------------- */
+
+/* A caption arriving: a short rise and fade, once. */
+@keyframes ex-in {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+.ex-in {
+  animation: ex-in 0.7s var(--ease-editorial) both;
+}
+
+/* The scroll cue: a hairline that draws itself and lets go, slowly. */
+@keyframes ex-cue {
+  0% {
+    transform: scaleX(0);
+  }
+  55%,
+  100% {
+    transform: scaleX(1);
+  }
+}
+.ex-cue {
+  animation: ex-cue 2.6s var(--ease-editorial) infinite;
+}
+
+/* DESIGN ——— CODE: a hairline with a square handle, as large to grab as a thumb needs. */
+.dc-range {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  height: 44px;
+  cursor: pointer;
+  touch-action: pan-y;
+}
+.dc-range::-webkit-slider-runnable-track {
+  height: 1px;
+  background: var(--fg);
+}
+.dc-range::-moz-range-track {
+  height: 1px;
+  background: var(--fg);
+}
+.dc-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  margin-top: -8px;
+  border: 0;
+  border-radius: 0;
+  background: var(--accent);
+}
+.dc-range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border: 0;
+  border-radius: 0;
+  background: var(--accent);
+}
+.dc-range:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
