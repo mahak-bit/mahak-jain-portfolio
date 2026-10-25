@@ -6,14 +6,14 @@ import { Section, SectionMark } from '@/components/ui/Section';
 import { Reveal } from '@/components/ui/Reveal';
 import { cn } from '@/lib/utils';
 import type { ExhibitProject } from './types';
-import { CapabilitiesBlock, ContactBlock, IntroBlock } from './ui/Blocks';
+import { CapabilitiesBlock, ContactBlock } from './ui/Blocks';
 
 /**
- * The exhibition as an ordinary page: the same intro, the same six projects
- * with their real links, the same two halves of what the work is made of, the
- * same way to get in touch. It is what you get with no WebGL, on a machine too
- * modest for the 3D, with reduced motion on, or when you simply ask for it —
- * and it is what a search engine or a screen reader meets first.
+ * The work section as an ordinary page: the same projects with their real
+ * links, the same two halves of what the work is made of, the same way to get
+ * in touch. It is what you get with no WebGL, on a machine too modest for the
+ * 3D, with reduced motion on, or when you simply ask for it — and it is what a
+ * search engine or a screen reader meets first.
  */
 export function ExhibitionStatic({
   projects,
@@ -25,22 +25,21 @@ export function ExhibitionStatic({
 }) {
   return (
     <div id="exhibition-list">
-      <Section className="pt-16 pb-12 sm:pt-20 sm:pb-16 lg:pt-24 lg:pb-20">
-        <SectionMark index="01" label="Intro" className="mb-10 sm:mb-14" />
-        <IntroBlock cue={false} />
+      <Section
+        id="projects"
+        aria-label="Projects"
+        className="pt-16 pb-12 sm:pt-20 sm:pb-16 lg:pt-24 lg:pb-20"
+      >
+        <SectionMark index="01" label="Work" className="mb-10 sm:mb-14" />
         {upgrade ? (
           <button
             type="button"
             onClick={upgrade.onClick}
-            className="meta bg-fg text-bg hover:bg-accent tap mt-10 px-5 py-3 transition-colors"
+            className="meta bg-fg text-bg hover:bg-accent tap mb-12 px-5 py-3 transition-colors"
           >
             {upgrade.label}
           </button>
         ) : null}
-      </Section>
-
-      <Section id="projects" aria-label="Projects" className="py-12 sm:py-16 lg:py-20">
-        <SectionMark index="02" label="Projects" className="mb-10 sm:mb-14" />
         <ul className="grid gap-x-10 gap-y-16 md:grid-cols-2">
           {projects.map((p, i) => (
             <li key={p.slug}>
@@ -93,12 +92,12 @@ export function ExhibitionStatic({
       </Section>
 
       <Section id="capabilities" className="py-12 sm:py-16 lg:py-20">
-        <SectionMark index="03" label="Design and code" className="mb-10 sm:mb-14" />
+        <SectionMark index="02" label="Design and code" className="mb-10 sm:mb-14" />
         <CapabilitiesBlock className="max-w-4xl" />
       </Section>
 
       <Section id="contact" className="py-12 pb-24 sm:py-16 sm:pb-32 lg:py-20 lg:pb-40">
-        <SectionMark index="04" label="Contact" className="mb-10 sm:mb-14" />
+        <SectionMark index="03" label="Contact" className="mb-10 sm:mb-14" />
         <ContactBlock />
       </Section>
     </div>

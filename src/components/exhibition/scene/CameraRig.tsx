@@ -25,7 +25,7 @@ export function CameraRig({ track, reduced }: { track: KeyPoint[]; reduced: bool
   useFrame((state, dt) => {
     const t = state.clock.elapsedTime;
     const L = (rate: number) => (reduced ? 400 : rate);
-    const { selected, ready, mix: mixTarget } = exhibition.get();
+    const { selected, ready, inView, mix: mixTarget } = exhibition.get();
 
     const progress = damp(rig.progress, live.progress, L(5), dt);
     const px = damp(rig.px, live.pointer.x, L(3.2), dt);
@@ -48,8 +48,8 @@ export function CameraRig({ track, reduced }: { track: KeyPoint[]; reduced: bool
     rig.mix = mix;
     rig.sel = sel;
 
-    // the entrance starts when the scene is ready to be seen
-    if (ready && rig.intro < 1) {
+    // the entrance starts when the scene is ready and someone is there to see it
+    if (ready && inView && rig.intro < 1) {
       rig.intro = reduced ? 1 : Math.min(1, rig.intro + dt / 2.8);
       activity.t = t;
     }

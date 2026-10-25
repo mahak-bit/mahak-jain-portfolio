@@ -54,31 +54,37 @@ Search the repo for `[ADD` to find them all. Public contact email: `mahakj532@gm
 `src/lib/portfolio-ai.ts` exposes one `askPortfolio(query)` function the UI calls. Swap its body
 for a `fetch('/api/ask', …)` and nothing else changes.
 
-## The 3D exhibition (`/exhibition`)
+## The 3D work section (home page)
 
-The work as a walk-through installation: a large metal ring standing in a pale room, the real
-projects laid out as cards on the floor, and a camera that travels with the scroll. Pick a card and
-it comes forward with its real details; the **DESIGN — CODE** control turns every card from the work
-as it looks to how it is built. Built with three.js and `@react-three/fiber`, loaded only on this
-route.
-
-It is **not linked from the site and is set to `noindex`** until it is promoted (below).
+The home page is the first screen (the name, the quote, the character — `TitleSlide`, unchanged)
+followed by the work as a walk-through installation: a large metal ring standing in a pale room, the
+real projects laid out as cards on the floor, and a camera that travels with the scroll. Pick a card
+and it comes forward with its real details; the **DESIGN — CODE** control turns every card from the
+work as it looks to how it is built. Built with three.js and `@react-three/fiber`. The page scrolls
+normally; the 3D is called up once the first screen has loaded and settled (or the moment a visitor
+starts to scroll), so the first screen never waits on it, and nothing is drawn while the section is
+off screen.
 
 - **Reads, never invents:** projects from `src/data/projects.ts`, the DESIGN / CODE lists from
   `src/data/skills.ts`, name, role, statement and contact links from `src/lib/site.ts`.
-- **Where things live:** `src/components/exhibition/` — `scene/` is everything three.js (the only
-  code that imports it, behind a lazy boundary), `ui/` is the words and controls over it,
-  `scene/layout.ts` is where everything stands and how the camera moves, `timeline.ts` is where each
-  scene sits on the scroll. Device tiers (pixel ratio, shadow size, texture size) are in
+- **Where things live:** `src/components/home/HomeWork.tsx` is the page — the first screen, then the
+  work section. `src/components/exhibition/` is the work section itself: `scene/` is everything
+  three.js (the only code that imports it, behind a lazy boundary), `ui/` is the words and controls
+  over it, `scene/layout.ts` is where everything stands and how the camera moves, `timeline.ts` is
+  where each scene sits on the scroll and when its words show (only while the camera is settled on
+  it, never over a room in motion). Device tiers (pixel ratio, shadow size, texture size) are in
   `src/lib/gpu.ts`.
 - **Fallbacks:** no WebGL2 (or only a software renderer), `prefers-reduced-motion`, or the
-  **List view** button all give the same content as an ordinary page (`ExhibitionStatic`). With
+  **List view** button all give the same projects as an ordinary list (`ExhibitionStatic`). With
   reduced motion there is an "Explore in 3D" button; the scene then runs without easing or drift.
 - **Test hooks:** `?view=list` (force the list), `?tier=mobile|tablet|desktop` (force a quality
   tier), `?debug` (exposes `window.__ex` with each card's screen rectangle and renderer stats).
-- **Make it the home page:** render `<Exhibition projects={projects.map(toExhibitProject)} />` from
-  `src/app/page.tsx` (see `src/app/exhibition/page.tsx`), add a nav entry in `src/lib/site.ts`, drop
-  the `robots` line from the route's metadata, and add it to `src/app/sitemap.ts`.
+- **Going back to the old project browser:** the one-project-per-screen browser it replaced is still
+  in `src/components/home/ProjectBrowser.tsx` (the first screen is exported from there). Render
+  `<ProjectBrowser />` from `src/app/page.tsx` instead of `<HomeWork />`, or revert the commit that
+  introduced `HomeWork`.
+- **`/exhibition`:** the scene was briefly at that address before it moved onto the home page; it now
+  redirects to `/` (see `next.config.ts`).
 
 ## Deployment (Vercel)
 

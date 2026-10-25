@@ -5,11 +5,11 @@ import { useCallback, useEffect, useRef, type ReactNode } from 'react';
 import { chooseListView } from '@/lib/useCapability';
 import type { Tier } from '@/lib/gpu';
 import { cn } from '@/lib/utils';
-import { SCENES, TOUR } from './timeline';
+import { SCENES, TOUR, wordsAt } from './timeline';
 import { BG, resetRig } from './scene/shared';
 import { exhibition, live, useExhibition } from './store';
 import type { ExhibitProject } from './types';
-import { CapabilitiesBlock, ContactBlock, IntroBlock, ProjectCaption } from './ui/Blocks';
+import { CapabilitiesBlock, ContactBlock, ProjectCaption, WorkIntro } from './ui/Blocks';
 import { DesignCodeControl, SceneNav } from './ui/Controls';
 import { DetailPanel } from './ui/DetailPanel';
 import { CardLabels, ProjectIndex } from './ui/ProjectLayer';
@@ -18,14 +18,11 @@ import { CardLabels, ProjectIndex } from './ui/ProjectLayer';
 const SceneRoot = dynamic(() => import('./scene/SceneRoot'), { ssr: false });
 
 /** Where each scene is shown when you jump to it, as a point on the scroll. */
-const JUMP_TO = { intro: 0, projects: 0.245, about: 0.72, contact: 1 } as const;
-
-/** The masthead's height at the top of the page; the stage slides up under it. */
-const MASTHEAD = 79;
+const JUMP_TO = { work: 0, projects: 0.245, skills: 0.72, contact: 1 } as const;
 
 /**
- * The exhibition itself: a tall track to scroll through, and inside it one
- * stage that stays put while the camera in the 3D scene does the travelling.
+ * The 3D work section: a tall track to scroll through, and inside it one stage
+ * that stays put while the camera in the 3D scene does the travelling.
  *
  * Scrolling is left alone — it is ordinary page scrolling. The only thing done
  * with it is to read how far through the track we are, and hand that to the
@@ -43,9 +40,11 @@ export default function ExhibitionImmersive({
   reduced: boolean;
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const n = projects.length;
 
   const scene = useExhibition((s) => s.scene);
+  const words = useExhibition((s) => s.words);
   const active = useExhibition((s) => s.active);
   const selected = useExhibition((s) => s.selected);
   const ready = useExhibition((s) => s.ready);
@@ -87,7 +86,11 @@ export default function ExhibitionImmersive({
               ? 2
               : 3;
       const f = ((p - TOUR.from) / (TOUR.to - TOUR.from)) * (n - 1);
-      exhibition.set({ scene: sceneIndex, active: Math.min(n - 1, Math.max(0, Math.round(f))) });
+      exhibition.set({
+        scene: sceneIndex,
+        words: wordsAt(p),
+        active: Math.min(n - 1, Math.max(0, Math.round(f))),
+      });
     };
     const onScroll = () => {
       if (queued) return;
@@ -105,6 +108,24 @@ export default function ExhibitionImmersive({
     };
   }, [n]);
 
+  // The stage is only worth drawing while a fair part of it is on screen. Scrolled
+  // away, nothing is drawn, and a project left open is put back rather than left
+  // behind. (The ratio is read, not isIntersecting, which is true for a single pixel.)
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+    const watcher = new IntersectionObserver(
+      (entries) => {
+        // several can arrive at once; the last one is where things stand
+        const inView = entries[entries.length - 1].intersectionRatio >= 0.2;
+        exhibition.set(inView ? { inView } : { inView, selected: null });
+      },
+      { threshold: [0, 0.2] }
+    );
+    watcher.observe(stage);
+    return () => watcher.disconnect();
+  }, []);
+
   // a little parallax from a real mouse; touch and pen don't get one
   useEffect(() => {
     if (tier === 'mobile' || reduced) return;
@@ -118,7 +139,7 @@ export default function ExhibitionImmersive({
   }, [tier, reduced]);
 
   const jump = useCallback(
-    (id: 'intro' | 'projects' | 'detail' | 'about' | 'contact') => {
+    (id: 'work' | 'projects' | 'detail' | 'skills' | 'contact') => {
       if (id === 'detail') {
         exhibition.set({ selected: selected ?? current.slug });
         return;
@@ -136,7 +157,13 @@ export default function ExhibitionImmersive({
     [selected, current, reduced]
   );
 
-  const onContextLost = useCallback(() => chooseListView(true), []);
+  // The list is a good deal shorter than the track, so a visitor who was in the
+  // scene is brought to the top of it rather than left part-way down.
+  const showList = useCallback(() => {
+    const watching = exhibition.get().inView;
+    chooseListView(true);
+    if (watching) window.setTimeout(() => document.getElementById('work')?.scrollIntoView(), 0);
+  }, []);
 
   const veiled = open !== null;
 
@@ -144,16 +171,17 @@ export default function ExhibitionImmersive({
     <div
       ref={trackRef}
       className="relative"
-      style={{ height: tier === 'mobile' ? '640svh' : '600svh', marginTop: -MASTHEAD }}
+      style={{ height: tier === 'mobile' ? '640svh' : '600svh' }}
     >
       <div
+        ref={stageRef}
         className="sticky top-0 h-svh w-full overflow-hidden"
         style={{ backgroundColor: BG }}
         data-scene={scene}
       >
         <button
           type="button"
-          onClick={() => chooseListView(true)}
+          onClick={showList}
           className="meta bg-bg text-fg border-line absolute top-24 left-[var(--gutter)] z-50 -translate-y-[400%] border px-4 py-3 focus-visible:translate-y-0"
         >
           Skip the 3D — see everything as a list
@@ -169,12 +197,7 @@ export default function ExhibitionImmersive({
             ready ? 'opacity-100' : 'opacity-0'
           )}
         >
-          <SceneRoot
-            projects={projects}
-            tier={tier}
-            reduced={reduced}
-            onContextLost={onContextLost}
-          />
+          <SceneRoot projects={projects} tier={tier} reduced={reduced} onContextLost={showList} />
         </div>
 
         <CardLabels projects={projects} />
@@ -190,7 +213,7 @@ export default function ExhibitionImmersive({
         />
         <div
           aria-hidden
-          data-on={scene <= 2 && !veiled}
+          data-on={words >= 0 && words <= 2 && !veiled}
           className="pointer-events-none absolute inset-y-0 left-0 z-[4] w-[56%] transition-opacity duration-700 data-[on=false]:opacity-0 portrait:hidden"
           style={{ backgroundImage: `linear-gradient(to right, ${BG}e6, ${BG}8c 55%, ${BG}00)` }}
         />
@@ -198,28 +221,28 @@ export default function ExhibitionImmersive({
         <div className="gutter-x pointer-events-none absolute inset-0 z-10 pt-24 pb-[108px]">
           <div className="relative mx-auto h-full w-full max-w-[1500px]">
             <Block
-              on={scene === 0 && !veiled}
+              on={words === 0 && !veiled}
               className="bottom-0 left-0 max-w-[min(40%,34rem)] portrait:max-w-full"
             >
-              <IntroBlock />
+              <WorkIntro total={n} />
             </Block>
 
             <Block
-              on={scene === 1 && !veiled}
+              on={words === 1 && !veiled}
               className="bottom-0 left-0 max-w-[min(44%,30rem)] portrait:max-w-full"
             >
               <ProjectCaption project={current} total={n} />
             </Block>
 
             <Block
-              on={scene === 2 && !veiled}
+              on={words === 2 && !veiled}
               className="bottom-0 left-0 w-[min(54%,40rem)] portrait:w-full"
             >
               <CapabilitiesBlock />
             </Block>
 
             <Block
-              on={scene === 3 && !veiled}
+              on={words === 3 && !veiled}
               className="inset-0 flex items-center justify-center portrait:items-end"
             >
               <ContactBlock />
@@ -241,7 +264,7 @@ export default function ExhibitionImmersive({
               <SceneNav onJump={jump} className="-ml-1.5" />
               <button
                 type="button"
-                onClick={() => chooseListView(true)}
+                onClick={showList}
                 className="meta text-muted hover:text-fg tap pointer-events-auto shrink-0 py-2 transition-colors"
               >
                 List view

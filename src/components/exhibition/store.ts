@@ -28,10 +28,14 @@ export interface ExhibitionState {
   mix: number;
   /** 0 intro, 1 projects, 2 capabilities, 3 contact — from the scroll. */
   scene: number;
+  /** Whose words are showing: a scene, as above, or -1 while the camera travels between two. */
+  words: number;
   /** The project the scroll tour is currently on. */
   active: number;
   /** The first frame is on screen and the card faces are loaded. */
   ready: boolean;
+  /** The stage is on screen. Off screen, nothing is drawn. */
+  inView: boolean;
 }
 
 const initial: ExhibitionState = {
@@ -39,8 +43,10 @@ const initial: ExhibitionState = {
   hovered: null,
   mix: 0,
   scene: 0,
+  words: 0,
   active: 0,
   ready: false,
+  inView: false,
 };
 
 let state: ExhibitionState = initial;

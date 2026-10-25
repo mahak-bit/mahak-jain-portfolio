@@ -301,7 +301,7 @@ function ProjectIndex({
 
 /* ---- slide 0 — identity ------------------------------------------------ */
 
-function TitleSlide() {
+export function TitleSlide() {
   const reduceMotion = useReducedMotion();
   const rise = (delay: number) =>
     reduceMotion

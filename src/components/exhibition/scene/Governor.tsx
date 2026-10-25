@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import type { Quality } from '@/lib/gpu';
-import { live } from '../store';
+import { exhibition, live } from '../store';
 import { activity } from './shared';
 
 /** A frame slower than this (ms) is one the eye can catch. */
@@ -62,6 +62,11 @@ export function Governor({
   useFrame((state, delta) => {
     const t = state.clock.elapsedTime;
     const moving = activity.t === t;
+
+    // Off screen, nothing is drawn. The very first frame is the exception: it compiles
+    // the shaders and puts the textures on the GPU while nobody is looking, so the room
+    // is ready the moment it scrolls into view.
+    if (first.current && !exhibition.get().inView) return;
 
     if (!moving && !live.dirty) return;
     live.dirty = false;

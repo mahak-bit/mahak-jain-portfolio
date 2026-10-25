@@ -13,29 +13,31 @@ import type { ExhibitProject } from '../types';
  * the same whether or not the scene behind them ever loads.
  */
 
-/** Scene 1: the name, what it is the name of, and the one-line version. */
-export function IntroBlock({ className, cue = true }: { className?: string; cue?: boolean }) {
+/**
+ * Scene 1: the way into the work. Her name and what she does are the screen
+ * above this, so here it only says what is on offer and how to move through it.
+ */
+export function WorkIntro({
+  total,
+  className,
+  cue = true,
+}: {
+  total: number;
+  className?: string;
+  cue?: boolean;
+}) {
   return (
     <div className={cn('flex flex-col', className)}>
-      <p className="meta text-muted">Digital Experiences</p>
-      <h1
-        aria-label={site.name}
-        className="font-display mt-4 flex flex-col text-[clamp(3.4rem,min(11vw,17svh),8.5rem)] leading-[0.86] tracking-[-0.042em]"
+      <p className="meta text-muted">{String(total).padStart(2, '0')} projects</p>
+      <h2
+        aria-label="Selected work"
+        className="font-display mt-4 flex flex-col text-[clamp(3rem,min(9.5vw,15svh),7rem)] leading-[0.88] tracking-[-0.04em]"
       >
-        <span>Mahak</span>
-        <span>Jain</span>
-      </h1>
-      {/* one role per item, so a narrow column wraps between them, never inside one */}
-      <p className="meta text-muted mt-6 flex flex-wrap gap-x-[0.6em]">
-        {site.role.split(' · ').map((role, i, all) => (
-          <span key={role} className="whitespace-nowrap">
-            {role}
-            {i < all.length - 1 ? ' ·' : ''}
-          </span>
-        ))}
-      </p>
-      <p className="text-muted mt-5 max-w-[38ch] text-[0.98rem] leading-relaxed max-sm:hidden">
-        {site.statement}
+        <span>Selected</span>
+        <span>work</span>
+      </h2>
+      <p className="text-muted mt-6 max-w-[34ch] text-[0.98rem] leading-relaxed">
+        Scroll through them, or open any one.
       </p>
       {cue ? (
         <p className="meta text-muted mt-8 flex items-center gap-3">
@@ -131,6 +133,8 @@ export function CapabilitiesBlock({ className }: { className?: string }) {
   const code = useExhibition((s) => s.mix) >= 0.5;
   return (
     <div className={cn('grid gap-x-10 gap-y-6 sm:grid-cols-2', className)}>
+      {/* so the two columns' headings sit under one of their own, not straight under the page's */}
+      <h2 className="sr-only">Design and code</h2>
       <Column label="Design" line={DESIGN_LINE} items={DESIGN} hiddenOnPhone={code} />
       <Column label="Code" line={CODE_LINE} items={CODE} hiddenOnPhone={!code} />
     </div>

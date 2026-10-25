@@ -69,10 +69,10 @@ export function DesignCodeControl({ className }: { className?: string }) {
 }
 
 const SCENE_ITEMS = [
-  { id: 'intro', label: 'Intro', n: '01' },
+  { id: 'work', label: 'Work', n: '01' },
   { id: 'projects', label: 'Projects', n: '02' },
   { id: 'detail', label: 'Detail', n: '03' },
-  { id: 'about', label: 'About', n: '04' },
+  { id: 'skills', label: 'Skills', n: '04' },
   { id: 'contact', label: 'Contact', n: '05' },
 ] as const;
 
@@ -91,10 +91,10 @@ export function SceneNav({
   const scene = useExhibition((s) => s.scene);
   const selected = useExhibition((s) => s.selected);
 
-  const current = selected ? 'detail' : (['intro', 'projects', 'about', 'contact'] as const)[scene];
+  const current = selected ? 'detail' : (['work', 'projects', 'skills', 'contact'] as const)[scene];
 
   return (
-    <nav aria-label="Exhibition scenes" className={cn('pointer-events-auto', className)}>
+    <nav aria-label="Work scenes" className={cn('pointer-events-auto', className)}>
       <ol className="flex items-center sm:gap-x-2">
         {SCENE_ITEMS.map((item) => {
           const on = item.id === current;
