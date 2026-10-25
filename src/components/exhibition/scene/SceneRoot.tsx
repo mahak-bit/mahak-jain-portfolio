@@ -15,6 +15,9 @@ import { Stage } from './Stage';
 import { buildTrack, cardPoses } from './layout';
 import { loadFonts, makeCodeFace, makeDesignFace, readFonts } from './textures';
 
+/** How long the scene waits for screenshots before it opens anyway, ms. */
+const READY_AFTER = 2600;
+
 /** Run `fn` when the browser has nothing better to do. */
 function whenIdle(fn: () => void): () => void {
   // Safari has no requestIdleCallback
@@ -44,40 +47,61 @@ export default function SceneRoot({
 }) {
   const quality = QUALITY[tier];
   const [faces, setFaces] = useState<Record<string, Faces>>({});
-  const [designReady, setDesignReady] = useState(false);
+  const [allDesignsIn, setAllDesignsIn] = useState(false);
+  const [waited, setWaited] = useState(false);
   const [drawn, setDrawn] = useState(false);
 
   const track = useMemo(() => buildTrack(cardPoses(projects.length)), [projects.length]);
   // `?debug` exposes window.__ex (card screen rects, render stats) for testing
   const debug = useMemo(() => new URLSearchParams(window.location.search).has('debug'), []);
 
-  // Card faces: the screenshots first, because they are what the visitor sees;
-  // the CODE faces a moment later, when the browser is idle.
+  // The room opens a couple of seconds after the scene mounts, whether or not every
+  // screenshot has arrived: a slow connection should cost a card its picture for a
+  // moment, never the whole scene.
+  useEffect(() => {
+    const id = window.setTimeout(() => setWaited(true), READY_AFTER);
+    return () => window.clearTimeout(id);
+  }, []);
+
+  // Card faces: each screenshot lands as it arrives, because that is what the
+  // visitor sees; the CODE faces a moment later, when the browser is idle.
   useEffect(() => {
     let cancelled = false;
     const made: CanvasTexture[] = [];
     let cancelIdle = () => {};
 
-    (async () => {
-      const fonts = readFonts();
-      await loadFonts(fonts);
-      if (cancelled) return;
+    const fonts = readFonts();
+    // Only the CODE faces (and a poster, were a project ever without a screenshot)
+    // are typeset, so nothing that matters waits on a font, and never for long.
+    const fontsReady = Promise.race([
+      loadFonts(fonts),
+      new Promise<void>((resolve) => window.setTimeout(resolve, 2500)),
+    ]);
 
-      const designs = await Promise.all(
+    (async () => {
+      await Promise.all(
         projects.map(async (p) => {
           try {
             const tex = await makeDesignFace(p, quality.texWidth, 8, fonts);
+            if (cancelled) {
+              tex.dispose();
+              return;
+            }
             made.push(tex);
-            return [p.slug, tex] as const;
+            setFaces((prev) => ({
+              ...prev,
+              [p.slug]: { design: tex, code: prev[p.slug]?.code ?? null },
+            }));
           } catch {
-            return [p.slug, null] as const; // the card keeps its neutral face
+            /* the card keeps its neutral face */
           }
         })
       );
       if (cancelled) return;
+      setAllDesignsIn(true);
 
-      setFaces(Object.fromEntries(designs.map(([slug, design]) => [slug, { design, code: null }])));
-      setDesignReady(true);
+      await fontsReady;
+      if (cancelled) return;
 
       cancelIdle = whenIdle(() => {
         if (cancelled) return;
@@ -103,8 +127,8 @@ export default function SceneRoot({
   }, [projects, quality.texWidth]);
 
   useEffect(() => {
-    if (drawn && designReady) exhibition.set({ ready: true });
-  }, [drawn, designReady]);
+    if (drawn && (allDesignsIn || waited)) exhibition.set({ ready: true });
+  }, [drawn, allDesignsIn, waited]);
 
   return (
     <Canvas
