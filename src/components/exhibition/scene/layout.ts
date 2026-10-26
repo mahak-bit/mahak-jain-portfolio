@@ -45,6 +45,17 @@ function fold(a: number) {
   return a;
 }
 
+/** Where the sweep starts: at the ring's feet. */
+const SWEEP_START = -3.0;
+/** The gap between neighbours along the sweep, as it was tuned for six cards. */
+const SPACING = 1.92;
+/** Six cards end at 6.6. More cards lengthen the sweep rather than crowd it. */
+const SIX_END = SWEEP_START + SPACING * 5;
+
+function sweepEnd(count: number) {
+  return Math.max(SIX_END, SWEEP_START + SPACING * (count - 1));
+}
+
 /**
  * The cards lie on the floor along one S-shaped sweep that starts at the ring's
  * base and runs out toward the viewer, as if the ring had set them down. Each
@@ -53,10 +64,11 @@ function fold(a: number) {
  * viewer, which keeps every project readable.
  */
 export function cardPoses(count: number): CardPose[] {
+  const end = sweepEnd(count);
   const at = (t: number) => ({
     // drifts right as it nears the viewer, with a gentle S in it
     x: 0.9 + 3.3 * t + Math.sin(t * Math.PI * 2.2) * 0.45,
-    z: MathUtils.lerp(-3.0, 6.6, t),
+    z: MathUtils.lerp(SWEEP_START, end, t),
   });
 
   const poses: CardPose[] = [];
@@ -111,11 +123,26 @@ const shot = (
 /** From the front and a little to the left; the ring a landmark on the right. */
 const INTRO = shot(v(-3.4, 3.2, 16.4), v(2.7, 3.1, -4.2), 30, -0.62, 0.06, 0);
 
-/** The whole sweep from above, every card in view, held right of centre. */
-const OVERVIEW = shot(v(-0.4, 14.0, 17.4), v(2.6, 0, 1.9), 30, -1.1, 0.12, 0.04);
+/**
+ * The whole sweep from above, every card in view, held right of centre. Framed for
+ * six cards; a longer sweep is framed around its middle, from a little further back.
+ */
+function overviewShot(extra: number): Shot {
+  const target = v(2.6, 0, 1.9 + extra / 2);
+  const pos = v(-0.4, 14.0, 17.4 + extra / 2);
+  const back = 1 + (extra / (SIX_END - SWEEP_START)) * 0.55;
+  pos.sub(target).multiplyScalar(back).add(target);
+  return shot(pos, target, 30, -1.1, 0.12, 0.04);
+}
 
-/** Low and square to the ring, which takes the right half; the cards a soft foreground. */
-const CAPABILITIES = shot(v(-1.4, 3.1, 15.4), v(2.9, 4.4, -4.8), 32, -0.42, 0.25, 0, 0.3);
+/**
+ * Low and square to the ring, which takes the right half; the cards a soft
+ * foreground. A longer sweep brings its last cards nearer the lens, so the camera
+ * stands back a little to keep them a foreground rather than a crowd.
+ */
+function capabilitiesShot(extra: number): Shot {
+  return shot(v(-1.4, 3.1, 15.4 + extra * 0.7), v(2.9, 4.4, -4.8), 32, -0.42, 0.25, 0, 0.3);
+}
 
 /** Straight on, so the ring becomes a halo around the closing lines. */
 const CONTACT = shot(v(2.7, 3.6, 12.6), v(2.7, 3.0, -4.8), 34, 0, 0, 0);
@@ -138,12 +165,15 @@ export interface KeyPoint {
 }
 
 export function buildTrack(poses: CardPose[]): KeyPoint[] {
+  const n = poses.length;
+  const extra = sweepEnd(n) - SIX_END;
+  const OVERVIEW = overviewShot(extra);
+  const CAPABILITIES = capabilitiesShot(extra);
   const keys: KeyPoint[] = [
     { p: 0, shot: INTRO },
     { p: 0.1, shot: INTRO },
     { p: 0.2, shot: OVERVIEW },
   ];
-  const n = poses.length;
   poses.forEach((pose, i) => {
     const p = n === 1 ? TOUR.from : MathUtils.lerp(TOUR.from, TOUR.to, i / (n - 1));
     keys.push({ p, shot: tourShot(pose) });

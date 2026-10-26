@@ -21,7 +21,7 @@ export const now: NowRow[] = [
     verb: 'Building',
     value: 'AI-powered products and full-stack web apps',
     href: '/',
-    evidence: 'Six pieces',
+    evidence: 'Seven pieces',
   },
   {
     verb: 'Learning',

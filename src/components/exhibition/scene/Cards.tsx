@@ -215,8 +215,11 @@ function Card({
     st.dim = damp(st.dim, anySel && !isSel ? 1 : 0, L(6), dt);
     const settling = Math.abs(before - (st.hover + st.sel + st.active + st.dim)) > 1e-4;
 
-    // the entrance: each card slides out from the ring's footing to its place
-    const e = ease(clamp(rig.intro * 1.8 - index * 0.13, 0, 1));
+    // the entrance: each card slides out from the ring's footing to its place, one
+    // after another; the last always has time to land, however many there are
+    const e = ease(
+      clamp(rig.intro * 1.8 - index * Math.min(0.13, 0.78 / Math.max(1, count - 1)), 0, 1)
+    );
     const flipMix = clamp(rig.mix * 1.6 - (index / Math.max(1, count - 1)) * 0.6, 0, 1);
 
     const hop = Math.sin(Math.PI * flipMix) * 0.55;

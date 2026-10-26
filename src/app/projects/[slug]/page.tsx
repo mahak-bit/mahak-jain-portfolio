@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getProject, projects, type Screenshot } from '@/data/projects';
 import { Reveal } from '@/components/ui/Reveal';
+import { DemoVideo } from '@/components/archive/DemoVideo';
 import { ProjectPoster } from '@/components/archive/ProjectPoster';
 import { site } from '@/lib/site';
 
@@ -92,6 +93,14 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <StoryBlock label="What I built" text={project.story.built} />
           <StoryBlock label="What I learned" text={project.story.learned} />
         </div>
+      )}
+
+      {/* A recording, when there is one — fetched only if someone presses play */}
+      {project.video && (
+        <Reveal className="mt-16">
+          <p className="kicker mb-4">Watch it work</p>
+          <DemoVideo {...project.video} label={`${project.name} — a recorded walkthrough`} />
+        </Reveal>
       )}
 
       {/* Deeper detail */}

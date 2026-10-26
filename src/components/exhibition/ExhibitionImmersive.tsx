@@ -206,7 +206,7 @@ export default function ExhibitionImmersive({
             the words their legibility. */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 z-[4] h-[190px] portrait:h-[46%]"
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-[4] h-[190px] portrait:h-[46%] portrait:[@media(max-height:700px)]:h-[56%]"
           style={{
             backgroundImage: `linear-gradient(to top, ${BG} 0%, ${BG} 40%, ${BG}d0 64%, ${BG}00)`,
           }}

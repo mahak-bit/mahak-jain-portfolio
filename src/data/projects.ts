@@ -64,6 +64,21 @@ export interface Project {
   sourceNote?: string;
   screenshots: Screenshot[];
 
+  /**
+   * An optional screen recording for the project page. It is not fetched until
+   * the visitor scrolls to it, and not played until they press play.
+   */
+  video?: {
+    src: string;
+    /** Still shown until it is played. */
+    poster: string;
+    /** What it shows, and anything a viewer should know about how it was made. */
+    caption: string;
+    /** Intrinsic size, so the frame holds its place before anything has loaded. */
+    width: number;
+    height: number;
+  };
+
   /** Deeper material for the /projects/[slug] page. */
   caseStudy: {
     overview: string;
@@ -81,6 +96,106 @@ type ProjectInput = Omit<Project, 'number'>;
  * archive entry and the /projects/<slug> page all follow automatically.
  */
 const projectList: ProjectInput[] = [
+  {
+    slug: 'documind-ai',
+    name: 'DocuMind AI',
+    year: '2026',
+    status: 'live',
+    featured: true,
+    oneLiner:
+      'Ask a PDF a question and see the page the answer came from — every claim is cited, and when the document doesn’t say, it says so.',
+    poster: 'Ask a PDF a question. See the page it came from.',
+    story: {
+      solving:
+        'A chat box over a document is only useful if you can check it. So the brief was strict: every claim cites its document and page, the passage is highlighted on the page itself, and a question the document doesn’t answer gets “it doesn’t say”, not a confident guess.',
+      built:
+        'A retrieval-augmented Q&A app. A FastAPI backend reads each PDF page by page and indexes the passages; a Gemini model may answer only from the best matches, with citations, and every citation is checked against what it was actually given. A Next.js front end streams the answer and shows the cited page, highlighted.',
+      learned:
+        'That “I don’t know” can’t be a similarity threshold: questions the document nearly answers score like ones it does, so declining needs the model’s grounding check plus citation validation.',
+    },
+    tech: ['Next.js 16', 'TypeScript', 'FastAPI', 'PyMuPDF', 'MiniLM', 'FAISS', 'Gemini API'],
+    links: {
+      demo: 'https://documind-ai-blush.vercel.app',
+      github: 'https://github.com/mahak-bit/ai-pdf',
+    },
+    screenshots: [
+      {
+        src: '/projects/documind-ai.jpg',
+        alt: 'DocuMind answering “How far ahead can I book a study room?” with a page 5 citation, the cited passage and the page with it highlighted, and declining “Who is the head librarian?” because the handbook doesn’t say',
+      },
+      {
+        src: '/projects/documind-ai-multi.jpg',
+        alt: 'One question answered across two PDFs, each citation naming its document and page, with the cited passage shown beside the answer',
+      },
+      {
+        src: '/projects/documind-ai-mobile.jpg',
+        alt: 'DocuMind on a phone: the sample handbook open, with suggested questions',
+        fit: 'contain',
+      },
+    ],
+    video: {
+      src: '/projects/documind-ai-demo.mp4',
+      poster: '/projects/documind-ai-demo-poster.jpg',
+      caption:
+        'A cited answer, a declined question, and one question answered across two PDFs. Recorded on the live site; loading pauses are shortened, everything else is real time.',
+      width: 1280,
+      height: 800,
+    },
+    caseStudy: {
+      overview:
+        'DocuMind answers questions about PDFs and shows its working. Upload a text-based PDF (up to 20 MB), ask in plain language, and the answer streams in with citations; select one and the exact passage is highlighted on the rendered page. Tick several PDFs and one question is answered across all of them, each citation naming its document and page. If the documents don’t contain the answer, it says so.',
+      features: [
+        {
+          title: 'Citations you can check',
+          detail:
+            'Every claim carries a citation to its document and page. The backend renders the cited page and highlights the passage, so checking an answer takes one click.',
+        },
+        {
+          title: 'Declines instead of guessing',
+          detail:
+            'Clearly off-topic questions are turned away before the model is called. For questions the documents come close to but don’t cover, a grounding check declines, and an answer without a valid citation is withheld.',
+        },
+        {
+          title: 'Several PDFs at once',
+          detail:
+            'Passages are retrieved from each ticked document and merged by similarity, and every citation names the document it came from.',
+        },
+        {
+          title: 'Streaming, then verified',
+          detail:
+            'Answers appear word by word. The final event is validated and authoritative, so a draft that fails the citation check is corrected rather than left on screen.',
+        },
+        {
+          title: 'Honest about its limits',
+          detail:
+            'Scanned PDFs are detected and rejected with a pointer to OCR instead of being answered badly. Large files upload straight to storage to get past serverless request limits.',
+        },
+      ],
+      architecture: [
+        'Text is extracted page by page, repeated headers and footers are stripped, and chunks never cross a page boundary, so every citation’s page number is exact.',
+        'Each passage is embedded locally with all-MiniLM-L6-v2 and kept in a per-document FAISS index; the question is embedded the same way and the closest passages are retrieved.',
+        'Gemini sees only the retrieved passages, labelled S1 to Sn, and must answer in JSON with inline citations. Citation ids are checked against the passages actually sent, and unknown ones are removed.',
+        'If the main model is overloaded or out of quota, the backend retries once and then falls back to the next configured model; each answer reports which model produced it. With no model configured it shows the best passages, labelled as such, and never invents an answer.',
+        'A Next.js front end on Vercel calls the FastAPI backend directly, so answers stream without an extra hop. The model key lives only on the server.',
+        'The backend has 110 tests: 103 run offline against a scripted model, on every push in CI, and 7 use the real embedding model and run locally. The front end has its own unit tests, with lint, type-check and build in CI too.',
+      ],
+      challenges: [
+        {
+          title: 'Making “I don’t know” reliable',
+          detail:
+            'A similarity floor turns away off-topic questions, but ones the document nearly answers (“Who is the head librarian?”) score like real ones, so no threshold separates them. Declining relies on the model’s grounding check and on citation validation: it declined 7 of the 8 questions the handbook doesn’t answer.',
+        },
+        {
+          title: 'Big uploads on serverless',
+          detail:
+            'A Vercel function takes at most 4.5 MB per request, so the browser sends the PDF straight to private storage with a short-lived token and the API ingests it from there. Verified live with an 8 MB, 30-page file.',
+        },
+      ],
+      outcome:
+        'A deployed, tested app with a public demo and a written evaluation. On 30 questions about one synthetic 7-page handbook (measured with Gemini 3.1 Flash-Lite), all 22 answerable questions were answered with citations to the expected page and judged correct by hand. That is a smoke test, not a benchmark, and the repo says so, along with what comes next: hybrid search, per-user sessions and OCR. The demo shares one document library between visitors, so try it with the sample documents rather than anything private.',
+    },
+  },
+
   {
     slug: 'pawan-industries',
     name: 'Pawan Industries',

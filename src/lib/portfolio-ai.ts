@@ -42,6 +42,29 @@ interface Intent {
 
 const INTENTS: Intent[] = [
   {
+    id: 'documind',
+    keywords: [
+      'documind',
+      'docu mind',
+      'ask a pdf',
+      'questions about a pdf',
+      'pdf question',
+      'pdf q&a',
+      'rag project',
+      'rag app',
+      'rag system',
+      'rag pipeline',
+      'retrieval',
+      'citation',
+      'citations',
+      'hallucinat',
+      'grounded',
+    ],
+    response:
+      'DocuMind AI answers questions about PDFs and shows its working: every claim is cited to a document and page, and the cited passage is highlighted on the page itself. If the documents don’t say, it says so rather than guessing. Under the hood: page-by-page extraction, local embeddings with a FAISS index, a Gemini model that may only answer from the retrieved passages, and a check that every citation points at a passage it was actually given. The backend has 110 tests and a written evaluation, which the case study reports as a small smoke test, not a benchmark.',
+    followUps: ['is she good with agents?', 'what has she built?', "what's the tech stack?"],
+  },
+  {
     id: 'projects',
     keywords: [
       'project',
@@ -57,7 +80,7 @@ const INTENTS: Intent[] = [
       'the work',
     ],
     response:
-      'Six in the archive, all deployed. The range: a full e-commerce platform with payments and its own admin, built for a clothing label (Zazzlers), the AI Study Planner with a tool-calling coach, an AI skincare matcher with an explainable engine (Beauty Match), a client site for a rice-milling company (Pawan Industries), a digital exhibition on 80 years of Indian independence, and a scroll-scrubbed 911 Carrera concept. Open the archive to read any of them.',
+      'Seven in the archive, all deployed. The range: DocuMind AI, which answers questions about PDFs and cites the exact page, a full e-commerce platform with payments and its own admin, built for a clothing label (Zazzlers), the AI Study Planner with a tool-calling coach, an AI skincare matcher with an explainable engine (Beauty Match), a client site for a rice-milling company (Pawan Industries), a digital exhibition on 80 years of Indian independence, and a scroll-scrubbed 911 Carrera concept. Open the archive to read any of them.',
     followUps: ['is she good with agents?', "what's the tech stack?", 'can she build an AI product?'],
   },
   {
@@ -183,7 +206,7 @@ const INTENTS: Intent[] = [
       'latest ai',
     ],
     response:
-      'AI/ML engineering is the headline role: LLM-powered features, tool-calling agents with real guardrails, retrieval over private data, and automating the workflow steps that don’t need a person. She’s not loyal to one provider: OpenAI or Anthropic, whichever model fits the task, kept behind one clean interface so swapping is a one-line change. And since the field reinvents itself roughly every quarter, keeping up is half the job and half the fun. The Study Planner shows most of it end to end — structured generation, a retry-then-typed-error contract, and an agent that can read a user’s context but never write to it.',
+      'AI/ML engineering is the headline role: LLM-powered features, tool-calling agents with real guardrails, retrieval over private data, and automating the workflow steps that don’t need a person. She’s not loyal to one provider: OpenAI or Anthropic, whichever model fits the task, kept behind one clean interface so swapping is a one-line change. And since the field reinvents itself roughly every quarter, keeping up is half the job and half the fun. The Study Planner shows most of it end to end — structured generation, a retry-then-typed-error contract, and an agent that can read a user’s context but never write to it. DocuMind AI is the retrieval side: page-cited answers over PDFs that decline to guess.',
     followUps: ['is she good with agents?', "what's she working on now?"],
   },
   {
